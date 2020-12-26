@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-cd $0
-latexmk -pdflua $1
+cd $1
+latexmk -pdflua $2
