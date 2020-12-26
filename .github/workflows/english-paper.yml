@@ -47,10 +47,10 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Typeset English Paper
-        uses: konn/smooth-paper/.github/actions/typeset-latex@master
+        uses: .github/actions/typeset-latex@master
         with:
-          workdir: english-paper
-          target: smooth-english-paper.tex
+          workdir: "english-paper"
+          target: "smooth-english-paper.tex"
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.1
