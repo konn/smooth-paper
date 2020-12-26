@@ -47,7 +47,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Typeset RIMS Kokyuroku
-        uses: .github/actions/typeset-latex@master
+        uses: konn/smooth-paper/.github/actions/typeset-latex@master
         with:
           target: "rims-smooth-paper.tex"
           workdir: "rims"
