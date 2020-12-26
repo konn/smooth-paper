@@ -93,7 +93,7 @@ jobs:
     - name: Tell me your pages
       run: |
         PAGES=$(pdfinfo rims/rims-smooth-paper.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
-        if [ 10 -lt ${PAGES} -a ${PAGES} -lt ]; then
+        if [ ${PAGES} -lt 20 ]; then
           echo "OK: Current pages ${PAGES} satisfies range."
         else
           echo "NG: Current page count ${PAGES} exeeds range!"
