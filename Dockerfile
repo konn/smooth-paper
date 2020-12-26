@@ -27,3 +27,5 @@ ENV PATH=/opt/texlive/${TEXLIVE_VERSION}/bin/x86_64-linux:$PATH
 
 # Making sure the luaotfload to create a cache at least once.
 RUN luaotfload-tool -u -v
+
+RUN tlmgr install latexmk
