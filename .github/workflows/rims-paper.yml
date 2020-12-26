@@ -79,7 +79,7 @@ jobs:
       with:
         # A list of files, directories, and wildcard patterns to cache and restore
         path: |
-          /usr/bin/poppler
+          /usr/bin/pdfinfo
           /usr/share/poppler
         # An explicit key for restoring and saving the cache
         key: pdfinfo-${{github.ref}}-${{runner.os}}
@@ -88,7 +88,7 @@ jobs:
           pdfinfo-master-${{runner.os}}
     - name: Install poppler
       run: |
-        which pdfinfo > /dev/null 2>&1 || sudo apt-get install -y poppler-utils
+        [ -e /usr/bin/pdfinfo ] || sudo apt-get install -y poppler-utils
     - name: Tell me your pages
       run: |
         PAGES=$(pdfinfo rims/rims-smooth-paper.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
