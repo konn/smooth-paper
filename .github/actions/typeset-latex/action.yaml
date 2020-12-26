@@ -1,0 +1,19 @@
+name: Typeset and Uploads LaTeX
+description: |
+  Typesets TeX source(s) with LuaHBLaTeX and uploads resulting PDF as an artifact.
+
+inputs:
+  workdir: 
+    description: "Working directory to invoke latex"
+    required: false
+    default: "."
+  target:
+    description: "A path of the target TeX, relative to workdir"
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+  - $${{ inputs.workdir }}
+  - $${{ inputs.target }}
