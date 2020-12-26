@@ -21,41 +21,41 @@
 \renewcommand{\shortauthors}{Hiromi ISHII}
 
 \begin{abstract}
-  We propose a novel algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra.
-
+  We propose a novel algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra, enabling us to do analysis with \emph{higher inifinitesimals}.
+  To that end, we first give a brief description of the (forward-mode) automatic differentiation in terms of $C^\infty$-rings, 
+  The notion of $C^\infty$ is introduced by Lawvere~\cite{lawvere1979categorical}, and used as a fundamental building block \emph{smooth infinitesimal analysis} and \emph{synthetic differential geometry}~\cite{Moerdijk:1991aa}.
 \end{abstract}
 
 \begin{CCSXML}
 <ccs2012>
-   <concept>
-       <concept_id>10010147.10010148.10010149.10010154</concept_id>
-       <concept_desc>Computing methodologies~Hybrid symbolic-numeric methods</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10010147.10010148.10010149.10010150</concept_id>
-       <concept_desc>Computing methodologies~Algebraic algorithms</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10010147.10010148.10010149.10010152</concept_id>
-       <concept_desc>Computing methodologies~Symbolic calculus algorithms</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10002950.10003714.10003732.10003734</concept_id>
-       <concept_desc>Mathematics of computing~Differential calculus</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
- </ccs2012>
+    <concept>
+        <concept_id>10010147.10010148.10010149.10010154</concept_id>
+        <concept_desc>Computing methodologies~Hybrid symbolic-numeric methods</concept_desc>
+        <concept_significance>500</concept_significance>
+        </concept>
+    <concept>
+        <concept_id>10010147.10010148.10010149.10010150</concept_id>
+        <concept_desc>Computing methodologies~Algebraic algorithms</concept_desc>
+        <concept_significance>500</concept_significance>
+        </concept>
+    <concept>
+        <concept_id>10010147.10010148.10010149.10010152</concept_id>
+        <concept_desc>Computing methodologies~Symbolic calculus algorithms</concept_desc>
+        <concept_significance>500</concept_significance>
+        </concept>
+    <concept>
+        <concept_id>10002950.10003714.10003732.10003734</concept_id>
+        <concept_desc>Mathematics of computing~Differential calculus</concept_desc>
+        <concept_significance>500</concept_significance>
+        </concept>
+  </ccs2012>
 \end{CCSXML}
 
 \ccsdesc[500]{Computing methodologies~Hybrid symbolic-numeric methods}
 \ccsdesc[500]{Computing methodologies~Algebraic algorithms}
 \ccsdesc[500]{Computing methodologies~Symbolic calculus algorithms}
 \ccsdesc[500]{Mathematics of computing~Differential calculus}
-
-
+  
 \keywords{automatic differentiation, %
   smooth infinitesimal analysis, %
   Weil algebras,%
@@ -67,6 +67,8 @@
 \maketitle
 
 \section{Introduction}
+\emph{Automatic Differentiation} is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently.
+
 
 \section{Preliminaries}
 
