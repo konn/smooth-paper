@@ -30,14 +30,15 @@ jobs:
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
-            **/*.aux
-            **/*.bbl
-            **/*.blg
-            **/*.bcf
-            **/*.fls
-            **/*.out
-            **/*.fdb_latexmk
-            **/*.run.xml
+            english-paper/*.aux
+            english-paper/*.bbl
+            english-paper/*.blg
+            english-paper/*.bcf
+            english-paper/*.fls
+            english-paper/*.out
+            english-paper/*.fdb_latexmk
+            english-paper/*.run.xml
+            english-paper/smooth-english-paper.pdf
           # An explicit key for restoring and saving the cache
           key: english-${{github.ref}}-${{ runner.os }}-${{ hashFiles('**/*.tex') }}
           restore-keys: |
