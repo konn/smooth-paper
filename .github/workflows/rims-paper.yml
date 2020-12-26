@@ -87,7 +87,8 @@ jobs:
           pdfinfo-${{github.ref}}-${{runner.os}}
           pdfinfo-master-${{runner.os}}
     - name: Install poppler
-      run: "sudo apt-get install -y poppler-utils"
+      run: |
+        which pdfinfo > /dev/null 2>&1 || sudo apt-get install -y poppler-utils
     - name: Tell me your pages
       run: |
         PAGES=$(pdfinfo rims/rims-smooth-paper.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
