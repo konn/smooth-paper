@@ -45,9 +45,8 @@ jobs:
             ${{env.JOBNAME}}-master-
       - name: Create .latex directory if missing
         run: |
-          [ -d ${WORKDIR}/.latex ] || mkdir -p ${WORKDIR}/.latex
+          [ -d ${GITHUB_WORKSPACE}/${WORKDIR}/.latex ] || mkdir -p ${GITHUB_WORKSPACE}/${WORKDIR}/.latex
       - name: Restore latex files
-        if: steps.tex-cache.outputs.cache-hit == 'true'
         run: |
           cd $GITHUB_WORKSPACE/${WORKDIR}
           if [ -n "$(find .latex/ -mindepth 1 -maxdepth 1)" ]; then
