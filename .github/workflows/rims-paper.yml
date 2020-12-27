@@ -53,7 +53,7 @@ jobs:
           if [ -n "$(find .latex/ -mindepth 1 -maxdepth 1)" ]; then
             cp -r .latex/* .
           else
-            echo "No .latex/ directory found. skip"
+            echo "::warn::No .latex/ directory found. skip"
           fi
       - name: Typeset it
         run: |
@@ -67,7 +67,7 @@ jobs:
           ls
           for fdb in $(find . -name "*.fdb_latexmk"); do
               for i in $(texlua ${GITHUB_WORKSPACE}/ci-resources/extract-generateds.lua <$fdb); do
-                echo "cp $(dirname $fdb)/$i .latex/$(dirname $fdb)/$i"
+                echo "::debug::cp $(dirname $fdb)/$i .latex/$(dirname $fdb)/$i"
                 cp $(dirname $fdb)/$i .latex/$(dirname $fdb)/$i
               done
           done
@@ -101,6 +101,6 @@ jobs:
         if [ ${PAGE_LOWERBOUND} -lt ${PAGES} -a ${PAGES} -lt ${PAGE_UPPERBOUND} ]; then
           echo "OK: Current pages ${PAGES} satisfies range."
         else
-          echo "NG: Current page count ${PAGES} exeeds range ${PAGE_LOWERBOUND}..${PAGE_UPPERBOUND}!"
+          echo "::error::Current page count ${PAGES} exceeds range ${PAGE_LOWERBOUND}..${PAGE_UPPERBOUND}!"
           exit 1
         fi
