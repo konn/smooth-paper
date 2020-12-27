@@ -5,7 +5,7 @@
 
 \begin{document}
 
-\title[Automatic Differentiation With Higher Infinitesimals]{Automatic Differentiation With Higher Infinitesimals, or Computational Smooth Infinitesimal Analysis in Arbitrary Weil Algebra}
+\title[Automatic Differentiation With Higher Infinitesimals]{Automatic Differentiation With Higher Infinitesimals, or Computational Smooth Infinitesimal Analysis in Weil Algebra}
 
 \author{Hiromi ISHII}
 \email{h-ishii@math.tsukuba.ac.jp}
@@ -21,9 +21,10 @@
 \renewcommand{\shortauthors}{Hiromi ISHII}
 
 \begin{abstract}
-  We propose a novel algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra, enabling us to do analysis with \emph{higher inifinitesimals}.
-  To that end, we first give a brief description of the (forward-mode) automatic differentiation in terms of $C^\infty$-rings, 
-  The notion of $C^\infty$ is introduced by Lawvere~\cite{lawvere1979categorical}, and used as a fundamental building block \emph{smooth infinitesimal analysis} and \emph{synthetic differential geometry}~\cite{Moerdijk:1991aa}.
+  \frenchspacing
+  We propose an algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra, enabling us to do some analysis with \emph{higher inifinitesimals}.
+  To that end, we first give a brief description of the (forward-mode) automatic differentiation in terms of $C^\infty$-rings.
+  The notion of $C^\infty$-ring is introduced by Lawvere~\cite{lawvere1979categorical}, and used as the fundamental building block of \emph{smooth infinitesimal analysis} and \emph{synthetic differential geometry}~\cite{Moerdijk:1991aa}.
 \end{abstract}
 
 \begin{CCSXML}
@@ -67,14 +68,57 @@
 \maketitle
 
 \section{Introduction}
+\sloppy
 \emph{Automatic Differentiation} is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently.
-
+They are all quite different
 
 \section{Preliminaries}
 
 \section{Algorithms}
 
-\section{Benchmarks}
+\begin{algorithm}[Weil algebra test]\label{alg:weil-test}
+  \hspace{1em}\vspace{-.5em}
+  \begin{description}
+    \item[Input] An ideal $I \subseteq \mathbb{R}[X_1, \dots, X_n]$
+    \item[Output] Returns the following data if $W = \mathbb{R}[\boldsymbol{X}]$ is a Weil algebra; otherwise \verb|No|.
+    \begin{enumerate}
+      \item Monomial basis $\set{\boldsymbol{w}_1, \dots, \boldsymbol{w}_\ell}$ of $W$,
+      \item $M$, the multiplication table of $W$ in terms of the basis,
+      \item $(k_1, \dots, k_n) \in \mathbb{N}^n$ such that $k_i$ is the maximum satisfying $X_i^{k_i} \notin I$ for each $i$, and
+      \item $\NonVan_W$, a table of representations of non-vanishing monomials in $W$;
+      i.e.\ for any $\alpha = (\alpha_1, \dots, \alpha_n) \in \N^n$, if $\alpha_i \leq k_i$ for all $i$, then $\NonVan_W(\X^\alpha) = (c_1, \dots, c_n) \in \R^k$ satisfies $[\X^\alpha]_I = \sum_i c_i \boldsymbol{w}_i$.
+    \end{enumerate} 
+  \end{description}
+
+  \begin{alg}
+G <- calcGroebnerBasis(I)
+If @$I$@ is not zero-dimensional
+  Return No
+@$\set{\boldsymbol{w}_1, \dots, \boldsymbol{w}_\ell}$@ <- Monomial basis of @$I$@
+@$M$@ <- the Multiplication table of @$W$@
+For i in 1..n@\label{line:weil-test:radical-start}@
+  @$p_i$@ <- the monic generator of @$I \cap \R[X_i]$@
+  Return No If @$p_i$@ is not a monomial
+  @$k_i$@ <- @$\deg(p_i) - 1$@@\label{line:weil-test:radical-end}@
+@$\NonVan_W$@ <- {}
+For @$\alpha$@ in @$\Set{\alpha \in \N^n | \alpha_i \leq k_i \; \forall i \leq \ell}$@
+  @$c_1 \boldsymbol{w}_1 + \cdots + c_\ell \boldsymbol{w}_\ell$@ <- @$\rem{\X^\alpha}{G}$@
+  @$\NonVan_W(\X^\alpha)$@ <- (@$c_1, \dots, c_\ell$@)
+Return (@$\vec{\boldsymbol{w}}, M, \vec{k}, \NonVan_W$@)
+\end{alg}
+\end{algorithm}
+
+\begin{theorem}
+  \Cref{alg:weil-test} terminates and returns expected values.
+\end{theorem}
+\begin{proof}
+  Algorithms to decide the zero-dimensionality and calculate their multiplication table is well-known (for detail we refer readers to Cox--Little--O'Shea~\cite[Chapter 2]{CLO:2005}).
+  So the only non-trivial part is nilpotence detection (\Crefrange{line:weil-test:radical-start}{line:weil-test:radical-end}).
+  But, again, this is just a variation of radical calculation algorithm for zero-dimensional ideals.
+  Indeed, since each $\R[X_i]$ is a PID, we have $X_i^k \in I \cap R[X_i]$ iff $p_i \divs X_i^k$, hence $p_i$ must be a monomial iff $X_i$ is nilpotent in $W$.
+\end{proof}
+
+\section{Examples}
 
 \section{Related and Future Works}
 

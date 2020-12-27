@@ -1,3 +1,23 @@
+\usepackage[final]{listings}
+\usepackage{cleveref}
+\usepackage{braket}
+
+\makeatletter
+\newtheoremstyle{acmplainbreak}%
+  {.5\baselineskip\@plus.2\baselineskip%
+    \@minus.2\baselineskip}% space above
+  {.5\baselineskip\@plus.2\baselineskip%
+    \@minus.2\baselineskip}% space below
+  {\@acmplainbodyfont}% body font
+  {\@acmplainindent}% indent amount
+  {\@acmplainheadfont}% head font
+  {.}% punctuation after head
+  {.5em}% spacing after head
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ {\@acmplainnotefont(#3)}}}
+\makeatother
+
+\theoremstyle{acmplainbreak}
+\newtheorem{algorithm}{Algorithm}
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
 \AtBeginDocument{%
@@ -17,3 +37,86 @@
 % \acmISBN{978-1-4503-XXXX-X/18/06}
 
 %%\acmSubmissionID{123-A56-BU3}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\rem}[2]{{\overline{#1}}^{#2}}
+\newcommand{\X}{\boldsymbol{X}}
+\DeclareMathOperator{\NonVan}{NV}
+
+% Syntax
+\definecolor{ltblue}{rgb}{0,0.4,0.4}
+\definecolor{dkblue}{rgb}{0,0.1,0.6}
+\definecolor{dkgreen}{rgb}{0,0.35,0}
+\definecolor{dkviolet}{rgb}{0.3,0,0.5}
+\definecolor{dkred}{rgb}{0.5,0,0}
+\definecolor{comment}{HTML}{444444}
+\definecolor{keywd}{HTML}{8D00ED}
+\definecolor{types}{HTML}{1F7B2F}
+\definecolor{str}{HTML}{4070a0}
+\definecolor{code-background}{gray}{0.8}
+\definecolor{pragma}{HTML}{372A78}
+\definecolor{num}{HTML}{40a070}
+\definecolor{symb}{HTML}{000000}
+\newcommand\symbmath[1]{{\ensuremath{\color{symb}#1}}}
+\newcommand\typemath[1]{{\ensuremath{\uley{#1}}}}
+\newcommand{\moncompose}{\mathbin{>\mkern-6mu=\mkern-6mu>}}
+\newcommand\colmath[2]{{\ensuremath{\color{#1}#2}}}
+\def\ul#1{{\underline{\smash{\bfseries #1}}}}
+\newcommand{\divs}{\mathrel{\mid}}
+
+\lstset{%
+  basicstyle=\ttfamily,
+  identifierstyle=,
+  commentstyle={\color{comment}},
+  keywordstyle={\ul\bfseries\color{keywd}},
+  stringstyle={\slshape},
+  stepnumber=1,
+  % numbersep=-10pt,
+  xleftmargin=15mm,framexleftmargin=15mm,
+  rulecolor=\color{gray},
+  frame=leftline,
+  framerule=0.4pt,
+  numberstyle=\tiny\ttfamily,
+  numbers=left,
+  stepnumber=1, 
+  keywordstyle=,
+  keywords={},
+  emphstyle={},
+  texcl=false,
+  mathescape=false,
+  literate={},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  breaklines=true,
+  captionpos=t,
+  rulecolor={\color{white}},
+  columns=[c]fixed,
+  keepspaces=true,
+}
+\lstdefinelanguage{algorithm}{
+  morecomment=[l][\slshape\color{comment}]{//},
+  morecomment=[n][\bfseries\itshape]{/*}{*/},
+  morestring=[b]\",
+  stringstyle={\slshape},
+  keywords={For,Done,End,in,Let,While,Loop,Do,If,Then,Else,Until,Unless,Return,INPUT,OUTPUT},
+  numbers=left,
+  escapechar=\@,
+  keywordstyle={\ul},
+  morekeywords=[2]{*,+,/,-,.,\%,!,?,=,<,>,$},
+  keywordstyle=[2]{\ttfamily\bfseries},
+  emphstyle={[2]\itshape},
+  literate=
+    {/=}{{\symbmath{\neq}}}2
+    {forall}{{\ensuremath{\pmb{\forall}}}}1
+    {*}{{\symbmath{\times}}}1
+    {+}{{\symbmath{+}}}1
+    {>}{{\symbmath{>}}}2
+    {<}{{\symbmath{<}}}2
+    {->}{{\symbmath{\rightarrow}}}2 {>=}{{\symbmath{\geq}}}2 {<-}{{\symbmath{\leftarrow}}}2
+    {===}{{\symbmath{\equiv}}}2
+    {==>}{{\symbmath{\Longrightarrow}}}{3}
+    {<=}{{\symbmath{\leq}}}1 {=>}{{\symbmath{\Rightarrow}}}2
+}
+\lstnewenvironment{alg}[1][frame=leftline]{\lstset{language=algorithm}}{}
