@@ -15,6 +15,9 @@ on:
 env:
   WORKDIR: rims
   JOBNAME: rims-smooth-paper
+  ARTIFACT_NAME: RIMS Kokyuroku
+  PAGE_LOWERBOUND: 10
+  PAGE_UPPERBOUND: 20
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -72,7 +75,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: RIMS Kokyuroku
+          name: ${{env.ARTIFACT_NAME}}
           path: ${{env.WORKDIR}}/${{env.JOBNAME}}.pdf
           if-no-files-found: error # optional, default is warn
           retention-days: 90
@@ -89,15 +92,15 @@ jobs:
       uses: actions/download-artifact@v2.0.7
       with:
         # Artifact name
-        name: RIMS Kokyuroku
+        name: ${{env.ARTIFACT_NAME}}
         # Destination path
         path: .
     - name: Tell me your pages
       run: |
-        PAGES=$(pdfinfo ${{env.JOBNAME}}.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
-        if [ ${PAGES} -lt 20 ]; then
+        PAGES=$(pdfinfo ${JOBNAME}.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
+        if [ ${PAGE_LOWERBOUND} -lt ${PAGES} -a ${PAGES} -lt ${PAGE_UPPERBOUND} ]; then
           echo "OK: Current pages ${PAGES} satisfies range."
         else
-          echo "NG: Current page count ${PAGES} exeeds range!"
+          echo "NG: Current page count ${PAGES} exeeds range ${PAGE_LOWERBOUND}..${PAGE_UPPERBOUND}!"
           exit 1
         fi
