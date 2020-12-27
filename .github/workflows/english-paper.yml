@@ -77,7 +77,7 @@ jobs:
         with:
           name: ${{env.ARTIFACT_NAME}}
           path: ${{env.WORKDIR}}/${{env.JOBNAME}}.pdf
-          if-no-files-found: error # optional, default is warn
+          if-no-files-found: error # optional, defaule is warn
           retention-days: 90
 
   lint:
@@ -98,7 +98,7 @@ jobs:
     - name: Tell me your pages
       run: |
         PAGES=$(pdfinfo ${JOBNAME}.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
-        if [ ${PAGE_LOWERBOUND} -lt ${PAGES} -a ${PAGES} -lt ${PAGE_UPPERBOUND} ]; then
+        if [ ${PAGE_LOWERBOUND} -le ${PAGES} -a ${PAGES} -le ${PAGE_UPPERBOUND} ]; then
           echo "OK: Current pages ${PAGES} satisfies range."
         else
           echo "::error::Current page count ${PAGES} exceeds range ${PAGE_LOWERBOUND}..${PAGE_UPPERBOUND}!"

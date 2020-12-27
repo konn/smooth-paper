@@ -98,7 +98,7 @@ jobs:
     - name: Tell me your pages
       run: |
         PAGES=$(pdfinfo ${JOBNAME}.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
-        if [ ${PAGE_LOWERBOUND} -lt ${PAGES} -a ${PAGES} -lt ${PAGE_UPPERBOUND} ]; then
+        if [ ${PAGE_LOWERBOUND} -le ${PAGES} -a ${PAGES} -le ${PAGE_UPPERBOUND} ]; then
           echo "OK: Current pages ${PAGES} satisfies range."
         else
           echo "::error::Current page count ${PAGES} exceeds range ${PAGE_LOWERBOUND}..${PAGE_UPPERBOUND}!"
