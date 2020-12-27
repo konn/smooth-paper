@@ -79,7 +79,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-18.04
-    container: docker://konn/texlive2020-slim:20201227.4
+    container: docker://konn/poppler-only:latest
     
     needs:
     - build
