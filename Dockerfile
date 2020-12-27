@@ -27,5 +27,15 @@ ENV PATH=/opt/texlive/${TEXLIVE_VERSION}/bin/x86_64-linux:$PATH
 
 # Making sure the luaotfload to create a cache at least once.
 RUN luaotfload-tool -u -v
-RUN tlmgr install latexmk biber biblatex
+RUN tlmgr install latexmk biber biblatex cluttex
 
+FROM debian:buster-slim AS other-tools
+
+LABEL maintainer="Hiromi ISHII <konn.jinro_at_gmail.com>"
+ENV DEBIAN_FRONTEND noninteractive
+ARG TEXLIVE_VERSION
+
+COPY --from=tex-env /opt/texlive /opt/texlive
+
+RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests poppler-utils poppler-data
+ENV PATH=/opt/texlive/${TEXLIVE_VERSION}/bin/x86_64-linux:$PATH
