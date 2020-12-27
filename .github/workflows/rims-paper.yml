@@ -12,6 +12,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  WORKDIR: rims
+  JOBNAME: rims-smooth-paper
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -27,22 +31,22 @@ jobs:
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
-            rims/rims-smooth-paper.fdb_latexmk
-            rims/.latex/
+            ${{env.WORKDIR}}/${{env.JOBNAME}}.fdb_latexmk
+            ${{env.WORKDIR}}/.latex/
 
           # An explicit key for restoring and saving the cache
-          key: rims-${{github.ref}}-${{ runner.os }}-${{ hashFiles('**/*.tex', '**/*.sty', '**/*.fdb_latexmk', 'extract-generateds.lua') }}
+          key: ${{env.JOBNAME}}-${{github.ref}}-${{ runner.os }}-${{ hashFiles('**/*.tex', '**/*.sty', '**/*.fdb_latexmk', 'extract-generateds.lua') }}
           restore-keys: |
-            rims-${{github.ref}}-${{ runner.os }}-
-            rims-${{github.ref}}-
-            rims-master-
+            ${{env.JOBNAME}}-${{github.ref}}-${{ runner.os }}-
+            ${{env.JOBNAME}}-${{github.ref}}-
+            ${{env.JOBNAME}}-master-
       - name: Create .latex directory if missing
         if: steps.tex-cache.outputs.cache-hit != 'true'
         run: mkdir -p .latex
       - name: Restore latex files
         if: steps.tex-cache.outputs.cache-hit == 'true'
         run: |
-          cd $GITHUB_WORKSPACE/rims
+          cd $GITHUB_WORKSPACE/${WORKDIR}
           if [ -n "$(find .latex/ -mindepth 1 -maxdepth 1)" ]; then
             cp -r .latex/* .
           else
@@ -50,16 +54,16 @@ jobs:
           fi
       - name: Typeset it
         run: |
-          cd $GITHUB_WORKSPACE/rims
+          cd ${GITHUB_WORKSPACE}/${WORKDIR}
           ls
-          latexmk -pdflua main.tex
+          latexmk -pdflua ${JOBNAME}.tex
       
       - name: Store latex generated files
         run: |
-          cd $GITHUB_WORKSPACE/rims
+          cd ${GITHUB_WORKSPACE}/${WORKDIR}
           ls
-          for fdb in $(find rims -name "*.fdb_latexmk"); do
-              for i in $(cat $fdb | texlua ${GITHUB_WORKSPACE}/ci-resources/extract-generateds.lua); do
+          for fdb in $(find . -name "*.fdb_latexmk"); do
+              for i in $(texlua ${GITHUB_WORKSPACE}/ci-resources/extract-generateds.lua <$fdb); do
                 echo "cp $(dirname $fdb)/$i .latex/$(dirname $fdb)/$i"
                 cp $(dirname $fdb)/$i .latex/$(dirname $fdb)/$i
               done
@@ -69,7 +73,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: RIMS Kokyuroku
-          path: rims.pdf
+          path: ${{env.WORKDIR}}/${{env.JOBNAME}}.pdf
           if-no-files-found: error # optional, default is warn
           retention-days: 90
 
@@ -81,17 +85,16 @@ jobs:
     - build
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.7
       with:
         # Artifact name
         name: RIMS Kokyuroku
         # Destination path
-        path: rims
+        path: .
     - name: Tell me your pages
       run: |
-        PAGES=$(pdfinfo rims/rims-smooth-paper.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
+        PAGES=$(pdfinfo ${{env.JOBNAME}}.pdf | grep "Pages:" | cut -d ':' -f2 | sed 's/[ \t]*//g')
         if [ ${PAGES} -lt 20 ]; then
           echo "OK: Current pages ${PAGES} satisfies range."
         else
