@@ -42,23 +42,21 @@ jobs:
       - name: Restore latex files
         if: steps.tex-cache.outputs.cache-hit == 'true'
         run: |
-          pushd rims
+          cd $GITHUB_WORKSPACE/rims
           if [ -n "$(find .latex/ -mindepth 1 -maxdepth 1)" ]; then
             cp -r .latex/* .
           else
             echo "No .latex/ directory found. skip"
           fi
-          popd
       - name: Typeset it
         run: |
-          pushd rims
+          cd $GITHUB_WORKSPACE/rims
           ls
           latexmk -pdflua main.tex
-          popd
       
       - name: Store latex generated files
         run: |
-          pushd rims
+          cd $GITHUB_WORKSPACE/rims
           ls
           for fdb in $(find rims -name "*.fdb_latexmk"); do
               for i in $(cat $fdb | texlua ${GITHUB_WORKSPACE}/ci-resources/extract-generateds.lua); do
