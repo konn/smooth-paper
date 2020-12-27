@@ -41,8 +41,8 @@ jobs:
             ${{env.JOBNAME}}-${{github.ref}}-
             ${{env.JOBNAME}}-master-
       - name: Create .latex directory if missing
-        if: steps.tex-cache.outputs.cache-hit != 'true'
-        run: mkdir -p .latex
+        run: |
+          [ -d ${WORKDIR}/.latex ] || mkdir -p ${WORKDIR}/.latex
       - name: Restore latex files
         if: steps.tex-cache.outputs.cache-hit == 'true'
         run: |
