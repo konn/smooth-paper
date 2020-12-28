@@ -1,6 +1,7 @@
 \usepackage[final]{listings}
 \usepackage{cleveref}
 \usepackage{braket}
+\usepackage[draft]{fixme}
 
 \makeatletter
 \newtheoremstyle{acmplainbreak}%
@@ -64,6 +65,9 @@
 \newcommand\colmath[2]{{\ensuremath{\color{#1}#2}}}
 \def\ul#1{{\underline{\smash{\bfseries #1}}}}
 \newcommand{\divs}{\mathrel{\mid}}
+\newcommand{\CartSp}{\mathord{\mathrm{CartSp}}}
+\newcommand{\RAlg}{\mathord{\R{\text{-}}\mathrm{Alg}}}
+\newcommand{\Sets}{\mathord{\mathrm{Sets}}}
 
 \lstset{%
   basicstyle=\ttfamily,
@@ -100,21 +104,28 @@
   morecomment=[n][\bfseries\itshape]{/*}{*/},
   morestring=[b]\",
   stringstyle={\slshape},
-  keywords={For,Done,End,in,Let,While,Loop,Do,If,Then,Else,Until,Unless,Return,INPUT,OUTPUT},
+  keywords={Pick,For,Done,End,in,with,Let,While,Loop,Do,If,Then,Else,Until,Unless,Return,INPUT,OUTPUT},
   numbers=left,
   escapechar=\@,
   keywordstyle={\ul},
   morekeywords=[2]{*,+,/,-,.,\%,!,?,=,<,>,$},
   keywordstyle=[2]{\ttfamily\bfseries},
+  morekeywords=[3]{WeilTest},
+  keywordstyle=[3]{\rmfamily\upshape\scshape},
   emphstyle={[2]\itshape},
   literate=
     {/=}{{\symbmath{\neq}}}2
     {forall}{{\ensuremath{\pmb{\forall}}}}1
     {*}{{\symbmath{\times}}}1
+    {I}{{\symbmath{I}}}1
     {+}{{\symbmath{+}}}1
     {>}{{\symbmath{>}}}2
+    {...}{{\symbmath{\ldots}}}2
     {<}{{\symbmath{<}}}2
+    {alpha}{{\symbmath{\alpha}}}1
     {->}{{\symbmath{\rightarrow}}}2 {>=}{{\symbmath{\geq}}}2 {<-}{{\symbmath{\leftarrow}}}2
+    {g_i}{{\symbmath{g_i}}}2
+    {f_i}{{\symbmath{f_i}}}2
     {===}{{\symbmath{\equiv}}}2
     {==>}{{\symbmath{\Longrightarrow}}}{3}
     {<=}{{\symbmath{\leq}}}1 {=>}{{\symbmath{\Rightarrow}}}2
