@@ -79,13 +79,48 @@ Then in \Cref{sec:alg}, we will give algorithms to compute $C^\infty$-ring struc
 We give some small examples in \Cref{sec:examples}, using our proof-of-concept implementation~\cite{Ishii:2020aa} in Haskell.
 Finally, we discuss related and possible future works and conclude in \Cref{sec:concl}.
 
+\section{Preliminaries}\label{sec:prel}
+In this section, we will briefly review classical definitions and facts on Weil algebras and $C^\infty$-rings without proofs, which will be used in \Cref{sec:alg}.
+For theoretical detail, we refer readers to Moerdijk--Reyes~\cite[Chapters I and II]{Moerdijk:1991aa} or Joyce~\cite{joyce2016algebraic}.
 
-\section{Preliminaries}
+\begin{definition}[Lawvere~\cite{lawvere1979categorical}]
+  A \emph{$C^\infty$}-algebra $A$ is a product-preserving functor from the category $\CartSp$ of finite-dimensional Euclidean spaces and smooth maps to the category $\Sets$ of sets.
 
-\section{Algorithms}
+  We identify $A$ with a $A(\R)$ and $A^n$ with $A(\R^n)$.
+\end{definition}
 
-\begin{algorithm}[Weil algebra test]\label{alg:weil-test}
-  \hspace{1em}\vspace{-.5em}
+Intuitively, $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary operations $A(f): A^m \to A$ respecting composition and product for all smooth map $f: \R^m \to \R$.
+
+One typical example of $C^\infty$-ring is a formal power series ring:
+
+\begin{theorem}[Lawvere]\label{thm:series-is-smooth}
+  A ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $0$.
+  In particular, lifting of a smooth map $f: \R^m \to \R$ is given by:
+  \[
+    \R\llbracket\X\rrbracket(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
+  \]
+  where $\alpha! = \alpha_1 ! \dots \alpha_n !$ is the multi-index factorial and $D^\alpha$ is the partial differential operator to degree $\alpha$.
+\end{theorem}
+
+$C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has deep connection with $\R\llbracket\X\rrbracket$:
+
+\begin{definition}[Weil algebra]
+  A \emph{Weil algebra} $W$ is an algebra of form $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
+\end{definition}
+It follows that Weil algebra $W$ is finite-dimensional as a $R$-linear space and hence $I$ is a \emph{zero-dimensional} ideal.
+Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
+In what follows, we identify an element $\boldsymbol{u} \in W$ of $k$-dimensional Weil algebra $W$ with a $k$-vector $\boldsymbol{u} = (u_1, \dots, u_k) \in \R^k$ of reals.
+
+Although it is not so clear from the definition, Weil algebras have the canonical $C^\infty$-structure.
+First note that, if $I$ is zero-dimensional, we have $\R[\X]/I \simeq \R\llbracket \X \rrbracket /I$.
+Hence, in particular, Weil algebra $W$ can also be regarded as a quotient ring of formal power series by zero-dimensional ideal.
+Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that any Weil algebra $W$ has the canonical $C^\infty$-ring structure:
+
+\begin{lemma}
+  For any $C^\infty$-ring $A$ and a ring-theoretical ideal $I \subseteq A$, the quotient ring $A/I$ again has the canonical $C^\infty$-ring structure.
+  In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\R\llbracket\X\rrbracket$.
+\end{lemma}
+
   \begin{description}
     \item[Input] An ideal $I \subseteq \mathbb{R}[X_1, \dots, X_n]$
     \item[Output] Returns the following data if $W = \mathbb{R}[\boldsymbol{X}]$ is a Weil algebra; otherwise \verb|No|.
