@@ -69,7 +69,7 @@
 
 \section{Introduction}\label{sec:intro}
 \sloppy
-\emph{Automatic Differentiation} (or, \emph{AD} for short) is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently\fxnote{More elaborate}.
+\emph{Automatic Differentiation} (or, \emph{AD} for short) is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently\fxnote{More elaboration needed}.
 
 This paper is organised as follows.
 In \Cref{sec:prel}, we will briefly review the basic concepts and facts on $C^\infty$-rings and Weil algebras.
@@ -121,23 +121,31 @@ Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that 
   In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\R\llbracket\X\rrbracket$.
 \end{lemma}
 
+\section{Connection between Automatic Differentiation and Weil Algebras}
+\label{sec:ad-and-weils}
+
+\section{Algorithms}\label{sec:alg}
+
+\begin{algorithm}[\textsc{WeilTest}]\label{alg:weil-test}
+  \hspace{1em}\vspace{-.25em}
   \begin{description}
     \item[Input] An ideal $I \subseteq \mathbb{R}[X_1, \dots, X_n]$
-    \item[Output] Returns the following data if $W = \mathbb{R}[\boldsymbol{X}]$ is a Weil algebra; otherwise \verb|No|.
+    \item[Output] Returns the following data if $W = \mathbb{R}[\boldsymbol{X}]/I$ is a Weil algebra; otherwise \verb|No|.
     \begin{enumerate}
-      \item Monomial basis $\set{\boldsymbol{w}_1, \dots, \boldsymbol{w}_\ell}$ of $W$,
+      \item Monomial basis $\set{\boldsymbol{b}_1, \dots, \boldsymbol{b}_\ell}$ of $W$,
       \item $M$, the multiplication table of $W$ in terms of the basis,
       \item $(k_1, \dots, k_n) \in \mathbb{N}^n$ such that $k_i$ is the maximum satisfying $X_i^{k_i} \notin I$ for each $i$, and
       \item $\NonVan_W$, a table of representations of non-vanishing monomials in $W$;
-      i.e.\ for any $\alpha = (\alpha_1, \dots, \alpha_n) \in \N^n$, if $\alpha_i \leq k_i$ for all $i$, then $\NonVan_W(\X^\alpha) = (c_1, \dots, c_n) \in \R^k$ satisfies $[\X^\alpha]_I = \sum_i c_i \boldsymbol{w}_i$.
+      i.e.\ for any $\alpha = (\alpha_1, \dots, \alpha_n) \in \N^n$, if $\alpha_i \leq k_i$ for all $i$, then $\NonVan_W(\X^\alpha) = (c_1, \dots, c_n) \in \R^k$ satisfies $[\X^\alpha]_I = \sum_i c_i \boldsymbol{b}_i$.
     \end{enumerate} 
+    \item[Procedure]
   \end{description}
 
   \begin{alg}
 G <- calcGroebnerBasis(I)
 If @$I$@ is not zero-dimensional
   Return No
-@$\set{\boldsymbol{w}_1, \dots, \boldsymbol{w}_\ell}$@ <- Monomial basis of @$I$@
+@$\set{\boldsymbol{b}_1, \dots, \boldsymbol{b}_\ell}$@ <- Monomial basis of @$I$@
 @$M$@ <- the Multiplication table of @$W$@
 For i in 1..n@\label{line:weil-test:radical-start}@
   @$p_i$@ <- the monic generator of @$I \cap \R[X_i]$@
@@ -145,9 +153,9 @@ For i in 1..n@\label{line:weil-test:radical-start}@
   @$k_i$@ <- @$\deg(p_i) - 1$@@\label{line:weil-test:radical-end}@
 @$\NonVan_W$@ <- {}
 For @$\alpha$@ in @$\Set{\alpha \in \N^n | \alpha_i \leq k_i \; \forall i \leq \ell}$@
-  @$c_1 \boldsymbol{w}_1 + \cdots + c_\ell \boldsymbol{w}_\ell$@ <- @$\rem{\X^\alpha}{G}$@
+  @$c_1 \boldsymbol{b}_1 + \cdots + c_\ell \boldsymbol{b}_\ell$@ <- @$\rem{\X^\alpha}{G}$@
   @$\NonVan_W(\X^\alpha)$@ <- (@$c_1, \dots, c_\ell$@)
-Return (@$\vec{\boldsymbol{w}}, M, \vec{k}, \NonVan_W$@)
+Return (@$\vec{\boldsymbol{b}}, M, \vec{k}, \NonVan_W$@)
 \end{alg}
 \end{algorithm}
 
@@ -160,15 +168,36 @@ Return (@$\vec{\boldsymbol{w}}, M, \vec{k}, \NonVan_W$@)
   But, again, this is just a variation of radical calculation algorithm for zero-dimensional ideals.
   Indeed, since each $\R[X_i]$ is a PID, we have $X_i^k \in I \cap R[X_i]$ iff $p_i \divs X_i^k$, hence $p_i$ must be a monomial iff $X_i$ is nilpotent in $W$.
 \end{proof}
+Now that we have information of a basis and multiplication table, we can calculate ordinary algebraic operations and take tensor products of Weil algebras just by the standard means.
 
-\section{Examples}
+And, with upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\R\llbracket\X\rrbracket$:
 
-\section{Related and Future Works}
+\begin{algorithm}[$C^\infty$-ring Structure of Weil Algebra]
+  \hfill\vspace{-.25em}
+  \begin{description}
+    \item[Input]
+      $I \subseteq \R[\X]$, an ideal where $W = \R[\X]/I$ is a Weil algebra,
+      $\R \llbracket\X\rrbracket(f): \R\llbracket\X\rrbracket^m \to \R\llbracket\X\rrbracket$, a lifting of a smooth map $f: \R^m \to \R$ to $\R\llbracket\X\rrbracket$, and $\vec{\boldsymbol{u}} = (\boldsymbol{u}_1, \dots, \boldsymbol{u}_m) \in W^m$,.
+    \item[Output] $\boldsymbol{v} = W(f)(\vec{\boldsymbol u}) \in W$, the value of $f$ at $\vec{\boldsymbol{u}}$ given by $C^\infty$-structure.
+    \item[Procedure] 
+  \end{description}
+\begin{alg}
+(@$\vec{\boldsymbol{b}}$@, M, @$\vec{k}$@, @$\NonVan_W$@) <- WeilTest(I)
+g_i <- @$(\boldsymbol{b}_1, \dots, \boldsymbol{b}_k) \cdot \boldsymbol{u}_i \in \R[\X]$@ for i <= m
+h = @$\sum_\alpha c_\alpha \X^\alpha$@ <- @$\R\llbracket\X\rrbracket(f)(\vec{g})$@
+@$\boldsymbol v$@ <- 0
+For alpha with @$\alpha_i \leq k_i\, \forall i$@
+  @$\boldsymbol{v}$@ <- @$\boldsymbol v$@ + @$c_\alpha \NonVan_W(\X^\alpha)$@
+Return @$\boldsymbol{v}$@
+\end{alg}
+\end{algorithm}
 
-\section{Conclusion}
+\section{Examples}\label{sec:examples}
+
+\section{Conclusion}\label{sec:concl}
 
 \begin{acks}
-The author is grateful for Prof.\ Akira Terui, for encouraging  to write this paper.
+The author is grateful to Prof.\ Akira Terui, for encouraging  to write this paper.
 
 This work was supported by the Research Institute for Mathematical Sciences,
 an International Joint Usage/Research Center located in Kyoto University.
