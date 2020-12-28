@@ -67,10 +67,18 @@
 
 \maketitle
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 \sloppy
-\emph{Automatic Differentiation} is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently.
-They are all quite different
+\emph{Automatic Differentiation} (or, \emph{AD} for short) is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently\fxnote{More elaborate}.
+
+This paper is organised as follows.
+In \Cref{sec:prel}, we will briefly review the basic concepts and facts on $C^\infty$-rings and Weil algebras.
+Subsequently, we will give some exposition of the connection between forward-mode automatic differentiation and Weil algebras in \Cref{sec:ad-and-weils}.
+There, we will see how the notion of Weil algebra can be exploited to treat higher-order partial ADs in a unified and general setting.
+Then in \Cref{sec:alg}, we will give algorithms to compute $C^\infty$-ring structure of arbitrary Weil algebra, enabling us \emph{automatic differentiation with higher infinitesimals}, or \emph{computational smooth infinitesimal analysis}.
+We give some small examples in \Cref{sec:examples}, using our proof-of-concept implementation~\cite{Ishii:2020aa} in Haskell.
+Finally, we discuss related and possible future works and conclude in \Cref{sec:concl}.
+
 
 \section{Preliminaries}
 
