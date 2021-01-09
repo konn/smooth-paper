@@ -97,12 +97,12 @@ One typical example of $C^\infty$-ring is a formal power series ring:
   A ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $0$.
   In particular, lifting of a smooth map $f: \R^m \to \R$ is given by:
   \[
-    \R\llbracket\X\rrbracket(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
+    \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
   \]
   where $\alpha! = \alpha_1 ! \dots \alpha_n !$ is the multi-index factorial and $D^\alpha$ is the partial differential operator to degree $\alpha$.
 \end{theorem}
 
-$C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has deep connection with $\R\llbracket\X\rrbracket$:
+$C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has deep connection with $\Rseries$:
 
 \begin{definition}[Weil algebra]
   A \emph{Weil algebra} $W$ is an algebra of form $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
@@ -118,13 +118,67 @@ Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that 
 
 \begin{lemma}
   For any $C^\infty$-ring $A$ and a ring-theoretical ideal $I \subseteq A$, the quotient ring $A/I$ again has the canonical $C^\infty$-ring structure.
-  In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\R\llbracket\X\rrbracket$.
+  In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\Rseries$.
 \end{lemma}
 
 \section{Connection between Automatic Differentiation and Weil Algebras}
 \label{sec:ad-and-weils}
 
+\begin{definition}
+  The \emph{dual number ring} is a Weil algebra $\R[X]/(X^2)$.
+  We often write $d = {(X)}_I \in \R[d]$ and $\R[d] \coloneq \R[X]/X^2$.
+
+  We use analogous notation for multivariate versions:
+  
+  \[
+    \R[d_1, \dots, d_k] \coloneq \R[\X]/(X_1^2, \dots, X_k^2)
+    \simeq \underbrace{\R[d] \otimes_\R \dots \otimes_\R \R[d]}_{k\text{-copies}}
+  \]
+\end{definition}
+
+By an easy induction, we can show the following:
+\begin{theorem}\label{thm:univ-partial-duals}
+  For any $f: \R^n \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
+  \[
+    \R[d_1, \dots, d_k](f)(x + d_1 + \cdots d_n) 
+    = \sum_{0 \leq i \leq n} f^{(i)}(x)\sigma^i_n(\vec{d}),
+  \]
+  where, $\sigma^i_k(x_1, \dots, x_k)$ denotes the $k$-variate elementary symmetric polynomial of degree $i$.
+\end{theorem}
+
+It immediately extends to the multivariate case.
+
+\begin{theorem}\label{thm:multi-partial-duals}
+  Let
+  \[
+    W \coloneq \R[d_{1,1}, \dots, d_{1,k_1}] \otimes_\R \dots \otimes_\R \R[d_{n,1}, \dots, d_{n,k_n}].
+  \]
+  For any $f: \R^n \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
+  \begin{align*}
+    &W(f)\left(x + \sum_{j \leq n}\sum_{i \leq k_j} d_{j,i}\right) \\
+    = &\sum_{\alpha \leq (k_1,\dots,k_n)} \mathop{D}\nolimits^\alpha f(\boldsymbol{x})
+    \sigma^{\alpha_1}_{k_1}(\vec{d}_1) 
+    \cdots
+    \sigma^{\alpha_n}_{k_n}(\vec{d}_n).
+  \end{align*}
+  In particular, for $\alpha \leq (k_1, \dots, k_n)$, a partial coefficient $D^\alpha(f)(\boldsymbol{x})$ is given by a coefficient of $d_{1,1}^{\alpha_1} d_{2,1}^{\alpha_2} \cdots d_{n,1}^{\alpha_2}$ in $W(f)(\boldsymbol{x})$.
+\end{theorem}
+This illustrates how we can derive higher-order AD from the first-order forward-mode AD.
+If we continue this ad infinitum and lazily, we can reach the same method as so-called Tower AD (see~\cite{Pearlmutter:2007aa,Kmett:2010aa} for detail and implementation).
+
 \section{Algorithms}\label{sec:alg}
+In this section, we will present the main results of this paper: concrete algorithms to compute $C^\infty$-structure of arbitrary Weil algebra.
+Roughly speaking, the algorithms can be divided into threefold:
+
+\begin{enumerate}
+  \item A procedure deciding Weil-ness of an ideal and returning data required to compute $C^\infty$-structure (\textsc{WeilTest}, \Cref{alg:weil-test}),
+  \item A procedure to compute the lifting  $W(f): W^m \to W$ to Weil albgebra $W$ from $\Rseries(f)$ (\textsc{LiftWeil}, \Cref{alg:smooth-weil}), and
+  \item A procedure to lift smooth map $f: \R^m \to \R$ to the $m$-variate formal power series ring $\Rseries$.\label{step:lift-series}
+\end{enumerate}
+
+As we shall see later, in step~\ref{step:lift-series}, we don't need overall coefficients lifted to $\Rseries$ but only a finite fragment.
+
+We start with Weil-ness testing:
 
 \begin{algorithm}[\textsc{WeilTest}]\label{alg:weil-test}
   \hspace{1em}\vspace{-.25em}
@@ -138,7 +192,7 @@ Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that 
       \item $\NonVan_W$, a table of representations of non-vanishing monomials in $W$;
       i.e.\ for any $\alpha = (\alpha_1, \dots, \alpha_n) \in \N^n$, if $\alpha_i \leq k_i$ for all $i$, then $\NonVan_W(\X^\alpha) = (c_1, \dots, c_n) \in \R^k$ satisfies $[\X^\alpha]_I = \sum_i c_i \boldsymbol{b}_i$.
     \end{enumerate} 
-    \item[Procedure]
+    \item[Procedure] \textup{\textsc{WeilTest}}
   \end{description}
 
   \begin{alg}
@@ -170,21 +224,21 @@ Return (@$\vec{\boldsymbol{b}}, M, \vec{k}, \NonVan_W$@)
 \end{proof}
 Now that we have information of a basis and multiplication table, we can calculate ordinary algebraic operations and take tensor products of Weil algebras just by the standard means.
 
-And, with upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\R\llbracket\X\rrbracket$:
+And, with upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\Rseries$:
 
-\begin{algorithm}[$C^\infty$-ring Structure of Weil Algebra]
+\begin{algorithm}[\textsc{LiftWeil}]\label{alg:smooth-weil}
   \hfill\vspace{-.25em}
   \begin{description}
     \item[Input]
       $I \subseteq \R[\X]$, an ideal where $W = \R[\X]/I$ is a Weil algebra,
-      $\R \llbracket\X\rrbracket(f): \R\llbracket\X\rrbracket^m \to \R\llbracket\X\rrbracket$, a lifting of a smooth map $f: \R^m \to \R$ to $\R\llbracket\X\rrbracket$, and $\vec{\boldsymbol{u}} = (\boldsymbol{u}_1, \dots, \boldsymbol{u}_m) \in W^m$,.
+      $\R \llbracket\X\rrbracket(f): \Rseries^m \to \Rseries$, a lifting of a smooth map $f: \R^m \to \R$ to $\Rseries$, and $\vec{\boldsymbol{u}} = (\boldsymbol{u}_1, \dots, \boldsymbol{u}_m) \in W^m$,.
     \item[Output] $\boldsymbol{v} = W(f)(\vec{\boldsymbol u}) \in W$, the value of $f$ at $\vec{\boldsymbol{u}}$ given by $C^\infty$-structure.
-    \item[Procedure] 
+    \item[Procedure] \textup{\textsc{LiftWeil}}
   \end{description}
 \begin{alg}
 (@$\vec{\boldsymbol{b}}$@, M, @$\vec{k}$@, @$\NonVan_W$@) <- WeilTest(I)
 g_i <- @$(\boldsymbol{b}_1, \dots, \boldsymbol{b}_k) \cdot \boldsymbol{u}_i \in \R[\X]$@ for i <= m
-h = @$\sum_\alpha c_\alpha \X^\alpha$@ <- @$\R\llbracket\X\rrbracket(f)(\vec{g})$@
+h = @$\sum_\alpha c_\alpha \X^\alpha$@ <- @$\Rseries(f)(\vec{g})$@
 @$\boldsymbol v$@ <- 0
 For alpha with @$\alpha_i \leq k_i\, \forall i$@
   @$\boldsymbol{v}$@ <- @$\boldsymbol v$@ + @$c_\alpha \NonVan_W(\X^\alpha)$@
@@ -192,9 +246,27 @@ Return @$\boldsymbol{v}$@
 \end{alg}
 \end{algorithm}
 
+The termination and validity of \Cref{alg:smooth-weil} are clear.
+
+It remains to compute $C^\infty$-structure of $\Rseries$.
+Thanks to \Cref{alg:smooth-weil}, we know the precise definition of lifting to $\Rseries$.
+Given $f: \R^n \smoothto \R$, we could employ a purely symbolic algorithm to calculate an entire power series.
+On the other hand, symbolic computation along this line could be quite expensive without any heuristics.
+One possible alternative is to employ Lazy multivariate Tower AD~\cite{Pearlmutter:2007aa} or Sparse Tower mode\footnote{For an implementation, see, for example, \texttt{Numeric.AD.Internal.Sparse} module of \texttt{ad}~\cite{Kmett:2010aa}.}.
+These methods can be obtained by applying \Cref{thm:multi-partial-duals} ad infinitum.
+If one uses a language with easy laziness support, our task is done by Tower AD.
+Fortunately enough, we don't need the entire information of power series.
+Concerning the use of power series in \Cref{alg:smooth-weil}, we need only a finite fragment of the series of interest; we need the coefficients up to multidegree $(k_1, \dots, k_n)$.
+Hence, we can resort to automatic differentiation up to a fixed degree, so one can just apply ADs finitely many times as \Cref{thm:multi-partial-duals} required.
+Equivalently, one can implement the $C^\infty$-structure of multi-dual number ring $\R[\vec{d}]$ directly and use them.
+
 \section{Examples}\label{sec:examples}
+We have implemented the algorithms introduced in the previous section on top of the \texttt{computational-algebra}~\cite{ISHII:2018ek,computational-algebra} package, a computer algebra system implemented as an Embedded Domain Specific Language in Haskell.
+The code is available on GitHub~\cite{Ishii:2020aa}.
 
 \section{Conclusion}\label{sec:concl}
+
+\section*{Appendix: Symbolic computation of smooth structure }\label{sec:appendix}
 
 \begin{acks}
 The author is grateful to Prof.\ Akira Terui, for encouraging  to write this paper.
