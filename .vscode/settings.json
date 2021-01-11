@@ -8,10 +8,30 @@
     ".github/workflows/english-paper.yml",
     ".github/workflows/rims-paper.yml"
   ],
+  "catex.image-completion": {
+    "name": "CaTeX Image Completion",
+    "languages": [
+      "latex"
+    ],
+    "triggers": [
+      ";"
+    ],
+    "dictionary": [
+      "defaults/images.json",
+      {
+        "label": "/>",
+        "body": "nearrow",
+        "description": "↗"
+      },
+      { "label": "|`",
+        "body": "upharpoonright",
+        "description": "↾"
+      }
+      ],
+    "renderMode": "latex"
+  },
   "catex.environment.dictionary": [
-    {
-      "include": "defaults/environments.json"
-    },
+    "defaults/environments.json",
     {
       "name": "tikzpicture",
       "args": [
@@ -110,6 +130,9 @@
     },
     {
       "name": "alg"
+    },
+    {
+      "name": "code"
     }
   ],
   "catex.section.dictionary": [
