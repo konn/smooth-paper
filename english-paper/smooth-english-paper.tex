@@ -204,14 +204,15 @@ The above can be proven by an easy induction.
 If we continue this ad infinitum and lazily, we can reach the same method as so-called Tower AD (see~\cite{Pearlmutter:2007aa,Kmett:2010aa} for detail and implementation).
 
 However, as one can easily see, terms in $\Rseries/(X_i^2)$ can grow exponentially and it includes duplicated coefficients.
+How could we reduce such duplication and save space consumption? ---This is where general Weil algebras, beyond (repeated) dual numbers, can play a role.
 We can get derivatives in more succinct representation with \emph{higher infinitesimal} beyond dual numbers:
 
 \begin{lemma}\label{lem:higher-infinitesimal}
-  Let $W = \R[X]/(X^{n + 1})$ and $\varepsilon = {[X]}_{(X^{n+1})}$ for $n \in \N$.
+  Let $I = (X^{n + 1}), W = \R[X]/I$ and $\varepsilon = {[X]}_I$ for $n \in \N$.
   Given $f: \R \smoothto \R$ and $a \in \R$, we have:
   \[
-    W(f)(a + d)
-    = \sum_{k \leq n} \frac{f^{(k)}(a)}{k !} X^k.
+    W(f)(a + \varepsilon)
+    = \sum_{k \leq n} \frac{f^{(k)}(a)}{k !} \varepsilon^k.
   \]
 \end{lemma}
 In this representation, we only have $(n + 1)$-terms and hence it results in succinct and efficient representation of derivatives.
@@ -223,7 +224,7 @@ If we duplicate such higher-order infinitesimals as much as one wants, one can l
   \[
     W(f)(a_1 + \varepsilon_1, \dots, a_m + \varepsilon_m) =
       \sum_{\delta_i \leq \beta_i} 
-      \frac{D^\delta f}{\delta !}(\boldsymbol{a}) \X^\delta.
+      \frac{D^\delta f}{\delta !}(\boldsymbol{a})\ \varepsilon_1^{\delta_1} \cdots \varepsilon_m^{\delta_m}.
   \]
 \end{lemma}
 
@@ -606,8 +607,12 @@ Let's see what will happen evaluating $sin(a + d_0 + d_1)$, where $d_0 = [x]_I, 
 Carefully analysing each output, one can see that the output coincides with what is given by \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal}.
 
 \section{Discussions and Conclusions}\label{sec:concl}
-We have illustrated the connection of automatic differentiation (AD) and $C^\infty$-rings, especially Weil algebras.
-Using tensor products of Weil algebra, one can easily compose (univariate) higher-order AD corresponding to Weil algebras into multivariate ones.
+We have illustrated the connection of automatic differentiation (AD) and $C^\infty$-rings, especially Weil algebras, and general algorithms to compute $C^\infty$-structure of Weil algebras.
+Weil algebra is a real line-like algebra augmented with nilpotent infinitesimals, typically exemplified by the dual number ring $R[d] = R[X]/X^2$.
+Then forward-mode AD can be seen as a mechanised form of dual number operations.
+We generalised this view to general Weil algebras with higher infinitesimals beyond dual numbers, enabling us to compute higher-order derivatives efficiently and succinctly.
+Then, with tensor products, one can easily compose (univariate) higher-order AD corresponding to Weil algebras into multivariate ones.
+
 In this last section, we briefly discuss the possible applications aside AD, related works and future works.
 
 \subsection{Possible Applications and Related Works}
