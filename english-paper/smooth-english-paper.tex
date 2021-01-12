@@ -339,9 +339,7 @@ Here, we give a simple procedure to compute Weil settings of the tensor product 
   \item[Procedure] {\upshape \textsc{WeilTensor}}
 \end{description}
 \begin{alg}
-For i in 1..(@$\ell_1$@ * @$\ell_2$@)
-  (j, k) <- i `divMod` @$\ell_2$@
-  @$\boldsymbol{b}_i$@ <- @$\boldsymbol{b}^1_j \boldsymbol{b}^2_k$@
+(@$\boldsymbol{b}_1, \dots, \boldsymbol{b}_{\ell_1 \ell_2}$@) <- Convol(@$\vec{\boldsymbol{b}}^1, \vec{\boldsymbol{b}}^2$@)
 M <- {}
 For ({@$\boldsymbol{b}^1_L, \boldsymbol{b}^1_R$@}, @$(c_1,\dots,c_{\ell_1})$@) in @$M_1$@
   For ({@$\boldsymbol{b}^2_L, \boldsymbol{b}^2_R$@}, @$(d_1,\dots,d_{\ell_1})$@) in @$M_2$@
