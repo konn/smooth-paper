@@ -144,6 +144,9 @@
     },
     {
       "name": "haskell"
+    },
+    {
+      "name": "align*"
     }
   ],
   "catex.section.dictionary": [

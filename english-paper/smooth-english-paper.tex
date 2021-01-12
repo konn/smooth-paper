@@ -399,9 +399,9 @@ The validity is a routine work.
 We have implemented the algorithms introduced in the previous section on top of two libraries: \texttt{computational-algebra} package~\cite{ISHII:2018ek,computational-algebra} and \texttt{ad} package~\cite{Kmett:2010aa}.
 The code is available on GitHub~\cite{Ishii:2020aa}.
 
-\subsection{Higher-order derivatives via dual numebrs and higher infinitesimals}
+\subsection{Higher-order derivatives via dual numbers and higher infinitesimals}
 As indicated by \Cref{thm:univ-partial-duals} and \Cref{lem:higher-infinitesimal},
-to compute higher-order derivatives of univariate functions with we can use multiple tensor products of Dual numebrs or higher order inifinitesimals.
+to compute higher-order derivatives of univariate functions with we can use multiple tensor products of Dual numbers or higher-order infinitesimals.
 
 Let us first compute higher-order derivatives of $\sin$ up to $3$.
 
@@ -565,9 +565,48 @@ Let's see what will happen evaluating $sin(a + d_0 + d_1)$, where $d_0 = [x]_I, 
   + (cos x) d(1) + (sin x)
 \end{code}
 
-Carefully analysing each outputs, one can see that the output coincides with what is given by \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal}.
+Carefully analysing each output, one can see that the output coincides with what is given by \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal}.
 
-\section{Conclusion}\label{sec:concl}
+\section{Discussions and Conclusions}\label{sec:concl}
+We have illustrated the connection of automatic differentiation (AD) and $C^\infty$-rings, especially Weil algebras.
+Using tensor products of Weil algebra, one can easily compose (univariate) higher-order AD corresponding to Weil algebras into multivariate ones.
+In this last section, we briefly discuss the possible applications aside AD, related works and future works.
+
+\subsection{Possible Applications and Related Works}
+Beside the reformulation of AD, we can argue that our methods can be used for a pedagogical purpose in teaching \emph{Smooth Infinitesimal Analysis} (SIA) and \emph{Synthetic Differential Geometry} (SDG).
+In those fields, arguing in the appropriate intuitionistic topos, various infinitesimal spaces corresponding to Weil algebra is used to build a theory, expressed by the following \emph{generalised Kock-Lawvere axiom}~\cite{Moerdijk:1991aa}:
+
+\begin{quote}
+  For any Weil algebra $W$, the following evaluation map gives an isomorphism:
+  \begin{align*}
+    f: &W \to   \R^{\mathop{\mathrm{Spec}}_\R{W}}\\
+       &a \mapsto \lambda f. f(a)
+  \end{align*}
+\end{quote}
+This is another way to state the fact that Weil algebras are $C^\infty$-rings, viewed within some topoi.
+For dual numbers, their meaning is clear: it just couples a value and their (first-order) differential coefficient.
+But, solely from Kock-Lawvere axiom, it is unclear what the result corresponding to general Weil algebra $W$.
+With the algorithms we have presented, students can use computers to calculate what the map given by the axiom actually is.
+Since, in these fields, there are plenty of uses of generalised infinitesimal spaces such as $\R[x_1,\dots, x_n]/\braket{x_i x_j | i, j \leq n}$ or $\R[x]/(x^n)$,concrete examples for these Weil algebras can help to understand the theory.
+
+In the context of SDG, applying techniques in computer algebra to Weil algebras has attained only little interest.
+One such example is Nishimura--Osoekawa~\cite{Nishimura:2007aa}: they apply zero-dimensional ideal algorithms to compute categorical limits of Weil algebras.
+However, their purpose is to use computer algebra to ease heavy calculations needed to develop the theory of SDG, and hence they are not interested in computing $C^\infty$-structure of Weil algebras, but calculating the finite presentation of limits of diagrams of Weil algebras.
+
+Implementing AD in a functional setting has a long history.
+See, for example, Elliott~\cite{Elliott2009-beautiful-differentiation} for explanation and \texttt{ad} package by Kmett~\cite{Kmett:2010aa} for actual implementation.
+In \texttt{ad} package, so-called \emph{Skolem trick}, or \emph{RankN trick} is applied to distinguish multiple directional derivatives.
+We argue that, our method pursues other direction of formulations; we treat higher infinitesimals as first-class citizens, enabling us to express and compose higher-order ADs in a more modular and composable manner.
+
+\subsection{Future Works}
+In SDG, $C^\infty$-ring and higher infinitesimals are used as fundamental building blocks to formulate manifolds, vector fields, differential forms, and so on.
+Hence, if one can extend our method to treat general $C^\infty$-algebra $C^\infty(M)$ of real-valued smooth functions on $M$, it can open up a new door to formulate differential geometry on computer.
+One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented}, it is NOT finitely \emph{generated}, but $2^{\aleph_0}$-generated, by its very nature.
+Hence, computing $C^\infty(M)$ purely symbolically and directly seems impossible; we need some workarounds or distinct formulations to overcome such obstacles.
+
+As for connections with AD, there are also many rooms for further research.
+There are so many ``modes'' other than Forward-mode in AD: for examples, Reverse, Mixed, Sparse, Tower, etc.\ amongst others.
+We can study the connection with other modes of ADs and Weil algebra, and perhaps extend formulation to allow polymorphism in such mods in computing Weil algebra.
 
 \begin{acks}
 The author is grateful to Prof.\ Akira Terui, for encouraging  to write this paper.
