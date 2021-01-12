@@ -141,6 +141,9 @@
           "kind": "optional"
         }
       ]
+    },
+    {
+      "name": "haskell"
     }
   ],
   "catex.section.dictionary": [

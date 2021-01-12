@@ -25,7 +25,7 @@
   We propose an algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra, enabling us to do some analysis with \emph{higher inifinitesimals} numerically and symbolically.
   To that end, we first give a brief description of the (forward-mode) \emph{automatic differentiation} (AD) in terms of \emph{$C^\infty$-rings}.
   The notion of $C^\infty$-ring is introduced by Lawvere~\cite{lawvere1979categorical}, and used as the fundamental building block of \emph{smooth infinitesimal analysis} and \emph{synthetic differential geometry}~\cite{Moerdijk:1991aa}.
-  We argue that interpreting AD in terms of $C^\infty$-ring, more precisely Weil algebras, gives us a unifying theoretical framework and modular ways to express multivariate partial derivatives modularly.
+  We argue that interpreting AD in terms of $C^\infty$-rings, more precisely Weil algebras, gives us a unifying theoretical framework and modular ways to express multivariate partial derivatives modularly.
 \end{abstract}
 
 \begin{CCSXML}
@@ -95,7 +95,7 @@ Intuitively, $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary o
 One typical example of $C^\infty$-ring is a formal power series ring:
 
 \begin{theorem}[Lawvere]\label{thm:series-is-smooth}
-  A ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $0$.
+  A ring $\R\llbracket d(1), \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $0$.
   In particular, lifting of a smooth map $f: \R^m \to \R$ is given by:
   \[
     \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
@@ -106,7 +106,7 @@ One typical example of $C^\infty$-ring is a formal power series ring:
 $C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has deep connection with $\Rseries$:
 
 \begin{definition}[Weil algebra]
-  A \emph{Weil algebra} $W$ is an algebra of form $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
+  A \emph{Weil algebra} $W$ is an algebra of form $W = \R[d(1), \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{d(1), \dots, X_n}^k \subseteq I$ for some $k \in \N$.
 \end{definition}
 It follows that Weil algebra $W$ is finite-dimensional as a $R$-linear space and hence $I$ is a \emph{zero-dimensional} ideal.
 Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
@@ -117,7 +117,7 @@ First note that, if $I$ is zero-dimensional, we have $\R[\X]/I \simeq \R\llbrack
 Hence, in particular, Weil algebra $W$ can also be regarded as a quotient ring of formal power series by zero-dimensional ideal.
 Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that any Weil algebra $W$ has the canonical $C^\infty$-ring structure:
 
-\begin{lemma}
+\begin{lemma}\label{lem:quot-ring-ideal}
   For any $C^\infty$-ring $A$ and a ring-theoretical ideal $I \subseteq A$, the quotient ring $A/I$ again has the canonical $C^\infty$-ring structure.
   In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\Rseries$.
 \end{lemma}
@@ -132,7 +132,7 @@ Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that 
   We use analogous notation for multivariate versions:
   
   \[
-    \R[d_1, \dots, d_k] \coloneq \R[\X]/(X_1^2, \dots, X_k^2)
+    \R[d_1, \dots, d_k] \coloneq \R[\X]/(d(1)^2, \dots, X_k^2)
     \simeq \underbrace{\R[d] \otimes_\R \dots \otimes_\R \R[d]}_{k\text{-copies}}
   \]
 \end{definition}
@@ -152,7 +152,7 @@ It immediately extends to the multivariate case.
 \begin{theorem}\label{thm:multi-partial-duals}
   Let
   \[
-    W \coloneq \R[d_{1,1}, \dots, d_{1,k_1}] \otimes_\R \dots \otimes_\R \R[d_{n,1}, \dots, d_{n,k_n}].
+    W \coloneq \R[d_{1,1}, \dots, d_{1,k_1}, \dots, d_{n,1}, \dots, d_{n,k_n}].
   \]
   For any $f: \R^n \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
   \begin{align*}
@@ -167,15 +167,43 @@ It immediately extends to the multivariate case.
 This illustrates how we can derive higher-order AD from the first-order forward-mode AD.
 If we continue this ad infinitum and lazily, we can reach the same method as so-called Tower AD (see~\cite{Pearlmutter:2007aa,Kmett:2010aa} for detail and implementation).
 
-\begin{theorem}[{See~\cite[4.19 Corollary]{Moerdijk:1991aa}}]
+However, as one can easily see, terms in $\Rseries/(X_i^2)$ can grow exponentially and it includes duplicated coefficients.
+We can get derivatives in more succinct representation with \emph{higher infinitesimal} beyond dual numbers:
+
+\begin{lemma}\label{lem:higher-infinitesimal}
+  Let $W = \R[X]/(X^{n + 1})$ and $\varepsilon = {[X]}_{(X^{n+1})}$ for $n \in \N$.
+  Given $f: \R \smoothto \R$ and $a \in \R$, we have:
+  \[
+    W(f)(a + d)
+    = \sum_{k \leq n} \frac{f^{(k)}(a)}{k !} X^k.
+  \]
+\end{lemma}
+In this representation, we only have $(n + 1)$-terms and hence it results in succinct and efficient representation of derivatives.
+
+Likewise, one can get the following multivariate version of this, which gives us multivariate higher-order derivatives up to some multidegree $\alpha$ all at once:
+\begin{lemma}
+  Let $I = (X_i^{\gamma_i + 1}\ |\ i \leq m )$, $W = \R[d(1), \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $n_1, \dots, n_m \in \N$ and $\gamma = {(\gamma_i)}_{i \leq m} \in \N^m$.
+  For $f: \R^m \smoothto \R$ and $\boldsymbol{a} = {(a_i)}_{i \leq m} \in \R$, we have:
+  \[
+    W(f)(a_1 + \varepsilon_1, \dots, a_m + \varepsilon_m) =
+      \sum_{\beta_i \leq \gamma} 
+      \frac{D^\beta f}{\beta !}(\boldsymbol{a}) \X^\beta.
+  \]
+\end{lemma}
+
+So far, we have used Weil algebra of form $\Rseries/I$.
+So, we need to define new ideals whenever one wants to treat multiple variables?
+The answer is no; as indicated by the following lemma, we can use algebraic tensor products to compose multiple Weil algebras into one:
+
+\begin{lemma}[{See~\cite[4.19 Corollary]{Moerdijk:1991aa}}]
   \label{thm:quot-tensor}
-  For ideals $I \subseteq \R\llbracket{}X_1, \dots, X_n\rrbracket$ and $J \subseteq \R\llbracket{}Y_1, \dots, Y_m\rrbracket$, we have:
+  For ideals $I \subseteq \R\llbracket\X\rrbracket$ and $J \subseteq \R\llbracket{}\Y\rrbracket$, we have:
   \[
     \Rseries/I \otimes_\R \R\llbracket{}\boldsymbol{Y}\rrbracket/J \simeq
     \R\llbracket{}\X, \boldsymbol{Y}\rrbracket/(I, J),
   \]
   where $\otimes_\R$ is a tensor product of $C^\infty$-rings.
-\end{theorem}
+\end{lemma}
 
 
 \section{Algorithms}\label{sec:alg}
@@ -226,7 +254,7 @@ We start with Weil-ness testing and returns Weil settings if it is:
 \begin{algorithm}[\textsc{WeilTest}]\label{alg:weil-test}
   \hspace{1em}\vspace{-.25em}
   \begin{description}
-    \item[Input] An ideal $I \subseteq \mathbb{R}[X_1, \dots, X_n]$
+    \item[Input] An ideal $I \subseteq \mathbb{R}[d(1), \dots, X_n]$
     \item[Output] Returns the Weil settings of $W = \mathbb{R}[\boldsymbol{X}]/I$ if it is a Weil algebra; otherwise \verb|No|.
     \item[Procedure] \textup{\textsc{WeilTest}}
   \end{description}
@@ -284,6 +312,8 @@ Return @$\boldsymbol{v}$@
 
 The termination and validity of \Cref{alg:smooth-weil} are clear.
 
+Now that we can compute the $\R$-algebraic and $C^\infty$-structure of a Weil algebra solely from its Weil setting, one can hard-code pre-calculated Weil settings for known typical Weil algebras, such as the dual number ring or higher infinitesimal rings of form $\R[X]/(X^{n+1})$, to reduce computational overheads.
+
 \subsubsection{Computing $C^\infty$-structure of $\Rseries$}\label{sec:power-series-lifting}
 So it remains to compute $C^\infty$-structure of $\Rseries$.
 Thanks to \Cref{alg:smooth-weil}, we know the precise definition of lifting to $\Rseries$:
@@ -301,7 +331,7 @@ This means we cannot apply Tower-like AD all at once, meaning we can't make use 
 
 Another possible solution to calculate the entire $C^\infty$-structure of $\Rseries$ is to employ a purely symbolic algorithm to calculate an entire power series.
 On the other hand, symbolic computation along this line could be quite expensive without any heuristics.
-We include an example of such symbolic implementation in Haskell in the Appendix (\Cref{sec:appendix}).
+For an implementation of symbolic algorithm, see \hask{liftSmoothSeries} function in \texttt{Numeric.Algebra.Smooth.Weil} module of our referential implementation~\cite{Ishii:2020aa}.
 
 Fortunately enough, we don't need the entire information of power series when implementing $C^\infty$-structure of Weil algebra.
 Carefully analysing the use of power series in \Cref{alg:smooth-weil}, we can notice that all arguement power series $g_1, \dots, g_m$ to lifting function $\Rseries(f)(g_1, \dots, g_m)$ are indeed of finite degree.
@@ -312,7 +342,7 @@ Assuming an algorithm \textsc{TowerAD} to compute a coefficient table of partial
 \begin{description}
   \item[Input]
     $f: \R^m \smoothto \R$, a smooth function which admits Lazy Tower AD,
-    $g_1, \dots, g_n \in \R[X_1, \dots, X_n]$, polynomials.
+    $g_1, \dots, g_n \in \R[d(1), \dots, X_n]$, polynomials.
   \item[Output] $\Rseries(f)(g_1, \dots, g_m): \N^n \to \R$, $f$ lifted to the power series expressed as a function from monomials to coefficient.
   \item[Procedure] \textup{\textsc{LiftSeriesPoly}}
 \end{description}
@@ -326,7 +356,7 @@ Return \ (@$\alpha \in \N^n$@) -> @$\frac{T(m)}{\alpha!}$@
 
 \subsection{Tensor product of Weil algebras}
 \label{sec:tensor-algorithm}
-As indicated by \Cref{thm:quot-tensor}, tensor products of Weil algebras can be useful to compute multivariate AD.
+As indicated by \Cref{thm:quot-tensor}, tensor products of Weil algebras enables us to compose multiple Weil algebras into one and use them to compute higher-order multivariate derivatives.
 Here, we give a simple procedure to compute Weil settings of the tensor product of given two algebras.
 
 \begin{algorithm}[WeilTensor]\label{alg:weil-tensor}
@@ -366,8 +396,176 @@ Return (@$a_1, \dots, a_{\ell_1 \ell_2}$@)
 The validity is a routine work.
 
 \section{Examples}\label{sec:examples}
-We have implemented the algorithms introduced in the previous section on top of the \texttt{computational-algebra}~\cite{ISHII:2018ek,computational-algebra} package, a computer algebra system implemented as an Embedded Domain Specific Language in Haskell.
+We have implemented the algorithms introduced in the previous section on top of two libraries: \texttt{computational-algebra} package~\cite{ISHII:2018ek,computational-algebra} and \texttt{ad} package~\cite{Kmett:2010aa}.
 The code is available on GitHub~\cite{Ishii:2020aa}.
+
+\subsection{Higher-order derivatives via dual numebrs and higher infinitesimals}
+As indicated by \Cref{thm:univ-partial-duals} and \Cref{lem:higher-infinitesimal},
+to compute higher-order derivatives of univariate functions with we can use multiple tensor products of Dual numebrs or higher order inifinitesimals.
+
+Let us first compute higher-order derivatives of $\sin$ up to $3$.
+
+First, let's use tensor product of dual numbers:
+\begin{code}
+d1, d2, d3
+  :: Floating a
+  => Weil (D1 |*| D1 |*| D1) a
+[d1, d2, d3] = map di [0..]
+\end{code}
+
+Here, \hask{Weil w a} represents the type of Weil algebra with ideal information given in \hask{w}.
+Here, \hask{D1} corresponds to dual number ideal, say $I = (X^2)$, and \hask{|*|} corresponds to the tensor product operator.
+Each $d_i$ corresnponds to $i$\textsuperscript{th} infinitesimal.
+
+OK, then let's calculate higher-order differntial coefficients at $x = \frac{\pi}{6}$ up to the third:
+
+\begin{code}
+>>> ( sin (pi/6),  cos (pi/6), 
+     -sin (pi/6), -cos (pi/6))
+( 0.49999999999999994,
+  0.8660254037844387,
+ -0.49999999999999994,
+ -0.8660254037844387)
+
+>>> sin (pi/6 + d0 + d1 + d2)
+-0.8660254037844387 d(0) d(1) d(2) 
+  - 0.49999999999999994 d(0) d(1) 
+  - 0.49999999999999994 d(0) d(2)
+  - 0.49999999999999994 d(1) d(2) 
+  + 0.8660254037844387 d(0) 
+  + 0.8660254037844387 d(1) 
+  + 0.8660254037844387 d(2) 
+  + 0.49999999999999994
+\end{code}
+
+It is easy to see that terms of degree $i$ has coefficients $\sin^{(i)}(\pi/6)$.
+Since our implementation is polymorphic, if we apply the same function to the type for symbolic computation, say \hask{Symbolic}, we can reconstruct symbolic differentiation and check that the result is indeed correct symbolically:
+
+\begin{code}
+x :: Weil w Symbolic
+x = injectCoeff (var "x")
+
+>>> normalise <$> sin (x + d0+d1+d2)
+((-1.0) * cos x) d(0) d(1) d(2) 
+  + (- (sin x)) d(0) d(1) 
+  + (- (sin x)) d(0) d(2) 
+  + (- (sin x)) d(1) d(2) 
+  + (cos x) d(0) + (cos x) d(1) 
+  + (cos x) d(2) 
+  + (sin x)
+
+\end{code}
+
+As stated before, tensor-of-duals approach blows the number of terms exponentially.
+Let's see how higher infinitesimal works.
+
+\begin{code}
+eps :: Floating a => Weil (DOrder 4) a
+eps = di 0
+\end{code}
+
+Here, \hask{DOrder n} corresponds to an ideal $\R[X]/(X^n)$.
+Note that, according to \Cref{lem:higher-infinitesimal}, to calculate $n$-th derivative  we have to use $\R[X]/(X^{n+1})$.
+
+\begin{code}
+>>> (  sin (pi/6),    cos (pi/6), 
+      -sin (pi/6)/2, -cos (pi/6)/6)
+  (0.49999999999999994,
+   0.8660254037844387,
+   -0.24999999999999997,
+   -0.14433756729740646)
+  
+>>> sin (pi/6 + eps)
+-0.14433756729740646 d(0)^3 
+  - 0.24999999999999997 d(0)^2 
+  + 0.8660254037844387 d(0)
+  + 0.49999999999999994
+
+>>> normalise <$> sin (x + eps)
+((-1.0) * cos x / 6.0) d(0)^3 
+  + ((- (sin x)) / 2.0) d(0)^2
+  + (cos x) d(0) + (sin x)
+\end{code}
+
+Note that by \Cref{lem:higher-infinitesimal}, each coefficient is not directly a differential coefficient, but divided by $i!$.
+
+Let's see how we can use tensor products of higher infinitesimal ideals can be used to multivariate higher-order partial derivatives.
+Suppose we want to calculate partial derivatives of $f(x, y) = e^{2x} \sin y$ up to $(2, 1)$-th.
+\begin{code}
+>>> f (2 + eps1) (pi/6 + eps2)
+94.5667698566742 d(0)^2 d(1)
+  + 54.59815003314423 d(0)^2
+  + 94.5667698566742 d(0) d(1)
+  + 54.59815003314423 d(0)
+  + 47.2833849283371 d(1)
+  + 27.299075016572115
+
+>>> normalise <$> f (x+eps1) (y+eps2)
+(4.0 * exp (2.0 * x) / 2.0 * cos y) d(0)^2 d(1)
+  + (4.0 * exp (2.0 * x) / 2.0 * sin y) d(0)^2
+  + (2.0 * exp (2.0 * x) * cos y) d(0) d(1)
+  + (2.0 * exp (2.0 * x) * sin y) d(0)
+  + (exp (2.0 * x) * cos y) d(1)
+  + (exp (2.0 * x) * sin y)
+\end{code}
+
+In this way, we can freely compose multiple Weil algebra to calculate various partial derivatives modularly.
+
+\subsection{Computation in General Weil Algebra}
+All examples so far is concerning the predefined, specific form of Weil algebra.
+Here, we demonstrate that we can determine whether the given ideal defines Weil algebras with \Cref{alg:weil-test}, and some actual calculation in arbitrary Weil algebra.
+
+First, we see that \textsc{WeilTest} rejects invalid ideals:
+
+\begin{code}
+-- R[X,Y]/(X^2 - Y), not zero-dimensional
+>>> isWeil (toIdeal [x ^3 - y :: Q[x,y]])
+Nothing
+
+-- R[X]/(X^2 - 1), which is zero-dimensional but not Weil
+>>> isWeil (toIdeal [x - 1 :: Q[x]])
+Nothing
+\end{code}
+
+Next, we try to calculate in arbitrary chosen Weil algebra, $W = \R[x,y]/(x^2 - y^3, y^4)$, whose corresponding meaning in AD is unclear but is a Weil algebra as a matter of fact.
+
+\begin{code}
+i :: Ideal (Rational[x,y])
+i = toIdeal [x ^ 2 - y ^ 3, y ^ 4]
+
+>>> isWeil red
+Just WeilSettings 
+  {weilBasis =
+    [[0,0],[0,1],...,[3,0]]
+  , nonZeroVarMaxPowers = [3,3]
+  , weilMonomDic = 
+    [([0,2],[0,0,0,1,0,0,0,0]),
+      ...,([1,3],[0,0,0,0,0,0,0,1])]
+  , table = [((0,0),1),((1,3),d(0)^2)
+      ,...,((3,4),d(0)^3)]
+  }
+\end{code}
+
+Let's see what will happen evaluating $sin(a + d_0 + d_1)$, where $d_0 = [x]_I, d_1 = [y]_I$?
+
+\begin{code}
+>>> withWeil i (sin (pi/4 + di 0 + di 1))
+-2.7755575615628914e-17 d(0)^3 
+  - ...
+  + 0.7071067811865476 d(0)
+  + 0.7071067811865476 d(1)
+  + 0.7071067811865475
+
+>>> withWeil i (normalise <$> sin (x + di 0 + di 1))
+((-1.0) * (- (sin x)) / 6.0 
+    + (-1.0) * cos x / 6.0
+  ) d(0)^3
+  + ...
+  + (cos x) d(0)
+  + (cos x) d(1) + (sin x)
+\end{code}
+
+Carefully analysing each outputs, one can see that the output coincides with what is given by \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal}.
 
 \section{Conclusion}\label{sec:concl}
 
@@ -377,68 +575,6 @@ The author is grateful to Prof.\ Akira Terui, for encouraging  to write this pap
 This work was supported by the Research Institute for Mathematical Sciences,
 an International Joint Usage/Research Center located in Kyoto University.
 \end{acks}
-
-\section{Appendix: Symbolic computation of smooth structure }\label{sec:appendix}
-In \Cref{sec:power-series-lifting}, we just make use of such lifting function with all the inputs are mere polynomials, but with some symbolic computation, we can compute unrestricted $C^\infty$-structure of $\Rseries$ in theory.
-Here, we include a referential implementation for Smooth lifting function for general formal power series rings (\texttt{liftSeries}) for completeness.
-
-Basic idea is to use dedicated an abstract syntax tree representing a $k$-ary function composed with $n$-ary series and their partial derivatives.
-For brevity, we include a raw source code of their implementation in Haskell.
-The same implementation can also be found in our implementation on GitHub~\cite{Ishii:2020aa}.
-
-\begin{code}
-newtype PowerSeries n a 
-  = Powers (UVec n Natural -> a)
-  deriving (Functor)
-
-liftSeries :: Floating a =>
-  (forall x. Floating x => Vec k x -> x)
-  -> Vec k (PowerSeries n a)
-  -> PowerSeries n a
-liftSeries f vs = Powers $ \alpha ->
-  evalMTree
-  ( foldr
-    ($)
-    (DiffFun $ replicate' 0)
-    (diffMTree <$> 
-      ifoldMap (flip replicate) alpha
-    )
-  )
-  f
-  vs
-  / (alpha !)
-
-data MTree m n a
-  = Mul (MTree m n a) (MTree m n a)
-  | Add (MTree m n a) (MTree m n a)
-  | DiffArg (Vec m Natural) (Ordinal n)
-  | DiffFun (Vec n Natural)
-  | K a
-  deriving (Eq, Ord)
-
-evalMTree ::
-  ( KnownNat n, KnownNat m
-  , Floating a, Eq a
-  ) => MTree m n a
-    -> (forall x. Floating x 
-        => Vec n x -> x)
-    -> Vec n (PowerSeries m a)
-    -> a
-evalMTree (Mul l r) f vs = 
-    evalMTree l f vs 
-  * evalMTree r f vs
-evalMTree (Add l r) f vs =
-    evalMTree l f vs 
-  + evalMTree r f vs
-evalMTree (DiffArg pow i) f vs =
-  constPTerm 
-    (formalNDiff pow (vs %!! i))
-evalMTree (DiffFun pows) f vs =
-  head 
-    (multDiff pows (singleton . f)
-      (map constPTerm vs))
-evalMTree (K a) _ _ = a
-\end{code}
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{../references}

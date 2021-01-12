@@ -152,11 +152,11 @@
  keywordstyle={\bfseries},
  morekeywords=[2]{*,+,/,-,.,\%,!,?,=,<,>,$},
  keywordstyle=[2]{\ttfamily\bfseries},
- emph={[1] Bool,Char,Double,Either,Float,IO,Int,Maybe,Ordering,Rational,Ratio,ReadS,ShowS,String,UVec,Vec,Functor,PowerSeries,%
-	   InPacket,Sing,SNat,Show,Eq,KnownNat,Floating,Ord,Num,SingRep,Void,Monad,Field,Coeff,MyMat,%
-           IsOrdPoly, CoeffRing, Ring, Abelian, Commutative, Group, Ideal, Unipol,Strategy,%
+ emph={[1] Bool,Char,Either,Float,IO,Int,Maybe,Ordering,Ratio,ReadS,ShowS,String,UVec,Vec,Functor,PowerSeries,%
+	   InPacket,Sing,SNat,Show,Eq,KnownNat,Floating,Ord,Num,SingRep,Void,Monad,Field,Coeff,MyMat,DOrder,D1,%
+           IsOrdPoly, CoeffRing, Ring, Abelian, Commutative, Group, Ideal, Unipol,Strategy,Just,Nothing,WeilSettings,%
            OrdPoly,IsMonomialOrder,MOrder,Coeff,Arity,Lex,Grevlex,Revlex,Homogenised,%
-           Additive,Monoidal,OrderedMonomial,Module,LeftModule,Scalar,Type,Polynomial,%
+           Additive,Monoidal,OrderedMonomial,Module,LeftModule,Scalar,Type,Polynomial,Weil,%
            MMatrix,Matrix,Mutable,Vector,ST,Entry,HPS,%
            Unital,Multiplicative,HomogOrder%
  },
@@ -170,7 +170,8 @@
  {Integer}{{\typemath{\mathbb{Z}}}}2
    {Natural}{{\underline{\ensuremath{\mathbb{N}}}}}1
    {fromInteger}{{fromInteger}}{12}
-   {Rational}{{\typemath{\mathbb{Q}}}}2
+   {Rational}{{\underline{\ensuremath{\mathbb{Q}}}}}1
+   {Double}{{\underline{\ensuremath{\mathbb{R}}}}}1
    {::}{{\textcolor{symb}{:\!:}}}2
    {==}{{\symbmath{=}}}2
    {/=}{{\symbmath{\neq}}}2
@@ -179,6 +180,9 @@
    {!*}{{\symbmath{\ltimes}}}2
    {+}{{\symbmath{+}}}1 {-}{{\symbmath{-}}}1
    {:-}{{:-}}2
+   {eps}{{\symbmath{\varepsilon}}}1
+   {eps1}{{\symbmath{\varepsilon_1}}}2
+   {eps2}{{\symbmath{\varepsilon_2}}}2
    {Pi}{{\ensuremath{\boldsymbol{\Pi}}}}1
    {++}{{\symbmath{{}^{\frown}}}}2
    {\%-}{{\symbmath{\ominus}}}2
@@ -203,13 +207,17 @@
    {\ .\%=}{{\ \symbmath{{:}{\Leftarrow}}}}4
    {<\$>}{{\symbmath{{<}\!{\text{\textdollar}}\!{>}}}}3
    {<*>}{{\symbmath{{<}\!\!\!\ast\!\!\!{>}}}}3
-   {>>}{{\symbmath{\ll}}}1 {>>=}{{\symbmath{\gg\mkern-6.5mu=}}}3
+   {>>}{{\symbmath{\gg}}}1 {>>=}{{\symbmath{\gg\mkern-6.5mu=}}}3
+   {>>>}{{\symbmath{>\!>\!>}}}3
    {>=>}{{\symbmath{\moncompose}}}3
    {=<<}{{\symbmath{=\mkern-6.5mu\ll}}}3
    {|}{{\symbmath{\mid}}}1
    {FF}{{FF}}2
    {F\ }{{\typemath{\mathbb{F}\ }}}2
    {GF\ }{{\typemath{\mathbb{GF}\ }}}3
+   {|*|}{{\symbmath{\otimes}}}1
 }
 
 \lstnewenvironment{code}[1][frame=leftline]{\lstset{language=Haskell, #1}}{}
+
+\newcommand{\hask}[1]{\lstinline[backgroundcolor=\color{gray},language=haskell]{#1}}
