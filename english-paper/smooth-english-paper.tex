@@ -138,23 +138,61 @@ Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that 
 
 \section{Connection between Automatic Differentiation and Weil Algebras}
 \label{sec:ad-and-weils}
-In this section, based on the basic facts on $C^\infty$-rings and Weil algebras reviewed in \Cref{sec:prel}, we give a description on the connection of automatic differentiation (AD) and Weil algebra.
+In this section, based on the basic facts on $C^\infty$-rings and Weil algebras reviewed in \Cref{sec:prel}, we describe the connection of automatic differentiation (AD) and Weil algebra.
 
+\emph{Forward-mode} AD is a technique to compute a value and differential coefficient of given univariate composition of smooth function efficiently.
+It can be used implemented by ad-hoc polymorphism (or equivalently, function overloading).
+For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beautiful-differentiation} and Ekmett's \texttt{ad} package~\cite{Kmett:2010aa}.
+
+Briefly speaking, in forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
+Then, when evaluating composite functions, one uses Chain Rule for implementation:
+\[
+  \frac{\mathrm{d}}{\mathrm{d}x}(g \circ f)(x) = f'(x) g'(f(x))
+\]
+
+The following definition of functions on dual numbers illustrate the idea:
+
+\begin{align*}
+  (a_1 + b_1 d) + (a_2 + b_2 d) &= (a_1 + a_2) + (b_1 + b_2)d\\
+  (a_1 + b_1 d) \times (a_2 + b_2 d) &= a_1 a_2 + (a_1 b_2 + a_2 b_1)d\\
+  \cos(a_1 + b_1 d) &= \cos(a_1) - b_1 \sin(a_1) d
+\end{align*}
+
+The first two equations for addition and multiplication suggests that operations could be seen extending the algebraic structure of $\R[d] = \R[X]/(X^2)$.
+Indeed, as stated in the introduction, first-order forward-mode AD can be identified with the arithmetic on \emph{dual numbers}:
 \begin{definition}
   The \emph{dual number ring} is a Weil algebra $\R[X]/(X^2)$.
   We often write $d = {(X)}_I \in \R[d]$ and $\R[d] \coloneq \R[X]/X^2$.
 
-  We use analogous notation for multivariate versions:
+  We use an analogous notation for multivariate versions:
   
   \[
-    \R[d_1, \dots, d_k] \coloneq \R[\X]/(d(1)^2, \dots, X_k^2)
-    \simeq \underbrace{\R[d] \otimes_\R \dots \otimes_\R \R[d]}_{k\text{-copies}}
+    \R[d_1, \dots, d_k] \coloneq \R[\X]/(X_1^2, \dots, X_k^2)
   \]
 \end{definition}
 
-By an easy induction, we can show the following:
+Since the dual number ring $\R[d]$ is a Weil algebra, one can apply \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal} to compute its $C^\infty$-structure.
+Letting $f: \R \smoothto \R$ a univariate smooth function, then we can derive $C^\infty$-lifting $\R[d](f): \R[d] \to \R[d]$ can be calculated as follows:
+
+\begin{alignat*}{3}
+  &&&\R\llbracket{}X\rrbracket(f)(a + bX) \\
+  &&=\:&f(a) + \frac{\mathrm d}{\mathrm{d} x}(f(a + bx))(0) X + \cdots
+  &\quad&(\text{by \Cref{thm:series-is-smooth}})\\
+  &&=\:&f(a) + b f'(a) X + \cdots\\
+  &&\xrightarrow{X \mapsto d}\:&f(a) + bf'(a) d\\
+  &\therefore&& \R[d](f)(a + bd) = f(a) + b f'(a) 
+  && (\text{by \Cref{lem:quot-ring-ideal}}) \tag{\ensuremath{\ast}}
+  \label{eqn:dual-smooth}
+\end{alignat*}
+
+One can notice that the derived $C^\infty$-structure in \eqref{eqn:dual-smooth} is exactly the same as how to implement individual smooth functions for forward-mode AD.
+This describes the connection between forward-mode AD and dual numbers: forward-mode AD is just an implementation of $C^\infty$-structure of the dual number ring $\R[d]$.
+
+Let's see how this can be extended to the higher-order case.
+The most naïve way to compute higher-order derivatives of smooth function is just to successively differentiating it.
+This intuition can be expressed just by duplicating the number of basis of dual numbers:
 \begin{theorem}\label{thm:univ-partial-duals}
-  For any $f: \R^n \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
+  For any $f: \R \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
   \[
     \R[d_1, \dots, d_k](f)(x + d_1 + \cdots d_n) 
     = \sum_{0 \leq i \leq n} f^{(i)}(x)\sigma^i_n(\vec{d}),
@@ -162,24 +200,7 @@ By an easy induction, we can show the following:
   where, $\sigma^i_k(x_1, \dots, x_k)$ denotes the $k$-variate elementary symmetric polynomial of degree $i$.
 \end{theorem}
 
-It immediately extends to the multivariate case.
-
-\begin{theorem}\label{thm:multi-partial-duals}
-  Let
-  \[
-    W \coloneq \R[d_{1,1}, \dots, d_{1,k_1}, \dots, d_{n,1}, \dots, d_{n,k_n}].
-  \]
-  For any $f: \R^n \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
-  \begin{align*}
-    &W(f)\left(x + \sum_{j \leq n}\sum_{i \leq k_j} d_{j,i}\right) \\
-    = &\sum_{\alpha \leq (k_1,\dots,k_n)} \mathop{D}\nolimits^\alpha f(\boldsymbol{x})
-    \sigma^{\alpha_1}_{k_1}(\vec{d}_1) 
-    \cdots
-    \sigma^{\alpha_n}_{k_n}(\vec{d}_n).
-  \end{align*}
-  In particular, for $\alpha \leq (k_1, \dots, k_n)$, a partial coefficient $D^\alpha(f)(\boldsymbol{x})$ is given by a coefficient of $d_{1,1}^{\alpha_1} d_{2,1}^{\alpha_2} \cdots d_{n,1}^{\alpha_2}$ in $W(f)(\boldsymbol{x})$.
-\end{theorem}
-This illustrates how we can derive higher-order AD from the first-order forward-mode AD.
+The above can be proven by an easy induction.
 If we continue this ad infinitum and lazily, we can reach the same method as so-called Tower AD (see~\cite{Pearlmutter:2007aa,Kmett:2010aa} for detail and implementation).
 
 However, as one can easily see, terms in $\Rseries/(X_i^2)$ can grow exponentially and it includes duplicated coefficients.
@@ -195,20 +216,20 @@ We can get derivatives in more succinct representation with \emph{higher infinit
 \end{lemma}
 In this representation, we only have $(n + 1)$-terms and hence it results in succinct and efficient representation of derivatives.
 
-Likewise, one can get the following multivariate version of this, which gives us multivariate higher-order derivatives up to some multidegree $\alpha$ all at once:
+If we duplicate such higher-order infinitesimals as much as one wants, one can likewise compute multivariate higher-order derivatives all at once, up to some multidegree $\beta$:
 \begin{lemma}
-  Let $I = (X_i^{\gamma_i + 1}\ |\ i \leq m )$, $W = \R[d(1), \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $n_1, \dots, n_m \in \N$ and $\gamma = {(\gamma_i)}_{i \leq m} \in \N^m$.
+  Let $I = \left(X_i^{\beta_i + 1}\ \middle|\ i \leq m \right)$, $W = \R[X_1, \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $n_1, \dots, n_m \in \N$ and $\beta = {(\beta_i)}_{i \leq m} \in \N^m$.
   For $f: \R^m \smoothto \R$ and $\boldsymbol{a} = {(a_i)}_{i \leq m} \in \R$, we have:
   \[
     W(f)(a_1 + \varepsilon_1, \dots, a_m + \varepsilon_m) =
-      \sum_{\beta_i \leq \gamma} 
-      \frac{D^\beta f}{\beta !}(\boldsymbol{a}) \X^\beta.
+      \sum_{\delta_i \leq \beta_i} 
+      \frac{D^\delta f}{\delta !}(\boldsymbol{a}) \X^\delta.
   \]
 \end{lemma}
 
 So far, we have used Weil algebra of form $\Rseries/I$.
-So, we need to define new ideals whenever one wants to treat multiple variables?
-The answer is no; as indicated by the following lemma, we can use algebraic tensor products to compose multiple Weil algebras into one:
+So, do we need to define new ideals whenever one wants to treat multiple variables?
+The answer is no; as indicated by the following lemma, we can use algebraic tensor products to compose existing multiple Weil algebras into one:
 
 \begin{lemma}[{See~\cite[4.19 Corollary]{Moerdijk:1991aa}}]
   \label{thm:quot-tensor}
@@ -219,10 +240,12 @@ The answer is no; as indicated by the following lemma, we can use algebraic tens
   \]
   where $\otimes_\R$ is a tensor product of $C^\infty$-rings.
 \end{lemma}
-
+Thanks to this lemma, we don't have to define $I$ by hand every time, but just can take tensor products to compose them to compute multivariate and higher-order derivatives.
+Examples of such calculations will be discussed in \Cref{sec:examples}.
 
 \section{Algorithms}\label{sec:alg}
 In this section, we will present the main results of this paper: concrete algorithms to compute $C^\infty$-structure of arbitrary Weil algebra and their Tensor products.
+For examples of applications of the algorithm presented here, the reader can skip to the next \cref{sec:examples} to comprehend the actual use case.
 
 \subsection{Computing $C^\infty$-structure of Weil algebra}
 \label{sec:general-weil-algs}
@@ -408,7 +431,7 @@ Return (@$a_1, \dots, a_{\ell_1 \ell_2}$@)
 \end{alg}
 \end{algorithm}
 
-The validity is a routine work.
+The validity proof is routine work.
 
 \section{Examples}\label{sec:examples}
 We have implemented the algorithms introduced in the previous section on top of two libraries: \texttt{computational-algebra} package~\cite{ISHII:2018ek,computational-algebra} and \texttt{ad} package~\cite{Kmett:2010aa}.

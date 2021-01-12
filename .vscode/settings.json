@@ -1,6 +1,7 @@
 {
   "grammarly.userWords": [
     "dtx",
+    "injectCoeff",
     "lualatex"
   ],
   "github-actions.workflows.pinned.refresh.enabled": true,
@@ -147,6 +148,14 @@
     },
     {
       "name": "align*"
+    },
+    {
+      "name": "alignat*",
+      "args": [
+        {
+          "kind": "fixed"
+        }
+      ]
     }
   ],
   "catex.section.dictionary": [
