@@ -70,7 +70,21 @@
 
 \section{Introduction}\label{sec:intro}
 \sloppy
-\emph{Automatic Differentiation} (or, \emph{AD} for short) is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently\fxnote{More elaboration needed}.
+\emph{Automatic Differentiation} (or, \emph{AD} for short) is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently.
+It has a long history of research, and by the recent rise of needs of differentiable programming in the realm of machine learning, methods of AD attracts some interests again nowadays.
+
+\emph{Smooth Infinitesimal Analysis} (or, \emph{SIA} for short), on the other hand, is an area of mathematics that uses \emph{nilpotent infinitesimals} to build the theory of real analysis intuitionistically.
+Its central building blocks are \emph{Weil algebras}, which can be viewed as the real line augmented with nilpotent infinitesimals.
+Indeed, SIA is a subarea of \emph{Synthetic Differential Geometry} (SDG) initiated by Lawvere~\cite{lawvere1979categorical}, which studies smooth manifolds topos theoretically, and higher multivariate infinitesimals plays an important role in building theory of, e.g.\ vector fields, differential forms and tangent spaces.
+The crucial observation of Lawvere is that manifolds can be classified solely by their smooth function ring $C^\infty(M)$, and both such function rings and Weil algebras are special cases of \emph{$C^\infty$-rings}.
+
+It has been pointed out that AD and SIA have some connection; e.g.\ even Wikipedia article~\cite{Wikipedia:2021aa} mentions the connection between first-order forward-mode AD with the ring $\R[X]/(X^2)$ of dual numbers.
+However, a precise theoretical description of this correspondence is not well-communicated and further generalisation of AD in terms of SIA hasn't been discussed enough.
+
+The present paper aims at filling this gap, giving a unified description of AD in terms of $C^\infty$-rings and Weil algebras.
+Further, our main contribution is the algorithms to compute $C^\infty$-ring structure of general Weil algebra.
+This enables automatic differentiation done in \emph{arbitrary} Weil algebras other than dual numbers, and, together with tensor products, lets us compute higher-order multivariate partial derivatives in a modular and composable manner, packed as Weil algebra.
+Such algorithms can also be used to learn and study the theory of SIA and SDG.
 
 This paper is organised as follows.
 In \Cref{sec:prel}, we will briefly review the basic concepts and facts on $C^\infty$-rings and Weil algebras.
@@ -124,6 +138,7 @@ Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that 
 
 \section{Connection between Automatic Differentiation and Weil Algebras}
 \label{sec:ad-and-weils}
+In this section, based on the basic facts on $C^\infty$-rings and Weil algebras reviewed in \Cref{sec:prel}, we give a description on the connection of automatic differentiation (AD) and Weil algebra.
 
 \begin{definition}
   The \emph{dual number ring} is a Weil algebra $\R[X]/(X^2)$.
@@ -601,7 +616,7 @@ We argue that, our method pursues other direction of formulations; we treat high
 \subsection{Future Works}
 In SDG, $C^\infty$-ring and higher infinitesimals are used as fundamental building blocks to formulate manifolds, vector fields, differential forms, and so on.
 Hence, if one can extend our method to treat general $C^\infty$-algebra $C^\infty(M)$ of real-valued smooth functions on $M$, it can open up a new door to formulate differential geometry on computer.
-One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented}, it is NOT finitely \emph{generated}, but $2^{\aleph_0}$-generated, by its very nature.
+One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented} as an $C^\infty$-ring, it is NOT finitely \emph{generated} as an $\R$-algebra, but $2^{\aleph_0}$-generated, by its very nature.
 Hence, computing $C^\infty(M)$ purely symbolically and directly seems impossible; we need some workarounds or distinct formulations to overcome such obstacles.
 
 As for connections with AD, there are also many rooms for further research.
