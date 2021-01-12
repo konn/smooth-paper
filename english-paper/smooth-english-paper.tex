@@ -23,8 +23,9 @@
 \begin{abstract}
   \frenchspacing
   We propose an algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra, enabling us to do some analysis with \emph{higher inifinitesimals} numerically and symbolically.
-  To that end, we first give a brief description of the (forward-mode) automatic differentiation in terms of $C^\infty$-rings.
+  To that end, we first give a brief description of the (forward-mode) \emph{automatic differentiation} (AD) in terms of \emph{$C^\infty$-rings}.
   The notion of $C^\infty$-ring is introduced by Lawvere~\cite{lawvere1979categorical}, and used as the fundamental building block of \emph{smooth infinitesimal analysis} and \emph{synthetic differential geometry}~\cite{Moerdijk:1991aa}.
+  We argue that interpreting AD in terms of $C^\infty$-ring, more precisely Weil algebras, gives us a unifying theoretical framework and modular ways to express multivariate partial derivatives modularly.
 \end{abstract}
 
 \begin{CCSXML}
@@ -166,32 +167,67 @@ It immediately extends to the multivariate case.
 This illustrates how we can derive higher-order AD from the first-order forward-mode AD.
 If we continue this ad infinitum and lazily, we can reach the same method as so-called Tower AD (see~\cite{Pearlmutter:2007aa,Kmett:2010aa} for detail and implementation).
 
+\begin{theorem}[{See~\cite[4.19 Corollary]{Moerdijk:1991aa}}]
+  \label{thm:quot-tensor}
+  For ideals $I \subseteq \R\llbracket{}X_1, \dots, X_n\rrbracket$ and $J \subseteq \R\llbracket{}Y_1, \dots, Y_m\rrbracket$, we have:
+  \[
+    \Rseries/I \otimes_\R \R\llbracket{}\boldsymbol{Y}\rrbracket/J \simeq
+    \R\llbracket{}\X, \boldsymbol{Y}\rrbracket/(I, J),
+  \]
+  where $\otimes_\R$ is a tensor product of $C^\infty$-rings.
+\end{theorem}
+
+
 \section{Algorithms}\label{sec:alg}
-In this section, we will present the main results of this paper: concrete algorithms to compute $C^\infty$-structure of arbitrary Weil algebra.
-Roughly speaking, the algorithms can be divided into threefold:
+In this section, we will present the main results of this paper: concrete algorithms to compute $C^\infty$-structure of arbitrary Weil algebra and their Tensor products.
+
+\subsection{Computing $C^\infty$-structure of Weil algebra}
+\label{sec:general-weil-algs}
+Let's start with the algorithm $C^\infty$-structure of a general Weil algebra.
+Roughly speaking, the algorithm can be divided into threefold:
 
 \begin{enumerate}
   \item A procedure deciding Weil-ness of an ideal and returning data required to compute $C^\infty$-structure (\textsc{WeilTest}, \Cref{alg:weil-test}),
   \item A procedure to compute the lifting  $W(f): W^m \to W$ to Weil albgebra $W$ from $\Rseries(f)$ (\textsc{LiftWeil}, \Cref{alg:smooth-weil}), and
-  \item A procedure to lift smooth map $f: \R^m \to \R$ to the $m$-variate formal power series ring $\Rseries$.\label{step:lift-series}
+  \item A procedure to lift smooth map $f: \R^m \to \R$ to the $n$-variate formal power series ring $\Rseries$.\label{step:lift-series}
 \end{enumerate}
 
-As we shall see later, in step~\ref{step:lift-series}, we don't need overall coefficients lifted to $\Rseries$ but only a finite fragment.
+As we shall see later in \Cref{sec:power-series-lifting}, step~\ref{step:lift-series} requires some additional care.
+We can calculate the entire $C^\infty$-structure of $\Rseries$ somehow; but, since we don't need the full $C^\infty$-structure of $\Rseries$, we can employ the following restricted and more efficient variant of lifting function:
 
-We start with Weil-ness testing:
+\begin{enumerate}[label=$(3)'$]
+  \item A procedure to lift smooth map $f: \R^m \to R$ to the $n$-variate formal power series ring $\Rseries$, with arguments restricted to \emph{polynomials}: $\Rseries(f) \upharpoonright \R[\X]^m : \R[\X]^m \to \Rseries$
+  (\textsc{LiftSeriesPoly}, \Cref{alg:lift-poly-series}).
+\end{enumerate}
+
+We start with Weil-ness testing.
+First, we define the basic data needed to compute $C^\infty$-structure of Weil algebras:
+
+\begin{definition}[Weil settings]
+  The \emph{Weil setting} of a Weil algebra $W$ consists of the following data:
+  \begin{enumerate}[ref=(\arabic*)]
+    \item Monomial basis $\set{\boldsymbol{b}_1, \dots, \boldsymbol{b}_\ell}$ of $W$,
+    \item $M$, the multiplication table of $W$ in terms of the basis,
+    \item $(k_1, \dots, k_n) \in \mathbb{N}^n$ such that $k_i$ is the maximum satisfying $X_i^{k_i} \notin I$ for each $i$, and
+    \item $\NonVan_W$, a table of representations of non-vanishing monomials in $W$;
+    i.e.\ for any $\alpha = (\alpha_1, \dots, \alpha_n) \in \N^n$, if $\alpha_i \leq k_i$ for all $i$, then $\NonVan_W(\X^\alpha) = (c_1, \dots, c_n) \in \R^k$ satisfies $[\X^\alpha]_I = \sum_i c_i \boldsymbol{b}_i$.\label{item:nonvan}
+  \end{enumerate}
+\end{definition}
+
+A basis and multiplication table allows us to calculate ordinary $\R$-algebra structure of Weil algebra $W$.
+The latter two data, $\vec{k}$ and $\NonVan_W$, is essential to compute $C^\infty$-structure of $W$.
+In theory, \ref{item:nonvan} is unnecessary if one stores a Gr\"{o}bner basis of $I$;
+but since normal form calculation modulo $G$ can take much time in some case, we don't store $G$ itself and use the precalculated data $\NonVan$.
+It might be desirable to calculate $\NonVan_W$ as lazily as possible.
+Since it involves Gr\"{o}bner basis computation it is more desirable to delay the computation as later as possible and do in an on-demand manner.
+
+We start with Weil-ness testing and returns Weil settings if it is:
 
 \begin{algorithm}[\textsc{WeilTest}]\label{alg:weil-test}
   \hspace{1em}\vspace{-.25em}
   \begin{description}
     \item[Input] An ideal $I \subseteq \mathbb{R}[X_1, \dots, X_n]$
-    \item[Output] Returns the following data if $W = \mathbb{R}[\boldsymbol{X}]/I$ is a Weil algebra; otherwise \verb|No|.
-    \begin{enumerate}
-      \item Monomial basis $\set{\boldsymbol{b}_1, \dots, \boldsymbol{b}_\ell}$ of $W$,
-      \item $M$, the multiplication table of $W$ in terms of the basis,
-      \item $(k_1, \dots, k_n) \in \mathbb{N}^n$ such that $k_i$ is the maximum satisfying $X_i^{k_i} \notin I$ for each $i$, and
-      \item $\NonVan_W$, a table of representations of non-vanishing monomials in $W$;
-      i.e.\ for any $\alpha = (\alpha_1, \dots, \alpha_n) \in \N^n$, if $\alpha_i \leq k_i$ for all $i$, then $\NonVan_W(\X^\alpha) = (c_1, \dots, c_n) \in \R^k$ satisfies $[\X^\alpha]_I = \sum_i c_i \boldsymbol{b}_i$.
-    \end{enumerate} 
+    \item[Output] Returns the Weil settings of $W = \mathbb{R}[\boldsymbol{X}]/I$ if it is a Weil algebra; otherwise \verb|No|.
     \item[Procedure] \textup{\textsc{WeilTest}}
   \end{description}
 
@@ -248,17 +284,88 @@ Return @$\boldsymbol{v}$@
 
 The termination and validity of \Cref{alg:smooth-weil} are clear.
 
-It remains to compute $C^\infty$-structure of $\Rseries$.
-Thanks to \Cref{alg:smooth-weil}, we know the precise definition of lifting to $\Rseries$.
-Given $f: \R^n \smoothto \R$, we could employ a purely symbolic algorithm to calculate an entire power series.
+\subsubsection{Computing $C^\infty$-structure of $\Rseries$}\label{sec:power-series-lifting}
+So it remains to compute $C^\infty$-structure of $\Rseries$.
+Thanks to \Cref{alg:smooth-weil}, we know the precise definition of lifting to $\Rseries$:
+\[
+  \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
+\]
+One might think it straightforward to implement this with AD techniques, such as Lazy multivariate Tower AD~\cite{Pearlmutter:2007aa} or Sparse Tower mode\footnote{For an implementation, see, for example, \texttt{Numeric.AD.Internal.Sparse} module of \texttt{ad}~\cite{Kmett:2010aa}.}; but it is much harder than expected.
+
+One difficulty here is that each term $g_i$ is \emph{not} a smooth function, but \emph{formal power series}.
+This means there might not be a corresponding smooth function to each $g_i$ and hence AD technique is unapplicable in general.
+Still, one could overcome this situation realising that what we need to compute each coefficient is just the value at $\boldsymbol{0}$, i.e.\ the constant term of each $D^\alpha(f\circ\braket{\vec{g}})$.
+Hence, it is possible to calculate $D^\alpha(f\circ\braket{\vec{g}})$ for each $\alpha$ by cutting each $\vec{g}$ off to a polynomial of degree up to $\alpha$, regarding them as a smooth (polynomial) function, and then apply ordinary AD technique to compute them.
+Still, we need to apply AD to \emph{distinct} functions $f \circ \braket{g_1 \upharpoonright \alpha, \dots, g_n \upharpoonright \alpha}$ for each $\alpha$.
+This means we cannot apply Tower-like AD all at once, meaning we can't make use of caching virtue of such methods, resulting in a less efficient algorithm than expected.
+
+Another possible solution to calculate the entire $C^\infty$-structure of $\Rseries$ is to employ a purely symbolic algorithm to calculate an entire power series.
 On the other hand, symbolic computation along this line could be quite expensive without any heuristics.
-One possible alternative is to employ Lazy multivariate Tower AD~\cite{Pearlmutter:2007aa} or Sparse Tower mode\footnote{For an implementation, see, for example, \texttt{Numeric.AD.Internal.Sparse} module of \texttt{ad}~\cite{Kmett:2010aa}.}.
-These methods can be obtained by applying \Cref{thm:multi-partial-duals} ad infinitum.
-If one uses a language with easy laziness support, our task is done by Tower AD.
-Fortunately enough, we don't need the entire information of power series.
-Concerning the use of power series in \Cref{alg:smooth-weil}, we need only a finite fragment of the series of interest; we need the coefficients up to multidegree $(k_1, \dots, k_n)$.
-Hence, we can resort to automatic differentiation up to a fixed degree, so one can just apply ADs finitely many times as \Cref{thm:multi-partial-duals} required.
-Equivalently, one can implement the $C^\infty$-structure of multi-dual number ring $\R[\vec{d}]$ directly and use them.
+We include an example of such symbolic implementation in Haskell in the Appendix (\Cref{sec:appendix}).
+
+Fortunately enough, we don't need the entire information of power series when implementing $C^\infty$-structure of Weil algebra.
+Carefully analysing the use of power series in \Cref{alg:smooth-weil}, we can notice that all arguement power series $g_1, \dots, g_m$ to lifting function $\Rseries(f)(g_1, \dots, g_m)$ are indeed of finite degree.
+Assuming an algorithm \textsc{TowerAD} to compute a coefficient table of partial derivatives of a given smooth function, one can implement the lifting function restricted to polynomial inputs as follows:
+
+\begin{algorithm}[\textsc{LiftSeriesPoly}]\label{alg:lift-poly-series}
+\hfill\vspace{-.25em}
+\begin{description}
+  \item[Input]
+    $f: \R^m \smoothto \R$, a smooth function which admits Lazy Tower AD,
+    $g_1, \dots, g_n \in \R[X_1, \dots, X_n]$, polynomials.
+  \item[Output] $\Rseries(f)(g_1, \dots, g_m): \N^n \to \R$, $f$ lifted to the power series expressed as a function from monomials to coefficient.
+  \item[Procedure] \textup{\textsc{LiftSeriesPoly}}
+\end{description}
+\begin{alg}
+@$\hat{g}_i$@ <- a function represented by @$g_i$@
+@$\hat{f}$@ <- @$f \circ \braket{\hat{g}_1, \dots, \hat{g}_m}$@
+T <- TowerAD(@$\hat f$@)
+Return \ (@$\alpha \in \N^n$@) -> @$\frac{T(m)}{\alpha!}$@
+\end{alg}
+\end{algorithm}
+
+\subsection{Tensor product of Weil algebras}
+\label{sec:tensor-algorithm}
+As indicated by \Cref{thm:quot-tensor}, tensor products of Weil algebras can be useful to compute multivariate AD.
+Here, we give a simple procedure to compute Weil settings of the tensor product of given two algebras.
+
+\begin{algorithm}[WeilTensor]\label{alg:weil-tensor}
+\hfill\vspace{-.25em}
+\begin{description}
+  \item[Input] Weil settings of two Weil algebras $W_1, W_2$,
+  with $\set{\boldsymbol{b}_1^i, \dots, \boldsymbol{b}_{\ell_i}^i}$ a basis,
+  $(k^i_1, \dots, k^i_{n_i})$ a upper bounds and $M_i$ a multiprication table for each $W_i$.
+  \item[Output] Weil settings of $W_1 \otimes_\R W_2$.
+  \item[Procedure] {\upshape \textsc{WeilTensor}}
+\end{description}
+\begin{alg}
+For i in 1..(@$\ell_1$@ * @$\ell_2$@)
+  (j, k) <- i `divMod` @$\ell_2$@
+  @$\boldsymbol{b}_i$@ <- @$\boldsymbol{b}^1_j \boldsymbol{b}^2_k$@
+M <- {}
+For ({@$\boldsymbol{b}^1_L, \boldsymbol{b}^1_R$@}, @$(c_1,\dots,c_{\ell_1})$@) in @$M_1$@
+  For ({@$\boldsymbol{b}^2_L, \boldsymbol{b}^2_R$@}, @$(d_1,\dots,d_{\ell_1})$@) in @$M_2$@
+    M({@$\boldsymbol{b}^1_L \boldsymbol{b}^2_L$@, @$\boldsymbol{b}^1_R \boldsymbol{b}^2_R$@}) <- Convol(@$\vec{c}$@, @$\vec{d}$@)
+@$\NonVan_{W_1 \otimes W_2}$@ <- {}
+For (@$\X^\alpha$@, @$(c_1, \dots, c_{\ell_1})$@) in @$\NonVan_{W_1}$@
+  For (@$\Y^\beta$@, @$(d_1,\dots,d_{\ell_2})$@) in @$\NonVan_{W_2}$@
+    @$\NonVan_{W_1 \otimes W_2}(\X^\alpha\Y^\beta)$@ <- Convol(@$\vec{c}$@, @$\vec{d}$@)
+Return @$(\boldsymbol{b}, M, (\vec{k}^1, \vec{k}^2), \NonVan_{W_1 \otimes W_2})$@
+\end{alg}
+
+Here, {\upshape \textsc{Convol}} is a convolution of two sequences:
+\begin{description}
+  \item[Precedure] $\mathop{\text{\upshape\scshape Convol}}((c_1, \dots, c_{\ell_1}), (d_1, \dots, d_{\ell_2}))$
+\end{description}
+\begin{alg}
+For i in 1..(@$\ell_1 \times \ell_2$@)
+  j <- @$\lfloor \frac{i}{\ell_2} \rfloor$@; k <- @$i \mod{\ell_2}$@
+  @$a_i$@ <- @$c_j d_k$@
+Return (@$a_1, \dots, a_{\ell_1 \ell_2}$@)
+\end{alg}
+\end{algorithm}
+
+The validity is a routine work.
 
 \section{Examples}\label{sec:examples}
 We have implemented the algorithms introduced in the previous section on top of the \texttt{computational-algebra}~\cite{ISHII:2018ek,computational-algebra} package, a computer algebra system implemented as an Embedded Domain Specific Language in Haskell.
@@ -266,14 +373,74 @@ The code is available on GitHub~\cite{Ishii:2020aa}.
 
 \section{Conclusion}\label{sec:concl}
 
-\section*{Appendix: Symbolic computation of smooth structure }\label{sec:appendix}
-
 \begin{acks}
 The author is grateful to Prof.\ Akira Terui, for encouraging  to write this paper.
 
 This work was supported by the Research Institute for Mathematical Sciences,
 an International Joint Usage/Research Center located in Kyoto University.
 \end{acks}
+
+\section{Appendix: Symbolic computation of smooth structure }\label{sec:appendix}
+In \Cref{sec:power-series-lifting}, we just make use of such lifting function with all the inputs are mere polynomials, but with some symbolic computation, we can compute unrestricted $C^\infty$-structure of $\Rseries$ in theory.
+Here, we include a referential implementation for Smooth lifting function for general formal power series rings (\texttt{liftSeries}) for completeness.
+
+Basic idea is to use dedicated an abstract syntax tree representing a $k$-ary function composed with $n$-ary series and their partial derivatives.
+For brevity, we include a raw source code of their implementation in Haskell.
+The same implementation can also be found in our implementation on GitHub~\cite{Ishii:2020aa}.
+
+\begin{code}
+newtype PowerSeries n a 
+  = Powers (UVec n Natural -> a)
+  deriving (Functor)
+
+liftSeries :: Floating a =>
+  (forall x. Floating x => Vec k x -> x)
+  -> Vec k (PowerSeries n a)
+  -> PowerSeries n a
+liftSeries f vs = Powers $ \alpha ->
+  evalMTree
+  ( foldr
+    ($)
+    (DiffFun $ replicate' 0)
+    (diffMTree <$> 
+      ifoldMap (flip replicate) alpha
+    )
+  )
+  f
+  vs
+  / (alpha !)
+
+data MTree m n a
+  = Mul (MTree m n a) (MTree m n a)
+  | Add (MTree m n a) (MTree m n a)
+  | DiffArg (Vec m Natural) (Ordinal n)
+  | DiffFun (Vec n Natural)
+  | K a
+  deriving (Eq, Ord)
+
+evalMTree ::
+  ( KnownNat n, KnownNat m
+  , Floating a, Eq a
+  ) => MTree m n a
+    -> (forall x. Floating x 
+        => Vec n x -> x)
+    -> Vec n (PowerSeries m a)
+    -> a
+evalMTree (Mul l r) f vs = 
+    evalMTree l f vs 
+  * evalMTree r f vs
+evalMTree (Add l r) f vs =
+    evalMTree l f vs 
+  + evalMTree r f vs
+evalMTree (DiffArg pow i) f vs =
+  constPTerm 
+    (formalNDiff pow (vs %!! i))
+evalMTree (DiffFun pows) f vs =
+  head 
+    (multDiff pows (singleton . f)
+      (map constPTerm vs))
+evalMTree (K a) _ _ = a
+\end{code}
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{../references}

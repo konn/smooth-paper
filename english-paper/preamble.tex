@@ -2,6 +2,7 @@
 \usepackage{cleveref}
 \usepackage{braket}
 \usepackage[draft]{fixme}
+\usepackage{enumitem}
 
 \makeatletter
 \newtheoremstyle{acmplainbreak}%
@@ -43,6 +44,7 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\rem}[2]{{\overline{#1}}^{#2}}
 \newcommand{\X}{\boldsymbol{X}}
+\newcommand{\Y}{\boldsymbol{Y}}
 \newcommand{\Rseries}{\mathord{\R\llbracket\X\rrbracket}}
 \DeclareMathOperator{\NonVan}{NV}
 \newcommand{\smoothto}{\xrightarrow{C^\infty}}
@@ -62,7 +64,7 @@
 \definecolor{num}{HTML}{40a070}
 \definecolor{symb}{HTML}{000000}
 \newcommand\symbmath[1]{{\ensuremath{\color{symb}#1}}}
-\newcommand\typemath[1]{{\ensuremath{\uley{#1}}}}
+\newcommand\typemath[1]{{\ensuremath{\ul{#1}}}}
 \newcommand{\moncompose}{\mathbin{>\mkern-6mu=\mkern-6mu>}}
 \newcommand\colmath[2]{{\ensuremath{\color{#1}#2}}}
 \def\ul#1{{\underline{\smash{\bfseries #1}}}}
@@ -112,7 +114,7 @@
   keywordstyle={\ul},
   morekeywords=[2]{*,+,/,-,.,\%,!,?,=,<,>,$},
   keywordstyle=[2]{\ttfamily\bfseries},
-  morekeywords=[3]{WeilTest},
+  morekeywords=[3]{Convol,WeilTest,LiftWeil,LiftSeriesPoly,TowerAD},
   keywordstyle=[3]{\rmfamily\upshape\scshape},
   emphstyle={[2]\itshape},
   literate=
@@ -125,11 +127,89 @@
     {...}{{\symbmath{\ldots}}}2
     {<}{{\symbmath{<}}}2
     {alpha}{{\symbmath{\alpha}}}1
+    {beta}{{\symbmath{\beta}}}1
     {->}{{\symbmath{\rightarrow}}}2 {>=}{{\symbmath{\geq}}}2 {<-}{{\symbmath{\leftarrow}}}2
     {g_i}{{\symbmath{g_i}}}2
     {f_i}{{\symbmath{f_i}}}2
     {===}{{\symbmath{\equiv}}}2
     {==>}{{\symbmath{\Longrightarrow}}}{3}
+    {\\}{{\symbmath{\lambda}}}1
     {<=}{{\symbmath{\leq}}}1 {=>}{{\symbmath{\Rightarrow}}}2
 }
 \lstnewenvironment{alg}[1][frame=leftline]{\lstset{language=algorithm}}{}
+
+\lstdefinelanguage{Haskell}{
+ morecomment=[l][\slshape\color{comment}]{--},
+ morecomment=[n][\slshape\color{comment}]{\{-}{-\}},
+ morecomment=[n][\bfseries\itshape]{\{-\#}{\#-\}},
+ morestring=[b]\",
+ stringstyle={\slshape},
+ keywords={case,class,data,deriving,do,else,if,import,in,infixl,infixr,instance,let,infix,
+	   module,of,primitive,then,type,where,family,newtype
+ },
+ numbers=left,
+ stepnumber=1,
+ keywordstyle={\bfseries},
+ morekeywords=[2]{*,+,/,-,.,\%,!,?,=,<,>,$},
+ keywordstyle=[2]{\ttfamily\bfseries},
+ emph={[1] Bool,Char,Double,Either,Float,IO,Int,Maybe,Ordering,Rational,Ratio,ReadS,ShowS,String,UVec,Vec,Functor,PowerSeries,%
+	   InPacket,Sing,SNat,Show,Eq,KnownNat,Floating,Ord,Num,SingRep,Void,Monad,Field,Coeff,MyMat,%
+           IsOrdPoly, CoeffRing, Ring, Abelian, Commutative, Group, Ideal, Unipol,Strategy,%
+           OrdPoly,IsMonomialOrder,MOrder,Coeff,Arity,Lex,Grevlex,Revlex,Homogenised,%
+           Additive,Monoidal,OrderedMonomial,Module,LeftModule,Scalar,Type,Polynomial,%
+           MMatrix,Matrix,Mutable,Vector,ST,Entry,HPS,%
+           Unital,Multiplicative,HomogOrder%
+ },
+ emphstyle={[1]\ul},
+ emph={[2] Powers,DiffFun,Mul,Add,K,EQ,False,GT,Just,LT,Left,Nothing,Right,True,Z,S,SS,SZ,sS,sZ
+ },
+ emphstyle={[2]\slshape},
+ literate=
+ {alpha}{{\symbmath{\alpha}}}1
+ {beta}{{\symbmath{\beta}}}1
+ {Integer}{{\typemath{\mathbb{Z}}}}2
+   {Natural}{{\underline{\ensuremath{\mathbb{N}}}}}1
+   {fromInteger}{{fromInteger}}{12}
+   {Rational}{{\typemath{\mathbb{Q}}}}2
+   {::}{{\textcolor{symb}{:\!:}}}2
+   {==}{{\symbmath{=}}}2
+   {/=}{{\symbmath{\neq}}}2
+   {forall}{{\ensuremath{\pmb{\forall}}}}1
+   {*}{{\symbmath{\times}}}1
+   {!*}{{\symbmath{\ltimes}}}2
+   {+}{{\symbmath{+}}}1 {-}{{\symbmath{-}}}1
+   {:-}{{:-}}2
+   {Pi}{{\ensuremath{\boldsymbol{\Pi}}}}1
+   {++}{{\symbmath{{}^{\frown}}}}2
+   {\%-}{{\symbmath{\ominus}}}2
+   {P.++}{{\symbmath{{}^{\frown}}}}2
+   {>}{{\symbmath{>}}}2
+   {<}{{\symbmath{<}}}2
+   {\\}{{\symbmath{\lambda}}}1 {~}{{\symbmath{\sim}}}1
+   {:~:}{{\symbmath{\simeq}}}2
+   {Fp}{{\typemath{\mathbb{F}_p}}}2
+   {\\\\}{{\color{symb}\char`\\\char`\\}}2 {phi}{{\ensuremath{\varphi}}}1
+   {->}{{\symbmath{\rightarrow}}}2 {>=}{{\symbmath{\geq}}}2 {<-}{{\symbmath{\leftarrow}}}2
+   {`elem`}{{\symbmath{\in}}}2 {kappa}{{\ensuremath{\kappa}}}1 {===}{{\symbmath{\equiv}}}2
+   {`IsSubsetOf`}{{\symbmath{\subseteq}}}2
+   {==>}{{\symbmath{\Longrightarrow}}}{3}
+   {<=}{{\symbmath{\leq}}}1 {=>}{{\symbmath{\Rightarrow}}}2  {=~=}{{\symbmath{\cong}}}2
+   {\ .}{{\symbmath{\circ}}}3 {\ .\ }{{\symbmath{\circ}}}3 {:=:}{{\symbmath{\approx}}}2
+   {\ ..}{{{\color{symb}\ .\!\!.}}}2
+   {\ ...}{{\ensuremath{\ .\hspace{-.1ex}.\hspace{-.1ex}.}}}2
+   {\ .*}{{\ \symbmath{\bullet}}}{2}
+   {\ .||.}{{\ \symbmath{\vee}}}3 {\ .&&.}{{\symbmath{\ \wedge}}}2
+   {\ .=}{{\ \symbmath{{:}{=}}}}4
+   {\ .\%=}{{\ \symbmath{{:}{\Leftarrow}}}}4
+   {<\$>}{{\symbmath{{<}\!{\text{\textdollar}}\!{>}}}}3
+   {<*>}{{\symbmath{{<}\!\!\!\ast\!\!\!{>}}}}3
+   {>>}{{\symbmath{\ll}}}1 {>>=}{{\symbmath{\gg\mkern-6.5mu=}}}3
+   {>=>}{{\symbmath{\moncompose}}}3
+   {=<<}{{\symbmath{=\mkern-6.5mu\ll}}}3
+   {|}{{\symbmath{\mid}}}1
+   {FF}{{FF}}2
+   {F\ }{{\typemath{\mathbb{F}\ }}}2
+   {GF\ }{{\typemath{\mathbb{GF}\ }}}3
+}
+
+\lstnewenvironment{code}[1][frame=leftline]{\lstset{language=Haskell, #1}}{}
