@@ -22,11 +22,12 @@
 
 \begin{abstract}
   \frenchspacing
-  We propose an algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra, enabling us to do some analysis with \emph{higher infinitesimals} numerically and symbolically.
-  To that end, we first give a brief description of the (forward-mode) \emph{automatic differentiation} (AD) in terms of \emph{$C^\infty$-rings}.
+  We propose an algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra.
+  It allows us to do some analysis with \emph{higher infinitesimals} numerically and symbolically.
+  To that end, we first give a brief description of the (Forward-mode) \emph{automatic differentiation} (AD) in terms of \emph{$C^\infty$-rings}.
   The notion of a $C^\infty$-ring was introduced by Lawvere~\cite{lawvere1979categorical} and used as the fundamental building block of \emph{smooth infinitesimal analysis} and \emph{synthetic differential geometry}~\cite{Moerdijk:1991aa}.
   We argue that interpreting AD in terms of $C^\infty$-rings gives us a unifying theoretical framework and modular ways to express multivariate partial derivatives.
-  In particular, we can ``package'' higher-order forward-mode AD as a Weil algebra, and take tensor products to compose them to achieve multivariate higher-order AD.
+  In particular, we can ``package'' higher-order Forward-mode AD as a Weil algebra, and take tensor products to compose them to achieve multivariate higher-order AD.
   The algorithms in the present paper can also be used for a pedagogical purpose in learning and studying smooth infinitesimal analysis as well.
 \end{abstract}
 
@@ -72,16 +73,16 @@
 
 \section{Introduction}\label{sec:intro}
 \sloppy
-\emph{Automatic Differentiation} (or, \emph{AD} for short) is known as the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently.
-AD has a long history of research, and under the recent rise of needs of differentiable programming in machine learning, AD has been attracting some interests again nowadays.
+\emph{Automatic Differentiation} (or, \emph{AD} for short) is the method to calculate derivatives of (piecewise) smooth functions accurately and efficiently.
+AD has a long history of research, and under the recent rise of differentiable programming in machine learning, AD has been attracting some interests again nowadays.
 
 \emph{Smooth Infinitesimal Analysis} (or, \emph{SIA} for short), on the other hand, is an area of mathematics that uses \emph{nilpotent infinitesimals} to develop the theory of real analysis.
 Its central building blocks are \emph{Weil algebras}, which can be viewed as the real line augmented with nilpotent infinitesimals.
-Indeed, SIA is a subarea of \emph{Synthetic Differential Geometry} (SDG) initiated by Lawvere~\cite{lawvere1979categorical}, which studies smooth manifolds topos-theoretically, and higher multivariate infinitesimals play important roles in building theory of, e.g.\ vector fields, differential forms and tangent spaces.
-The crucial observation of Lawvere is that manifolds can be classified solely by their smooth function ring $C^\infty(M)$, and both such function rings and Weil algebras are special cases of \emph{$C^\infty$-rings}.
+Indeed, SIA is a subarea of \emph{Synthetic Differential Geometry} (SDG) initiated by Lawvere~\cite{lawvere1979categorical}, which studies smooth manifolds topos-theoretically, and higher multivariate infinitesimals play crucial roles in building theory of, e.g.\ vector fields, differential forms and tangent spaces.
+The key observation of Lawvere is that manifolds can be classified solely by their smooth function ring $C^\infty(M)$, and both such function rings and Weil algebras are special cases of \emph{$C^\infty$-rings}.
 
-It has been pointed out that AD and SIA have some connection; e.g.\ even Wikipedia article~\cite{Wikipedia:2021aa} mentions the connection between first-order forward-mode AD with the ring $\R[X]/(X^2)$ of dual numbers.
-However, a precise theoretical description of this correspondence is not well-communicated and further generalisation of AD in terms of SIA hasn't been discussed enough.
+It has been pointed out that AD and SIA have some connection; e.g.\ even Wikipedia article~\cite{Wikipedia:2021aa} mentions the connection between first-order Forward-mode AD with the ring $\R[X]/(X^2)$ of dual numbers.
+However, precise theoretical descriptions of this correspondence is not well-communicated, and further generalisation of AD in terms of SIA hasn't been discussed enough.
 
 The present paper aims at filling this gap, giving a unified description of AD in terms of $C^\infty$-rings and Weil algebras.
 Further, our main contribution is the algorithms to compute $C^\infty$-ring structure of general Weil algebra.
@@ -89,10 +90,10 @@ This enables automatic differentiation done in \emph{arbitrary} Weil algebras ot
 Such algorithms can also be used to learn and study the theory of SIA and SDG.
 
 This paper is organised as follows.
-In \Cref{sec:prel}, we will briefly review the basic concepts and facts on $C^\infty$-rings and Weil algebras.
-Subsequently, we will give some exposition of the connection between forward-mode automatic differentiation and Weil algebras in \Cref{sec:ad-and-weils}.
-There, we will see how the notion of Weil algebra can be exploited to treat higher-order partial ADs in a unified and general setting.
-Then in \Cref{sec:alg}, we will give algorithms to compute $C^\infty$-ring structure of arbitrary Weil algebra, enabling us \emph{automatic differentiation with higher infinitesimals}, or \emph{computational smooth infinitesimal analysis}.
+In \Cref{sec:prel}, we will review the basic concepts and facts on $C^\infty$-rings and Weil algebras.
+Subsequently, we will discuss the connection between Forward-mode automatic differentiation and Weil algebras in \Cref{sec:ad-and-weils}.
+There, we will see how the notion of Weil algebra and $C^\infty$-ring can be applied to treat higher-order partial ADs in a unified and general setting.
+Then, in \Cref{sec:alg}, we will give algorithms to compute $C^\infty$-ring structure of arbitrary Weil algebra. These algorithms enable us to do \emph{automatic differentiation with higher infinitesimals}, or \emph{computational smooth infinitesimal analysis}.
 We give some small examples in \Cref{sec:examples}, using our proof-of-concept implementation~\cite{Ishii:2020aa} in Haskell.
 Finally, we discuss related and possible future works and conclude in \Cref{sec:concl}.
 
@@ -107,9 +108,9 @@ For theoretical detail, we refer readers to Moerdijk--Reyes~\cite[Chapters I and
   For a map $f: \R^m \to \R$, we call $A(f): A^m \to A$ the \emph{$C^\infty$-lifting} of $f$ to $A$.
 \end{definition}
 
-Intuitively, $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary operations $A(f): A^m \to A$ respecting composition and product for all smooth map $f: \R^m \to \R$.
+Intuitively, $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary operations $A(f): A^m \to A$ respecting composition, projection and product for all smooth map $f: \R^m \to \R$.
 
-One typical example of $C^\infty$-ring is a formal power series ring:
+One typical example of a $C^\infty$-ring is a formal power series ring:
 
 \begin{theorem}[Lawvere]\label{thm:series-is-smooth}
   The ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $\boldsymbol{0}$.
@@ -120,14 +121,14 @@ One typical example of $C^\infty$-ring is a formal power series ring:
   where $\alpha! = \alpha_1 ! \dots \alpha_n !$ is the multi-index factorial and $D^\alpha$ is the partial differential operator to degree $\alpha$.
 \end{theorem}
 
-$C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has deep connection with $\Rseries$:
+$C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has a deep connection with $\Rseries$:
 
 \begin{definition}[Weil algebra]
   A \emph{Weil algebra} $W$ is an algebra of form $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
 \end{definition}
 It follows that Weil algebra $W$ is finite-dimensional as a $R$-linear space and hence $I$ is a \emph{zero-dimensional} ideal.
 Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
-In what follows, we identify an element $\boldsymbol{u} \in W$ of $k$-dimensional Weil algebra $W$ with a $k$-vector $\boldsymbol{u} = (u_1, \dots, u_k) \in \R^k$ of reals.
+In what follows, we identify an element $\boldsymbol{u} \in W$ of $k$-dimensional Weil algebra $W$ with a $k$-dimensional vector $\boldsymbol{u} = (u_1, \dots, u_k) \in \R^k$ of reals.
 
 Although it is unclear from the definition, Weil algebras have the canonical $C^\infty$-structure.
 First note that, if $I$ is zero-dimensional, we have $\R[\X]/I \simeq \R\llbracket \X \rrbracket /I$.
@@ -147,7 +148,7 @@ In this section, based on the basic facts on $C^\infty$-rings and Weil algebras 
 It can be implemented by ad-hoc polymorphism (or equivalently, function overloading).
 For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beautiful-differentiation} and Kmett's \texttt{ad} package~\cite{Kmett:2010aa}.
 
-Briefly speaking, in forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
+Briefly speaking, in Forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
 Then, when evaluating composite functions, one uses Chain Rule for implementation:
 \[
   \frac{\mathrm{d}}{\mathrm{d}x}(g \circ f)(x) = f'(x) g'(f(x))
@@ -161,8 +162,8 @@ The following definition of functions on dual numbers illustrate the idea:
   \cos(a_1 + b_1 d) &= \cos(a_1) - b_1 \sin(a_1) d
 \end{align*}
 
-The first two equations for addition and multiplication suggests us to regard operations on Forward-mode AD as extending the algebraic structure of $\R[d] = \R[X]/(X^2)$.
-Indeed, as stated in the introduction, first-order forward-mode AD can be identified with the arithmetic on \emph{dual numbers}:
+The first two equations for addition and multiplication suggest us to regard operations on Forward-mode AD as extending the algebraic structure of $\R[d] = \R[X]/(X^2)$.
+Indeed, first-order Forward-mode AD can be identified with the arithmetic on \emph{dual numbers}:
 \begin{definition}
   The \emph{dual number ring} is a Weil algebra $\R[X]/(X^2)$.
   We often write $d = {[X]}_I \in \R[d]$ and $\R[d] \coloneq \R[X]/(X^2)$.
@@ -188,12 +189,12 @@ Letting $f: \R \smoothto \R$ a univariate smooth function, then we can derive $C
   \label{eqn:dual-smooth}
 \end{alignat*}
 
-One can notice that the derived $C^\infty$-structure in \eqref{eqn:dual-smooth} is exactly the same as how to implement individual smooth functions for forward-mode AD.
-This describes the connection between forward-mode AD and dual numbers: forward-mode AD is just a (partial) implementation of $C^\infty$-structure of the dual number ring $\R[d]$.
+One can notice that the derived $C^\infty$-structure in \eqref{eqn:dual-smooth} is exactly the same as how to implement individual smooth functions for Forward-mode AD.
+This describes the connection between Forward-mode AD and dual numbers: Forward-mode AD is just a (partial) implementation of the $C^\infty$-structure of the dual number ring $\R[d]$.
 
 Let's see how this extends to higher-order cases.
 The most naïve way to compute higher-order derivatives of smooth function is just to successively differentiating it.
-This intuition can be expressed just by duplicating the number of basis of dual numbers:
+This intuition can be expressed by duplicating the number of the basis of dual numbers:
 \begin{theorem}\label{thm:univ-partial-duals}
   For any $f: \R \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
   \[
@@ -217,7 +218,7 @@ We can get derivatives in more succinct representation with \emph{higher infinit
     = \sum_{k \leq n} \frac{f^{(k)}(a)}{k !} \varepsilon^k.
   \]
 \end{lemma}
-In this representation, we have only $(n + 1)$-terms and hence it results in succinct and efficient representation of derivatives.
+In this representation, we have only $(n + 1)$-terms, and hence it results in succinct and efficient representation of derivatives.
 
 If we duplicate such higher-order infinitesimals as much as needed, one can likewise compute \emph{multivariate} higher-order derivatives all at once, up to some multidegree $\beta$:
 \begin{lemma}
@@ -233,8 +234,8 @@ If we duplicate such higher-order infinitesimals as much as needed, one can like
 Note that the formal power series ring $\Rseries$ can be viewed as the inverse limit of $\R[\X]/(\X^\beta)$'s.
 In other words, if we take a limit $\beta_i \to \infty$, we can compute any higher derivative up to any finite orders; this is exactly what \emph{Tower-mode} AD aims at, modulo factor $\frac{1}{\beta!}$.
 
-In this way, AD can be view as a technique to compute higher derivatives simultaneously by partially implementing the structure some $C^\infty$-ring\footnote{Such implementation is inherently a partial approximation: there are $2^{\aleph_0}$-many smooth functions, but there are only countably many computable (floating) functions.}.
-Forward-mode AD (of first-order) computes the $C^\infty$-structure of the dual number ring $\R[d]$; tower-mode AD computes that of the formal power series ring $\Rseries$ (modulo reciproal factorial).
+In this way, we can view AD as a technique to compute higher derivatives simultaneously by partially implementing certain $C^\infty$-ring\footnote{Such implementation is inherently a partial approximation: there are $2^{\aleph_0}$-many smooth functions, but there are only countably many computable (floating) functions.}.
+Forward-mode AD (of first-order) computes the $C^\infty$-structure of the dual number ring $\R[d]$; Tower-mode AD computes that of the formal power series ring $\Rseries$ (modulo reciprocal factorial).
 
 So far, we have used Weil algebra of form $\Rseries/I$.
 So, do we need to define new ideals by hand whenever one wants to treat multiple variables?
@@ -249,11 +250,11 @@ The answer is no:
   \]
   where $\otimes_\R$ is a tensor product of $C^\infty$-rings.
 \end{lemma}
-Thanks to this lemma, we don't have to define $I$ by hand every time, but just can take tensor products to compose predefined Weil algebras to compute multivariate and higher-order derivatives.
+Thanks to this lemma, we don't have to define $I$ by hand every time, but can take tensor products to compose predefined Weil algebras to compute multivariate and higher-order derivatives.
 Examples of such calculations will be present in \Cref{sec:examples}.
 
 \section{Algorithms}\label{sec:alg}
-In this section, we will present the main results of this paper: concrete algorithms to compute $C^\infty$-structure of arbitrary Weil algebra and their tensor products.
+In this section, we will present the main results of this paper: concrete algorithms to compute the $C^\infty$-structure of arbitrary Weil algebra and their tensor products.
 For examples of applications of the algorithm presented here, the reader can skip to the next \cref{sec:examples} to comprehend the actual use case.
 
 \subsection{Computing $C^\infty$-structure of Weil algebra}
@@ -268,7 +269,7 @@ Roughly speaking, the algorithm can be divided into threefold:
 \end{enumerate}
 
 We start with Weil-ness testing.
-First, we define the basic data needed to compute $C^\infty$-structure of Weil algebras:
+First, we define the basic data needed to compute the $C^\infty$-structure of Weil algebras:
 
 \begin{definition}[Weil settings]
   The \emph{Weil setting} of a Weil algebra $W$ consists of the following data:
@@ -281,12 +282,12 @@ First, we define the basic data needed to compute $C^\infty$-structure of Weil a
   \end{enumerate}
 \end{definition}
 
-A basis and multiplication table allows us to calculate ordinary $\R$-algebra structure of Weil algebra $W$.
-The latter two data, $\vec{k}$ and $\NonVan_W$, are essential to compute the $C^\infty$-structure of $W$.
+A basis and multiplication table allows us to calculate the ordinary $\R$-algebra structure of Weil algebra $W$.
+The latter two data, $\vec{k}$ and $\NonVan_W$, are essential in computing the $C^\infty$-structure of $W$.
 In theory, \ref{item:nonvan} is unnecessary if one stores a Gr\"{o}bner basis of $I$;
 but since normal form calculation modulo $G$ can take much time in some case, we don't store $G$ itself and use the precalculated data $\NonVan$.
 It might be desirable to calculate $\NonVan_W$ as lazily as possible.
-Since it involves Gr\"{o}bner basis computation it is more desirable to delay the computation as later as possible and do in an on-demand manner.
+Since it involves Gr\"{o}bner basis computation it is more desirable to delay it as later as possible and do in an on-demand manner.
 
 With this definition, one can decide Weilness and compute their settings:
 
@@ -321,12 +322,12 @@ Return (@$\vec{\boldsymbol{b}}, M, \vec{k}, \NonVan_W$@)
   \Cref{alg:weil-test} terminates and returns expected values.
 \end{theorem}
 \begin{proof}
-  Algorithms to decide the zero-dimensionality and calculate their multiplication table is well-known (for detail we refer readers to Cox--Little--O'Shea~\cite[Chapter 2]{CLO:2005}).
+  Algorithms to decide the zero-dimensionality and calculate their multiplication table is well-known (for details, we refer readers to Cox--Little--O'Shea~\cite[Chapter 2]{CLO:2005}).
   So the only non-trivial part is nilpotence detection (\Crefrange{line:weil-test:radical-start}{line:weil-test:radical-end}).
   But, again, this is just a variation of radical calculation algorithm for zero-dimensional ideals.
   Indeed, since each $\R[X_i]$ is a PID, we have $X_i^k \in I \cap R[X_i]$ iff $p_i \divs X_i^k$, hence $p_i$ is a monomial iff $X_i$ is nilpotent in $W$.
 \end{proof}
-Now that we have basis and multiplication table in handy, we can calculate ordinary algebraic operations just by the standard means.
+Now that we have the basis and multiplication table in handy, we can calculate the ordinary algebraic operations just by the standard means.
 
 And, with upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\Rseries$:
 
@@ -360,16 +361,16 @@ Thanks to \Cref{thm:series-is-smooth}, we know the precise definition of $C^\inf
 \[
   \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
 \]
-As noted in \Cref{sec:ad-and-weils}, as a $C^\infty$-ring, the formal power series is isomorphic to multivariate Tower-mode AD.
-It can be implemented in various way, such as Lazy Multivariate Tower AD~\cite{Pearlmutter:2007aa}, or nested Sparse Tower AD~\cite[{module \texttt{Numeric.AD.Rank1.Sparse}}]{Kmett:2010aa}.
-For reference, we include a succinct and efficient variant mixing these two techniques in Appendix.
+As noted in \Cref{sec:ad-and-weils}, as a $C^\infty$-ring, the formal power series ring is isomorphic to multivariate Tower-mode AD.
+It can be implemented in various ways, such as Lazy Multivariate Tower AD~\cite{Pearlmutter:2007aa}, or nested Sparse Tower AD~\cite[{module \texttt{Numeric.AD.Rank1.Sparse}}]{Kmett:2010aa}.
+For reference, we include a succinct and efficient variant mixing these two techniques in the Appendix.
 
 Both Tower-mode AD and formal power series can be represented as a formal power series.
 The difference is the interpretation of coefficients in a given series.
 On one hand, a coefficient of $\X^\alpha$ in Tower AD is interpreted as the $\alpha$\textsuperscript{th} partial differential coefficient $D^\alpha f(\boldsymbol{a})$, where $\boldsymbol{a} = (g_1(0), \dots, g_m(0))$.
 On the other hand, in $\Rseries$ it is interpreted as $\frac{D^\alpha f(\boldsymbol{a})}{\alpha!}$.
 To avoid the confusion, we represent Tower-mode AD as a function from monomials $\X^\alpha$ to coefficient $\R$ in what follows, whilst $\Rseries$ represented as-is.
-Note that this is purely for notational and comprehensional distinctions, and does not indicate any essential difference.
+Note that this is purely for notational and descriptional distinctions, and does not indicate any essential difference.
 
 With this distinction, we use the following notation and transformation:
 
@@ -407,8 +408,8 @@ Return @$\RF(\hat{f})$@
 
 \subsection{Tensor product of Weil algebras}
 \label{sec:tensor-algorithm}
-As indicated by \Cref{thm:quot-tensor}, tensor products of Weil algebras enables us to compose multiple Weil algebras into one and use them to compute higher-order multivariate derivatives.
-Here, we give a simple procedure to compute Weil settings of the tensor product of given two algebras.
+As indicated by \Cref{thm:quot-tensor}, tensor products enable us to compose multiple Weil algebras into one and use them to compute higher-order multivariate derivatives.
+Here, we give a simple procedure to compute Weil settings of the tensor product.
 
 \begin{algorithm}[WeilTensor]\label{alg:weil-tensor}
 \hfill\vspace{-.25em}
@@ -454,9 +455,9 @@ The code is available on GitHub~\cite{Ishii:2020aa}.
 As indicated by \Cref{thm:univ-partial-duals} and \Cref{lem:higher-infinitesimal},
 to compute higher-order derivatives of univariate functions, we can use tensor products of Dual numbers or higher-order infinitesimals.
 
-Let us first compute higher-order derivatives of $\sin$ up to $3$.
+Let us first compute higher-order derivatives of $\sin(x)$ up to $3$.
 
-First, let's use tensor product of dual numbers:
+First, let's use a tensor product of dual numbers:
 \begin{code}
 d1, d2, d3
   :: Floating a
@@ -506,7 +507,7 @@ x = injectCoeff (var "x")
 
 \end{code}
 
-As stated before, tensor-of-duals approach blows the number of terms exponentially.
+As stated before, the tensor-of-duals approach blows the number of terms exponentially.
 Let's see how higher infinitesimal works.
 
 \begin{code}
@@ -623,12 +624,12 @@ Carefully analysing each output, one can see that the output coincides with what
 \section{Discussions and Conclusions}\label{sec:concl}
 We have illustrated the connection of automatic differentiation (AD) and $C^\infty$-rings, especially Weil algebras.
 Methods of AD can be viewed as techniques to calculate partial coefficients simultaneously by partially implementing the $C^\infty$-lifting operator for certain $C^\infty$-ring.
-Especially, Forward-mode AD computes $C^\infty$-structure of the dual number ring $\R[d] = \R[X]/X^2$ and Tower-mode computes that of the formal power series ring $\Rseries$.
+Especially, Forward-mode AD computes the $C^\infty$-structure of the dual number ring $\R[d] = \R[X]/X^2$ and Tower-mode computes that of the formal power series ring $\Rseries$.
 
 The dual number ring $\R[d]$ is an archetypical example of Weil algebra, which formalise the real line with nilpotent infinitesimals.
-We generalised this view to general Weil algebras with higher infinitesimals beyond dual numbers, enabling us to compute higher-order derivatives efficiently and succinctly.
-We gave general algorithms to compute $C^\infty$-structure of Weil algebras.
-Then, with tensor products, one can easily compose (univariate) higher-order AD corresponding to Weil algebras into multivariate ones.
+We generalised this view to arbitrary Weil algebras beyond dual numbers, enabling us to compute higher-order derivatives efficiently and succinctly.
+We gave general algorithms to compute the $C^\infty$-structure of Weil algebras.
+With tensor products, one can easily compose (univariate) higher-order AD corresponding to Weil algebras into multivariate ones.
 
 In this last section, we briefly discuss the possible applications other than AD, related works and future works.
 
@@ -645,19 +646,19 @@ In those fields, arguing in the appropriate intuitionistic topos, various infini
 \end{quote}
 This is another way to state the fact that Weil algebras are $C^\infty$-rings, viewed within some topoi.
 For dual numbers, their meaning is clear: it just couples a value and their (first-order) differential coefficient.
-But, solely from Kock-Lawvere axiom, it is unclear what the result corresponding to general Weil algebra $W$.
-With the algorithms we have presented, students can use computers to calculate what the map given by the axiom actually is.
+But, solely from Kock-Lawvere axiom, it is unclear what the result corresponding to general Weil algebra $W$ is.
+With the algorithms we have presented, students can use computers to calculate the map given by the axiom.
 In SIA and SDG, there are plenty of uses of generalised infinitesimal spaces such as $\R[x_1,\dots, x_n]/\braket{x_i x_j | i, j \leq n}$ or $\R[x]/(x^n)$.
 Hence, concrete examples for these Weil algebras can help to understand the theory.
 
 In the context of SDG, applying techniques in computer algebra to Weil algebras has attained only little interest.
-One such example is Nishimura--Osoekawa~\cite{Nishimura:2007aa}: they apply zero-dimensional ideal algorithms to compute categorical limits of Weil algebras.
-However, their purpose is to use computer algebra to ease heavy calculations needed to develop the theory of SDG, and hence they are not interested in computing $C^\infty$-structure of Weil algebras.
+One such example is Nishimura--Osoekawa~\cite{Nishimura:2007aa}: they apply zero-dimensional ideal algorithms to compute the generating relation of limits of Weil algebras.
+However, their purpose is to use computer algebra to ease heavy calculations needed to develop the theory of SDG, and hence they are not interested in computing the $C^\infty$-structure of Weil algebras.
 
 Implementing AD in a functional setting has a long history.
 See, for example, Elliott~\cite{Elliott2009-beautiful-differentiation} for explanation and \texttt{ad} package by Kmett~\cite{Kmett:2010aa} for actual implementation.
 In \texttt{ad} package, so-called \emph{Skolem trick}, or \emph{RankN trick} is applied to distinguish multiple directional derivatives.
-We argue that, our method pursues other direction of formulations; we treat higher infinitesimals as first-class citizens, enabling us to treat higher-order AD in a more modular and composable manner.
+We argue that our method pursues other direction of formulations; we treat higher infinitesimals as first-class citizens, enabling us to treat higher-order AD in a more modular and composable manner.
 
 \subsection{Future Works}
 In SDG, $C^\infty$-ring and higher infinitesimals are used as fundamental building blocks to formulate manifolds, vector fields, differential forms, and so on.
@@ -671,10 +672,10 @@ From the point of view of Weil algebras, they are just implementation details.
 But such details matter much when one takes the efficiency seriously.
 It might be desirable to extend our formulation to handle such differences in implementation method.
 For such direction, Elliot~\cite{Elliott:2018aa} proposes the categorical formulation.
-Exploring how that approach fits with our algebraic framework could be interesting future work, and perhaps also shed a light to the way to realise aforementioned computational SDG.
+Exploring how that approach fits with our algebraic framework could be interesting future work, and perhaps also shed a light on the way to realise the aforementioned computational SDG.
 
 \begin{acks}
-The author is grateful to Prof.\ Akira Terui, for encouraging  to write this paper.
+The author is grateful to Prof.\ Akira Terui, for encouraging to write this paper.
 
 This work was supported by the Research Institute for Mathematical Sciences,
 an International Joint Usage/Research Center located in Kyoto University.
@@ -686,8 +687,9 @@ The method presented here is a mixture of Lazy Multivariate Tower~\cite{Pearlmut
 For details, we refer readers to the upcoming paper in RIMS Kokyuroku~\cite{Ishii:2021ab}.
 
 The idea is simple: we represent each partial derivative as a path in a tree of finite width and infinite heights.
-A path go down if the function is differentiated by the 0\textsuperscript{th} variable; go right if the order remains the same but differentiation wrt remaining variable can take place.
-This intuition is depicted by the following illustration for ternary case:
+A path goes down if the function is differentiated by the 0\textsuperscript{th} variable.
+It goes right if there will be no further differentiation w.r.t. 0\textsuperscript{th} variable, but differentiations wrt remaining variable can take place.
+This intuition is depicted by the following illustration of the ternary case:
 
 \begin{center}
 \begin{tikzpicture}[
