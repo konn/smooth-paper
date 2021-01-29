@@ -3,6 +3,8 @@
 \usepackage{braket}
 \usepackage{tikz}
 \usetikzlibrary{matrix,decorations,arrows,calc,trees}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,xparse}
 \usepackage[draft]{fixme}
 \usepackage{enumitem}
 
@@ -85,7 +87,7 @@
   stringstyle={\slshape},
   stepnumber=1,
   % numbersep=-10pt,
-  xleftmargin=15mm,framexleftmargin=15mm,
+  xleftmargin=10mm,framexleftmargin=10mm,
   rulecolor=\color{gray},
   frame=leftline,
   framerule=0.4pt,
@@ -222,6 +224,6 @@
    {|*|}{{\symbmath{\otimes}}}1
 }
 
-\lstnewenvironment{code}[1][frame=leftline]{\lstset{language=Haskell, #1}}{}
+\lstnewenvironment{code}[1][frame=leftline]{\lstset{xleftmargin=7.5mm,framexleftmargin=7.5mm,language=Haskell, #1}}{}
 
-\newcommand{\hask}[1]{\lstinline[backgroundcolor=\color{gray},language=haskell]{#1}}
+\DeclareTotalTCBox{\hask}{v}{box align=base,verbatim,colback=lightgray,colframe=gray}{\lstinline[language=haskell]{#1}}
