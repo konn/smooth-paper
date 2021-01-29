@@ -112,7 +112,7 @@ Intuitively, $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary o
 One typical example of $C^\infty$-ring is a formal power series ring:
 
 \begin{theorem}[Lawvere]\label{thm:series-is-smooth}
-  A ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $\boldsymbol{0}$.
+  The ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $\boldsymbol{0}$.
   In particular, lifting of a smooth map $f: \R^m \to \R$ is given by:
   \[
     \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
@@ -129,9 +129,9 @@ It follows that Weil algebra $W$ is finite-dimensional as a $R$-linear space and
 Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
 In what follows, we identify an element $\boldsymbol{u} \in W$ of $k$-dimensional Weil algebra $W$ with a $k$-vector $\boldsymbol{u} = (u_1, \dots, u_k) \in \R^k$ of reals.
 
-Although it is not so clear from the definition, Weil algebras have the canonical $C^\infty$-structure.
+Although it is unclear from the definition, Weil algebras have the canonical $C^\infty$-structure.
 First note that, if $I$ is zero-dimensional, we have $\R[\X]/I \simeq \R\llbracket \X \rrbracket /I$.
-Hence, in particular, Weil algebra $W$ can also be regarded as a quotient ring of formal power series by zero-dimensional ideal.
+Hence, in particular, Weil algebra $W$ can also be regarded as a quotient ring of the formal power series by zero-dimensional ideal.
 Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that any Weil algebra $W$ has the canonical $C^\infty$-ring structure:
 
 \begin{lemma}\label{lem:quot-ring-ideal}
@@ -145,7 +145,7 @@ In this section, based on the basic facts on $C^\infty$-rings and Weil algebras 
 
 \emph{Forward-mode} AD is a technique to compute a value and differential coefficient of given univariate composition of smooth function efficiently.
 It can be implemented by ad-hoc polymorphism (or equivalently, function overloading).
-For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beautiful-differentiation} and Ekmett's \texttt{ad} package~\cite{Kmett:2010aa}.
+For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beautiful-differentiation} and Kmett's \texttt{ad} package~\cite{Kmett:2010aa}.
 
 Briefly speaking, in forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
 Then, when evaluating composite functions, one uses Chain Rule for implementation:
@@ -161,7 +161,7 @@ The following definition of functions on dual numbers illustrate the idea:
   \cos(a_1 + b_1 d) &= \cos(a_1) - b_1 \sin(a_1) d
 \end{align*}
 
-The first two equations for addition and multiplication suggests that operations could be seen extending the algebraic structure of $\R[d] = \R[X]/(X^2)$.
+The first two equations for addition and multiplication suggests us to regard operations on Forward-mode AD as extending the algebraic structure of $\R[d] = \R[X]/(X^2)$.
 Indeed, as stated in the introduction, first-order forward-mode AD can be identified with the arithmetic on \emph{dual numbers}:
 \begin{definition}
   The \emph{dual number ring} is a Weil algebra $\R[X]/(X^2)$.
@@ -189,15 +189,15 @@ Letting $f: \R \smoothto \R$ a univariate smooth function, then we can derive $C
 \end{alignat*}
 
 One can notice that the derived $C^\infty$-structure in \eqref{eqn:dual-smooth} is exactly the same as how to implement individual smooth functions for forward-mode AD.
-This describes the connection between forward-mode AD and dual numbers: forward-mode AD is just an implementation of $C^\infty$-structure of the dual number ring $\R[d]$.
+This describes the connection between forward-mode AD and dual numbers: forward-mode AD is just a (partial) implementation of $C^\infty$-structure of the dual number ring $\R[d]$.
 
-Let's see how this can be extended to the higher-order case.
+Let's see how this extends to higher-order cases.
 The most naïve way to compute higher-order derivatives of smooth function is just to successively differentiating it.
 This intuition can be expressed just by duplicating the number of basis of dual numbers:
 \begin{theorem}\label{thm:univ-partial-duals}
   For any $f: \R \smoothto \R$ and $\boldsymbol{x} \in \R^n$, we have:
   \[
-    \R[d_1, \dots, d_k](f)(x + d_1 + \cdots d_n) 
+    \R[d_1, \dots, d_k](f)(x + d_1 + \cdots + d_n) 
     = \sum_{0 \leq i \leq n} f^{(i)}(x)\sigma^i_n(\vec{d}),
   \]
   where, $\sigma^i_k(x_1, \dots, x_k)$ denotes the $k$-variate elementary symmetric polynomial of degree $i$.
@@ -205,8 +205,8 @@ This intuition can be expressed just by duplicating the number of basis of dual 
 
 The above can be proven by an easy induction.
 
-However, as one can easily see, terms in $\Rseries/(X_i^2)$ can grow exponentially and it includes duplicated coefficients.
-How could we reduce such duplication and save space consumption? ---This is where general Weil algebras, beyond (multivariate) dual numbers, can play a role.
+However, as one can easily see, terms in $\Rseries/(X_i^2)$ can grow exponentially and include duplicated coefficients.
+How could we reduce such duplication and save space consumption? ---This is where general Weil algebras beyond (multivariate) dual numbers can play roles.
 We can get derivatives in more succinct representation with \emph{higher infinitesimal} beyond dual numbers:
 
 \begin{lemma}\label{lem:higher-infinitesimal}
@@ -217,12 +217,12 @@ We can get derivatives in more succinct representation with \emph{higher infinit
     = \sum_{k \leq n} \frac{f^{(k)}(a)}{k !} \varepsilon^k.
   \]
 \end{lemma}
-In this representation, we only have $(n + 1)$-terms and hence it results in succinct and efficient representation of derivatives.
+In this representation, we have only $(n + 1)$-terms and hence it results in succinct and efficient representation of derivatives.
 
-If we duplicate such higher-order infinitesimals as much as one wants, one can likewise compute \emph{multivariate} higher-order derivatives all at once, up to some multidegree $\beta$:
+If we duplicate such higher-order infinitesimals as much as needed, one can likewise compute \emph{multivariate} higher-order derivatives all at once, up to some multidegree $\beta$:
 \begin{lemma}
-  Let $I = \left(X_i^{\beta_i + 1}\ \middle|\ i \leq m \right)$, $W = \R[X_1, \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $n_1, \dots, n_m \in \N$ and $\beta = {(\beta_i)}_{i \leq m} \in \N^m$.
-  For $f: \R^m \smoothto \R$ and $\boldsymbol{a} = {(a_i)}_{i \leq m} \in \R$, we have:
+  Let $I = \left(X_i^{\beta_i + 1}\ \middle|\ i \leq m \right)$, $W = \R[X_1, \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $\beta = {(\beta_i)}_{i \leq m} \in \N^m$.
+  For $f: \R^m \smoothto \R$ and $\boldsymbol{a} = {(a_i)}_{i \leq m} \in \R^m$, we have:
   \[
     W(f)(a_1 + \varepsilon_1, \dots, a_m + \varepsilon_m) =
       \sum_{\delta_i \leq \beta_i} 
@@ -250,7 +250,7 @@ The answer is no:
   where $\otimes_\R$ is a tensor product of $C^\infty$-rings.
 \end{lemma}
 Thanks to this lemma, we don't have to define $I$ by hand every time, but just can take tensor products to compose predefined Weil algebras to compute multivariate and higher-order derivatives.
-Examples of such calculations will be discussed in \Cref{sec:examples}.
+Examples of such calculations will be present in \Cref{sec:examples}.
 
 \section{Algorithms}\label{sec:alg}
 In this section, we will present the main results of this paper: concrete algorithms to compute $C^\infty$-structure of arbitrary Weil algebra and their tensor products.
@@ -258,7 +258,7 @@ For examples of applications of the algorithm presented here, the reader can ski
 
 \subsection{Computing $C^\infty$-structure of Weil algebra}
 \label{sec:general-weil-algs}
-Let's start with the algorithm $C^\infty$-structure of a general Weil algebra.
+Let's start with algorithms to compute the $C^\infty$-structure of a general Weil algebra.
 Roughly speaking, the algorithm can be divided into threefold:
 
 \begin{enumerate}
@@ -282,7 +282,7 @@ First, we define the basic data needed to compute $C^\infty$-structure of Weil a
 \end{definition}
 
 A basis and multiplication table allows us to calculate ordinary $\R$-algebra structure of Weil algebra $W$.
-The latter two data, $\vec{k}$ and $\NonVan_W$, is essential to compute $C^\infty$-structure of $W$.
+The latter two data, $\vec{k}$ and $\NonVan_W$, are essential to compute the $C^\infty$-structure of $W$.
 In theory, \ref{item:nonvan} is unnecessary if one stores a Gr\"{o}bner basis of $I$;
 but since normal form calculation modulo $G$ can take much time in some case, we don't store $G$ itself and use the precalculated data $\NonVan$.
 It might be desirable to calculate $\NonVan_W$ as lazily as possible.
@@ -324,9 +324,9 @@ Return (@$\vec{\boldsymbol{b}}, M, \vec{k}, \NonVan_W$@)
   Algorithms to decide the zero-dimensionality and calculate their multiplication table is well-known (for detail we refer readers to Cox--Little--O'Shea~\cite[Chapter 2]{CLO:2005}).
   So the only non-trivial part is nilpotence detection (\Crefrange{line:weil-test:radical-start}{line:weil-test:radical-end}).
   But, again, this is just a variation of radical calculation algorithm for zero-dimensional ideals.
-  Indeed, since each $\R[X_i]$ is a PID, we have $X_i^k \in I \cap R[X_i]$ iff $p_i \divs X_i^k$, hence $p_i$ must be a monomial iff $X_i$ is nilpotent in $W$.
+  Indeed, since each $\R[X_i]$ is a PID, we have $X_i^k \in I \cap R[X_i]$ iff $p_i \divs X_i^k$, hence $p_i$ is a monomial iff $X_i$ is nilpotent in $W$.
 \end{proof}
-Now that we have information of a basis and multiplication table, we can calculate ordinary algebraic operations and take tensor products of Weil algebras just by the standard means.
+Now that we have basis and multiplication table in handy, we can calculate ordinary algebraic operations just by the standard means.
 
 And, with upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\Rseries$:
 
@@ -374,8 +374,8 @@ Note that this is purely for notational and comprehensional distinctions, and do
 With this distinction, we use the following notation and transformation:
 
 \begin{definition}
-  $\Tower = \Set{f | f: \N^\alpha \to \R }$ denotes the set of all elements of Tower-mode AD algebra.
-  We denote $C^\infty$-lifting of $f: \R^m \to \R$ to $\Tower$ by $\Tower(f): \Tower^m \to \R$.
+  $\Tower = \Set{f | f: \N^n \to \R }$ denotes the set of all elements of Tower-mode AD algebra.
+  We denote $C^\infty$-lifting of $f: \R^m \to \R$ to $\Tower$ by $\Tower(f): \Tower^m \to \Tower$.
 
   A \emph{reciprocal factorial transformation} $\RF: \Tower \to \Rseries$ is defined as follows:
   \[
@@ -399,9 +399,9 @@ With this distinction, we use the following notation and transformation:
   \item[Procedure] \textup{\textsc{LiftSeries}}
 \end{description}
 \begin{alg}
-@$\hat{g}_i$@ <- @$\RF(g_i)$@
+@$\hat{g}_i$@ <- @$\RF^{-1}(g_i)$@
 @$\hat{f}$@ <- @$\Tower(f)(\hat{g}_1, \dots, \hat{g}_m)$@
-Return @$\RF^{-1}(\hat{f})$@
+Return @$\RF(\hat{f})$@
 \end{alg}
 \end{algorithm}
 
@@ -452,7 +452,7 @@ The code is available on GitHub~\cite{Ishii:2020aa}.
 
 \subsection{Higher-order derivatives via dual numbers and higher infinitesimals}
 As indicated by \Cref{thm:univ-partial-duals} and \Cref{lem:higher-infinitesimal},
-to compute higher-order derivatives of univariate functions, we can use etensor products of Dual numbers or higher-order infinitesimals.
+to compute higher-order derivatives of univariate functions, we can use tensor products of Dual numbers or higher-order infinitesimals.
 
 Let us first compute higher-order derivatives of $\sin$ up to $3$.
 
@@ -662,13 +662,13 @@ We argue that, our method pursues other direction of formulations; we treat high
 \subsection{Future Works}
 In SDG, $C^\infty$-ring and higher infinitesimals are used as fundamental building blocks to formulate manifolds, vector fields, differential forms, and so on.
 Hence, if one can extend our method to treat general $C^\infty$-ring $C^\infty(M)$ of real-valued smooth functions on $M$, it can open up a new door to formulate differential geometry on computer.
-One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented} as an $C^\infty$-ring, it is NOT finitely \emph{generated} as an $\R$-algebra, but $2^{\aleph_0}$-generated, by its very nature.
+One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented} as a $C^\infty$-ring, it is NOT finitely \emph{generated} as an $\R$-algebra, but $2^{\aleph_0}$-generated, by its very nature.
 Hence, computing $C^\infty(M)$ purely symbolically and directly seems impossible; we need some workarounds or distinct formulations to overcome such obstacles.
 
 As for connections with AD, there are also many rooms for further exploration.
-There are so many ``modes'' other than Forward-mode in AD: for examples, Reverse, Mixed, etc.\ amongst others.
+There are so many ``modes'' other than Forward- and Tower-modes in AD: for examples, Reverse, Mixed, etc.\ amongst others.
 From the point of view of Weil algebras, they are just implementation details.
-But such details much matter when one takes the efficiency seriously.
+But such details matter much when one takes the efficiency seriously.
 It might be desirable to extend our formulation to handle such differences in implementation method.
 For such direction, Elliot~\cite{Elliott:2018aa} proposes the categorical formulation.
 Exploring how that approach fits with our algebraic framework could be interesting future work, and perhaps also shed a light to the way to realise aforementioned computational SDG.
@@ -681,9 +681,9 @@ an International Joint Usage/Research Center located in Kyoto University.
 \end{acks}
 
 \section*{Appendix: Succinct Multivariate Lazy Tower AD}
-For completeness, we include the referential implementation in Haskell for Multivariate Tower used in \Cref{alg:smooth-weil}.
+For completeness, we include the referential implementation of the Tower-mode AD in Haskell, which can be used in \Cref{alg:smooth-weil}.
 The method presented here is a mixture of Lazy Multivariate Tower~\cite{Pearlmutter:2007aa} and nested Sparse Tower~\cite{Kmett:2010aa}.
-For details, we refer readers to upcoming paper in RIMS Kokyuroku~\cite{Ishii:2021ab}.
+For details, we refer readers to the upcoming paper in RIMS Kokyuroku~\cite{Ishii:2021ab}.
 
 The idea is simple: we represent each partial derivative as a path in a tree of finite width and infinite heights.
 A path go down if the function is differentiated by the 0\textsuperscript{th} variable; go right if the order remains the same but differentiation wrt remaining variable can take place.
@@ -732,7 +732,7 @@ This intuition is depicted by the following illustration for ternary case:
 
 This can be seen as a special kind of infinite trie (or prefix-tree) of alphabets $\partial_{x_i}$, with available letter eventually decreasing.
 
-A (co-)inductive type this can be implemented as follows:
+This can be implemented by a (co-)inductive type as follows:
 
 \begin{code}
 data STower n a
@@ -744,8 +744,8 @@ data STower n a
 \end{code}
 
 A tree can have an \emph{infinite height}.
-But, since Haskell is lazy language, this won't eat up memory and only necessary information will be allocated on memory.
-Since making everything lazy can introduce a huge space leak, we force each coefficient \texttt{a} when their corresponding data constructors are reduced to weak head normal form, as expressed by field strictness annotation \texttt{!a}.
+Since Haskell is a lazy language, this won't eat up memory and only necessary information will be gradually allocated on memory.
+Since making everything lazy can introduce a huge space leak, we force each coefficient \hask{a} when their corresponding data constructors are reduced to weak head normal form, as expressed by field strictness annotation \hask{!a}.
 
 Then a lifting operation for univariate function is given by:
 
@@ -765,11 +765,11 @@ liftSTower f df x@(SS a da dus)
        (liftSTower @c f df dus)
 \end{code}
 
-Here, we use type-level constraint \texttt{c} corresponds to a subclass of smooth functions, e.g.\ $\mathtt{c} = \mathtt{Floating}$ when one wants to lift elementary functions.
+Here, we use type-level constraint \hask{c} to represent to a subclass of smooth functions, e.g.\ $\hask{c} = \hask{Floating}$ for elementary functions.
 Constraint of form $\forall x k.\ \texttt{c}\ x => \texttt{c}\ (\texttt{STower}\ k\ x)$ is an example of so-called \emph{Quantified Constraints}.
-This requires \texttt{c} to be implemented for any succinct Tower AD, provided that their coefficient type, say \texttt{x}, is also an instance of \texttt{c}.
-This constraint is used recursively when one implements an actual implementation of instance \texttt{c (STower n a)}.
-For example, \texttt{Floating} instance (for elementary floating point operations) can be written as follows:
+This requires \hask{c} to be implemented for any succinct Tower AD, provided that their coefficient type, say \hask{x}, is also an instance of \hask{c}.
+This constraint is used recursively when one implements an actual implementation of instance \hask{c (STower n a)}.
+For example, \hask{Floating} instance (for elementary floating point operations) can be written as follows:
 
 \begin{code}
 instance Floating a
@@ -781,7 +781,7 @@ instance Floating a
   ...
 \end{code}
 
-In this way, we can implement Tower AD for a class of smooth function closed under differentiation recursively, just by specifying an original and their first derivatives.
+In this way, we can implement Tower AD for a class of smooth function closed under differentiation, just by specifying an original and their first derivatives.
 
 More general $n$-ary case of lifting operator is obtained in just the same way:
 
