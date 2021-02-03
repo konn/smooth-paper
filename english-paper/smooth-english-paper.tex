@@ -151,7 +151,7 @@ For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beaut
 Briefly speaking, in Forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
 Then, when evaluating composite functions, one uses Chain Rule for implementation:
 \[
-  \frac{\mathrm{d}}{\mathrm{d}x}(g \circ f)(x) = f'(x) g'(f(x))
+  \frac{\mathrm{d}}{\mathrm{d}x}(g \circ f)(x) = f'(x) g'(f(x)).
 \]
 
 The following definitions of functions on dual numbers illustrate the idea:
@@ -183,8 +183,8 @@ Letting $f: \R \smoothto \R$ a univariate smooth function, then we can derive $C
   &&=\:&f(a) + \frac{\mathrm d}{\mathrm{d} x}(f(a + bx))(0) X + \cdots
   &\quad&(\text{by \Cref{thm:series-is-smooth}})\\
   &&=\:&f(a) + b f'(a) X + \cdots\\
-  &&\xrightarrow{X \mapsto d}\:&f(a) + bf'(a) d\\
-  &\therefore&& \R[d](f)(a + bd) = f(a) + b f'(a) 
+  &&\xrightarrow{X \mapsto d}\:&f(a) + bf'(a) d,\\
+  &\therefore&& \R[d](f)(a + bd) = f(a) + b f'(a).
   && (\text{by \Cref{lem:quot-ring-ideal}}) \tag{\ensuremath{\ast}}
   \label{eqn:dual-smooth}
 \end{alignat*}
