@@ -363,7 +363,7 @@ Thanks to \Cref{thm:series-is-smooth}, we know the precise definition of $C^\inf
 \]
 As noted in \Cref{sec:ad-and-weils}, as a $C^\infty$-ring, the formal power series ring is isomorphic to multivariate Tower-mode AD.
 It can be implemented in various ways, such as Lazy Multivariate Tower AD~\cite{Pearlmutter:2007aa}, or nested Sparse Tower AD~\cite[{module \texttt{Numeric.AD.Rank1.Sparse}}]{Kmett:2010aa}.
-For reference, we include a succinct and efficient variant mixing these two techniques in the Appendix.
+For reference, we include a succinct and efficient variant mixing these two techniques in \Cref{sec:appendix}.
 
 Both Tower-mode AD and formal power series can be represented as a formal power series.
 The difference is the interpretation of coefficients in a given series.
@@ -681,7 +681,8 @@ This work was supported by the Research Institute for Mathematical Sciences,
 an International Joint Usage/Research Center located in Kyoto University.
 \end{acks}
 
-\section*{Appendix: Succinct Multivariate Lazy Tower AD}
+\appendix
+\section{Succinct Multivariate Lazy Tower AD}\label{sec:appendix}
 For completeness, we include the referential implementation of the Tower-mode AD in Haskell, which can be used in \Cref{alg:smooth-weil}.
 The method presented here is a mixture of Lazy Multivariate Tower~\cite{Pearlmutter:2007aa} and nested Sparse Tower~\cite{Kmett:2010aa}.
 For details, we refer readers to the upcoming paper~\cite{Ishii:2021ab}.
