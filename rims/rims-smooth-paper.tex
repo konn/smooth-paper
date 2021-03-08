@@ -1,36 +1,45 @@
-\documentclass[article]{jlreq}
-\usepackage[theorem]{rims20j}
+\documentclass{article}
+\usepackage[theorem]{rims20e}
 \usepackage{amsmath,amssymb}
+\usepackage{stmaryrd}
 \usepackage{graphicx}
+\usepackage{subfiles}
+\input{syntax}
 \usepackage[backend=biber,bibstyle=numeric]{biblatex}
 \addbibresource{../references.bib}
 
-\title{自動微分と Gr\"{b}ner 基底による高次冪零無限小解析}
-\etitle{Smooth infinitesimal analysis with automatic differentiation and G\"{o}bner basis}
-\author{\jaffil{DeepFlow 株式会社}
-        \jname{石井大海}
-        \jaddress{E-mail: {\ttfamily h-ishii@math.tsukuba.ac.jp}}
-        \ename{Hiromi ISHII}
-        \eaffil{DeepFlow, Inc.}
+\title{A Succinct Multivariate Lazy Multivariate Tower AD for Weil Algebra  Computation}
+\author{Hiromi Ishii
+        \affil{DeepFlow, Inc.}
   }
+\endaddress{DeepFlow, Inc.
+       \address{3-16-40 Tsuruse nishi, Fujimi-shi, Saitama prefecture, Japan.}
+       \mail{h-ishii@math.tsukuba.ac.jp}
+       \kanjidata{DeepFlow株式会社 \quad 石井大海}
+     }
 \date{}
+\newcommand{\Rseries}{\R\llbracket\boldsymbol{X}\rrbracket}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-  The connection between \emph{Automatic differentiation} and \emph{smooth infinitesimal analysis} has long been indicated, but an explicit explanation of their relationship has remained unfamiliar.
-  In this paper, we give a brief explanation of this connection based on the concept of \emph{$C^\infty$-ring} and \emph{Weil algebra} introduced by Lawvere~\cite{lawvere1979categorical}.
-
-  Based on this understanding, we give algorithms to realise automatic differentiation with \emph{higher infinitesimals}; more precisely, we will combine Automatic Differentiation and Gr\"{o}bner basis algorithm to achieve generalised automatic differentiation in arbitrary Weil algebra.
+  We propose a functional implementation of \emph{Multivariate Tower Automatic Differentiation}.
+  Our implementation is intended to be used in implementing $C^\infty$-structure computation of an arbitrary Weil algebra, which we discussed in \cite{Ishii:2021vw}.
 \end{abstract}
 
-\section{準備}
+\section{Introduction}
+\emph{Automatic Differentiation} (AD) is known as a powerful technique to compute differential coefficients of a given (piecewise) smooth function efficiently and accurately.
+In the upcoming paper~\cite{Ishii:2021vw}, the author proposed to use \emph{$C^\infty$}-rings and Weil algebras to provide a modular and exprresive framework for forward-mode automatic difrerentiation.
+There, compute the $C^\infty$-structure of an arbitrary Weil algebra as a quotient of that of the formal power series ring $\Rseries$.
+The $C^\infty$-structure of $\Rseries$ was then computed via \emph{multivariate tower AD}.
+It can be implemented in various ways, such as Lazy Multivariate Tower AD~\cite{Pearlmutter:2007aa}, or nested Sparse Tower AD~\cite[{module \texttt{Numeric.AD.Rank1.Sparse}}]{Kmett:2010aa}.
 
-\begin{Th}
-\end{Th}
-
+Theoretically, such existing methods can be used to compute the $C^\infty$-structure of $\Rseries$.
+However, these methods are somewhat complex and not optimised for our purpose.
+In this paper, we will propose another implementation of Lazy Multivariate Tower-Mode AD using tree representation and exploiting smoothness to save memory consumption.
+Our method can be seen as aforementioned existing implementations~\cite{Pearlmutter:2007aa,Kmett:2010aa}.
 
 % \begin{tabular}{ll}
 %   Th & 定理 \\
@@ -47,7 +56,6 @@
 %   Proof & 証明 
 % \end{tabular}
 
-\section*{\hfil{}参　考　文　献\hfill}
-\printbibliography[heading=none]
+\printbibliography
 
 \end{document}

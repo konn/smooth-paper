@@ -1,41 +1,51 @@
-% LateX2e Style File for "数理解析研究所講究録 (Rims Kyoto)"
-%    published by Research Institure for Mathematical Sciences, Kyoto Univ.
+% LateX2e Style File privately prepared for "Kyoto RIMS Kokyuroku"
+%  to be published by Research Institure for Mathematical Sciences, Kyoto Univ.
 %
-% rims.sty
-%      version 3.3: Mar. 2019 by M.Fujimura
-%      version 3.2: Oct. 2015 by T.Saito saito@@jssac.org
+% rims-e.sty
+%      version 3.3: Mar. 2019 modified by M.Fujimura
+%      version 3.2: Oct. 2015 modified by T.Saito
+%      version 3.1: Nov. 2002 modified by H.Murao of CS.UEC, Japan.
+%	.conversion from rims.sty
 %      version 3.0: Jan. 2002 by Tomokatsu Saito saito@@a2z.co.jp
 %
 % Usage::
 %
-%   You make headline.tex. This file include next items.
-%   \title{原稿のタイトル}
-%   \etitle{English Title}
-%   \author{\jaffil{日本語所属}\jname{日本語名前}%
-%           \jaddress{日本語住所 \quad E-mail {\ttfamily メールアドレス}}%
-%           \ename{English name}\eaffil{English affiliation}%
-%         [\and
-%           \jaffil{日本語所属}\jname{日本語名前}%
-%           \jaddress{日本語住所 \quad E-mail {\ttfamily メールアドレス}}%
-%           \ename{English name}\eaffil{English affiliation}...]
-%         }
+%   Template of LaTeX file:
 %
-%   And, paper body, Main file preable only include 
-%   \usepackage[option]{rims02}.
-%
-%   \documentclass{jarticle}
-%   \usepackage[option]{rims02}
+%   \documentclass[...]{artcile}
+%   \usepackage{rims19e}
+%%%%   \usepackage[Option]{rims19e}
+%%%%	where Option is list of the following:
+%%%%	FVerb, useeps, theorem
+%   \title{...}
+%   \author{author's_name\affil{affiliation}%
+%	[ \and author's_name\affil{affiliation}%
+%	  ... ]
+%   }
+%   \endaddress{author's_affiliation\address{author's_address}%
+%                 \kanjidata{author's_name[in Kanji character]}%
+%        [\and author's_affiliation\address{author's_address}%
+%            ...]
+%   }
 %   \begin{document}
-%% Option setting
-%  English, FVerb, useeps, theorem
-%  You don't write \maketitle.
+%
+%   \end{document}
+%
+%   Editor must prepare "headline.tex'', which contains the following items:
+%
+%   \title{Title}
+%   \author{1st-author\affil{affiliation}\mail{E-mail address}%
+%		\and
+%	    2nd-author\affil{affiliation}\mail{E-mail address}%
+%            \ename{English name}\eaffil{English} ...}
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newif\ifLang
+%%HM	\newif\ifLang
 \newif\iffancybox
 \newif\ifgraphics
 \newif\iftheorem
-\DeclareOption{English}{\Langtrue}
+%%HM	\DeclareOption{English}{\Langtrue}
 \DeclareOption{FVerb}{\fancyboxtrue}
 \DeclareOption{useeps}{\graphicstrue}
 \DeclareOption{theorem}{\theoremtrue}
@@ -46,16 +56,17 @@
 %
 %%  Page dimensions
 %
-% setcounter{@paper}{1}% 
+\newcounter{@paper}	%%HM addition
+\setcounter{@paper}{1}%
 \setlength\paperheight{296mm}
 \setlength\paperwidth{210mm}
-%\tombowtrue \tombowdatetrue
-\tombowfalse
-\setlength{\@tombowwidth}{.1\p@}%
-\@bannertoken{%
-  \jobname\space:\space\number\year/\number\month/\number\day
-   (\number\hour:\number\minute)}
-%\maketombowbox
+%%HM%\tombowtrue \tombowdatetrue
+%%HM\tombowfalse
+%%HM\setlength{\@tombowwidth}{.1\p@}%
+%%HM\@bannertoken{%
+%%HM  \jobname\space:\space\number\year/\number\month/\number\day
+%%HM   (\number\hour:\number\minute)}
+%%HM%\maketombowbox
 \textheight=226mm
 \textwidth=160mm
 \topmargin=-7mm
@@ -64,14 +75,14 @@
 \setlength{\evensidemargin}{\oddsidemargin}
 \footnotesep=9pt
 %
-\ifLang% English mode
-\typeout{English Mode}
   \global\parindent=1.5em \global\leftmargini=1.5em
   \global\leftmarginii=1.25em \global\leftmarginiii=1.0em
   \global\leftmarginiv=1.0em \global\leftmarginv=1.0em
   \global\baselineskip=12pt
   \gdef\the@ck{Acknowledgements}
   \gdef\the@ref{References}
+  \global\let\@endaddress\@empty %%%% Fujimura
+  \global\let\endaddress\relax %%%% Fujimura
   \iftheorem
   \theoremstyle{break} \newtheorem{Th}{Theorem}
   \theoremstyle{break} \newtheorem{Pro}[Th]{Proposition}
@@ -91,29 +102,6 @@
   \renewcommand\listfigurename{List of Figures}
   \renewcommand\tablename{Table}
   \renewcommand\listtablename{List of Tables}
-\else% Japanese mode
-\typeout{Japanese Mode}
-  \global\parindent=1\zw
-  \global\baselineskip=15.65pt
-  \gdef\the@ck{謝　　辞}
-%  \gdef\the@ref{参　考　文　献}
-  \gdef\the@ref{\centerline{参　考　文　献}} %%%%%%%%%%%%%%%%% Fujimura
-  \iftheorem
-  \theoremstyle{break} \newtheorem{Th}{定理}
-  \theoremstyle{break} \newtheorem{Pro}[Th]{命題}
-  \theoremstyle{break} \newtheorem{Lem}[Th]{補題}
-  \theoremstyle{break} \newtheorem{Cor}[Th]{系}
-  \theoremstyle{break} \newtheorem{Def}[Th]{定義}
-  \theoremstyle{break} \newtheorem{Hyp}[Th]{仮定}
-  \theoremstyle{break} \newtheorem{Nte}{記法}
-  \theoremstyle{break} \newtheorem{Exp}{例}
-  \theoremstyle{break} \newtheorem{Rem}{注意}
-  \theoremstyle{break} \newtheorem{Prob}{問題}
-  \theoremstyle{break} \newtheorem{Alg}{アルゴリズム}
-  \newenvironment{Proof}%
-  {\par{\bfseries 証明 }}{\hfill\hbox{\rule[-2pt]{3pt}{6pt}}\par}
-  \fi
-\fi
 %
 %% Define some macros
 %
@@ -130,18 +118,20 @@
 \long\def\ifundefined#1#2#3{%
  \expandafter\ifx\csname #1\endcsname\relax #2\else #3\fi}
 %%\def\affil#1{\\[-1.5ex]\small #1}
-%\def\affil#1{\\ #1}
-\def\jaffil#1{#1} %%%%%%%%%%%%%%%%%%%% Fujimura
-\def\jname#1{\qquad #1} %%%%%%%%%%%%%%%%%%%% Fujimura
+\def\affil#1{\\ #1}
+\def\address#1{\\#1} %%%%%%%%%%%%%%%%% Fujimura
+\def\mail#1{\\E-mail address: {\ttfamily #1}} %%%%%%%%%%%%%%%%% Fujimura
+\def\kanjidata#1{\\ \ \hfill{#1}\\} %%%%%%%%%%%%%%%%%%%%%% Fujimura
 %%\def\ename#1{\\[-1.5ex]\footnotesize\scshape #1}
 %%\def\eaffil#1{\\[-1.5ex]\footnotesize\scshape #1}
-\def\ename#1{\\[-0.5ex]\normalsize\scshape #1}
+\def\ename#1{\\[-1.5ex]\normalsize\scshape #1}
 \def\eaffil#1{\\[-0.5ex]\normalsize\scshape #1}
 \def\author#1{\gdef\@author{#1}}
+\def\endaddress#1{\gdef\@endaddress{#1}} %%%%%%%%%%%% Fujimura
 \def\etitle#1{\gdef\@etitle{#1}}
 \def\thefootnote{\arabic{footnote})}
 %\def\art#1{\gdef\@art{#1}}
-\def\year#1{\gdef\@year{#1}}
+\def\Year#1{\gdef\@year{#1}}
 \gdef\StartPage#1{\gdef\@SPage{#1}}
 \gdef\EndPage#1{\gdef\@epage{#1}}
 \def\vol#1{\gdef\@vol{#1}}
@@ -216,10 +206,8 @@
   \ifundefined{@epage}{\gdef\@epage{XXX}}{}
   \par
   \begingroup
-%  \def\thefootnote{\fnsymbol{footnote}}%
-%  \def\@makefnmark{\hbox to 3pt{$^{\@thefnmark}$\hss}}%
-  \def\thefootnote{*\arabic{footnote}}   %%%%%%%%%%%%%%%%% Fujimura
-  \def\@makefnmark{\hbox to 10pt{$^{\@thefnmark}$\hss}}%%%%%%%%%%%%%%% Fujimura
+  \def\thefootnote{\fnsymbol{footnote}}%
+  \def\@makefnmark{\hbox to 3pt{$^{\@thefnmark}$\hss}}%
   \ifEditor\thispagestyle{eplain}\else\thispagestyle{plain}\fi
   \@maketitle%
   \@thanks%
@@ -230,24 +218,16 @@
   \let\thanks=\relax
   }
 \def\@maketitle{%
-%  \let\mail\thanks
-  \let\jaddress\thanks  %%%%%%%%%%%%%%%% Fujimura
+%  \let\mail\thanks  %%%%%%%%%%%%%%%% commented out by Fujimura
   \null
-%  \vbox{
-%    \hbox{\footnotesize \textgt{数式処理} \textit{J.\JSSAC (\@year)}%
-%      }\vskip -1.5ex
-%    \hbox{\footnotesize \textit{Vol.\ \@vol ,\ No.\ \@num ,%
-%      \ pp.\ \@SPage\ -\ \@epage}}\vskip 1ex
-%    \ifundefined{@art}{\relax}{\hbox{\fbox{\textgt{\@art}}}}
-%    }
-%  \vskip 2em
+%%%%
   \begin{center}
-    {\LARGE \bfseries \@title \par}\vskip 0.5em%
-%%HM   \ifundefined{\@etitle}{}%
-   {\LARGE \bfseries \@etitle \par}\vskip 1.5em%
-%%HM {\Large \lineskip .5em \begin{tabular}[t]{c}\@author\end{tabular}\vskip .5em}
+    {\LARGE \bfseries \@title \par}
+   \ifundefined{\@etitle}{}%
+    {\Large (\@etitle) \par}\vskip 1.5em%
+%%HM    {\Large \lineskip .5em \begin{tabular}[t]{c}\@author\end{tabular}\vskip .5em}
    \renewenvironment{tabular}[2][]{\begin{center}}{\end{center}} %%%%% Fujimura
-  {\large \lineskip .5em \begin{tabular}[t]{c}\@author\end{tabular}\vskip .5em}
+   {\Large \lineskip .5em \begin{tabular}[t]{c}\@author\end{tabular}\vskip .5em}
 %    \ifundefined{@received}{}%
 %    {\vskip 1.5em \footnotesize\sc (Received \@received %
 %      \ifundefined{@revised}{)}{\ \ \footnotesize\sc Revised \@revised)}
@@ -255,6 +235,15 @@
   \end{center}
   \par
   \vskip 1.5em}
+%%%%%%%%%%%%%%%% Author's data on the end papge %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% Fujimura %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \AtEndDocument{%
+      \renewenvironment{tabular}[2][]{\begin{minipage}{\textwidth}}%
+                                     {\end{minipage}}%
+        \vskip 3em
+        \noindent\begin{tabular}{l}\@endaddress\end{tabular}%
+    }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \@twosidetrue
 %
 %% Editors Session
@@ -311,8 +300,8 @@
     \addtocounter{TotalPage}{-1}
     \epageout{\theTotalPage}
     \closeout\OutPut
-%%HM    \IfFileExists{NextOdd.tex}{\ifodd\thepage{\clearpage　}\fi}{}
-    \ifEndWithEvenP{\ifodd\value{page}{\clearpage　}\fi}\fi
+%%HM    \IfFileExists{NextOdd.tex}{\ifodd\thepage{\clearpage}\fi}{}
+    \ifEndWithEvenP{\ifodd\value{page}{\clearpage}\fi}\fi
     \newcount\PP
     \newwrite\Plist
 %%HM    \PP=\thepage
@@ -327,5 +316,5 @@
     \closeout\Plist
     \nenddocument}
 }\fi
-%%\etitle{}
+\etitle{}
 \makeatother
