@@ -36,6 +36,7 @@ jobs:
           path: |
             ${{env.WORKDIR}}/${{env.JOBNAME}}.fdb_latexmk
             ${{env.WORKDIR}}/.latex/
+            ${{env.WORKDIR}}/_minted-${{env.JOBNAME}}
 
           # An explicit key for restoring and saving the cache
           key: ${{env.JOBNAME}}-${{github.ref}}-${{ runner.os }}-${{ hashFiles('**/*.tex', '**/*.sty', '**/*.fdb_latexmk', 'extract-generateds.lua') }}
@@ -54,6 +55,9 @@ jobs:
           else
             echo "::warn::No .latex/ directory found. skip"
           fi
+      - name: Install pygments
+        run: |
+          apt-get update && apt-get install -y python3-pygments
       - name: Typeset it
         run: |
           cd ${GITHUB_WORKSPACE}/${WORKDIR}
