@@ -16,7 +16,7 @@ env:
   WORKDIR: rims
   JOBNAME: rims-smooth-paper
   ARTIFACT_NAME: RIMS Kokyuroku
-  PAGE_LOWERBOUND: 0 # 10 # Disabled for now, as we haven't actually started this project!
+  PAGE_LOWERBOUND: 7 # Disabled for now, as we haven't actually started this project!
   PAGE_UPPERBOUND: 20
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel

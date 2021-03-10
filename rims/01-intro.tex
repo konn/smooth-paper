@@ -1,0 +1,16 @@
+%!TeX root = rims-smooth-paper.tex
+\documentclass[rims-smooth-paper.tex]{subfiles}
+\begin{document}
+\section{Introduction}
+\label{sec:intro}
+\emph{Automatic Differentiation} (AD) is known as a powerful technique to compute differential coefficients of a given (piecewise) smooth function efficiently and accurately.
+In the upcoming paper~\cite{Ishii:2021vw}, the author proposed to use \emph{$C^\infty$}-rings and Weil algebras to provide a modular and exprresive framework for forward-mode automatic difrerentiation.
+There, compute the $C^\infty$-structure of an arbitrary Weil algebra as a quotient of that of the formal power series ring $\Rseries$.
+The $C^\infty$-structure of $\Rseries$ was then computed via \emph{multivariate tower AD}.
+It can be implemented in various ways, such as Lazy Multivariate Tower AD~\cite{Pearlmutter:2007aa}, or nested Sparse Tower AD~\cite[{module \texttt{Numeric.AD.Rank1.Sparse}}]{Kmett:2010aa}.
+
+Theoretically, such existing methods can be used to compute the $C^\infty$-structure of $\Rseries$.
+However, these methods are somewhat complex and not optimised for our purpose.
+In this paper, we will propose another implementation of Lazy Multivariate Tower-Mode AD using tree representation and exploiting smoothness to save memory consumption.
+Our method can be seen as aforementioned existing implementations~\cite{Pearlmutter:2007aa,Kmett:2010aa}.
+\end{document}
