@@ -21,7 +21,7 @@ class Fractional a => Floating a where
   pi :: a
   exp :: a -> a
   log :: a -> a
-  logBase :: a -> a -> a
+  log\base :: a -> a -> a
   sin :: a -> a
   asin :: a -> a
   ...
@@ -44,6 +44,63 @@ For example, a simple forward-mode AD implemented as a dual number can be define
 The data-type \hask{AD} encapsulates a value of some univariate function and its first-order differential coefficient and calculates the result using the Chain Rule, using \hask{Floating}-operations on the coefficient \hask{a}.
 
 So our goal is to implement \hask{STower n a} data-type conveying information of \emph{all} the higher-order derivatives of an $n$-variate smooth function on \hask{a}, which has \hask{Floating (STower n a)} instances for all \hask{Floating a} and $n$.
+In addition, we demand the implementation to be \emph{succinct} and \emph{efficient}, in a sense that it avoids equivalent calculation as much as possible.
+For example, if we want to calculate $f_{xy^2}(a,b)$ and $f_{x^2y}(a,b)$ for some smooth $f: \R^2 \to \R$, it should calculate the derivatives up to $f_{xy}$ at most once and share their results in computing both $f_{xy^2}$ and $f_{x^2y}$; in other words, results up to $f_{xy}$ must be \emph{memoised}.
+
+To that end, we employ an infinite tree representation.
+The main idea is to use an $n$-ary infinite tree to express a (piecewise) smooth functions: the root node corresponds to the value $f(\boldsymbol{a})$, and its child in the $n$\textsuperscript{th} branch corresponds to $\partial x_n f(\boldsymbol{a})$.
+The intuition in the trivariate case is depected in \Cref{fig:tree-simpl}.
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}[
+    level/.style={level distance=1cm},
+    level 1/.style={sibling distance=3.75cm},
+    level 2/.style={sibling distance=1.2cm},
+    level 3/.style={sibling distance=4mm}
+    ]
+    \newcommand{\ba}{\boldsymbol{a}}
+    \node (fa) {$f(\ba)$}
+      child{ 
+        node (fxa) {$f_x(\ba)$}
+          child { 
+            node (fxxa) {$f_{xx}(\ba)$}
+            child {node{$\vdots$}}
+            child {node{$\vdots$}}
+            child {node{$\vdots$}}
+          }
+          child {
+            node (fxya) {$f_{xy}(\ba)$}
+            child {node{$\vdots$}} child {node{$\vdots$}} child {node{$\vdots$}}
+          }
+          child { 
+            node (fxza) {$f_{xz}(\ba)$}
+            child { node{$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+          }
+      }
+      child {
+        node (fya) {$f_y(\ba)$}
+        child { node {$f_{yx}(\ba)$} child {node{$\vdots$}} child{node{$\vdots$}} child{ node{$\vdots$}} }
+        child { node {$f_{yy}(\ba)$} child { node{$\vdots$} } child {node{$\vdots$}} child{ node{$\vdots$}} }
+        child { node {$f_{yz}(\ba)$} child { node{$\vdots$} } child { node{$\vdots$} } child {node {$\vdots$}} }
+      }
+      child {
+        node (fza) {$f_z(\ba)$}
+        child {
+            node {$f_{zx}(\ba)$}
+            child { node {$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+        }
+        child {
+          node {$f_{zy}(\ba)$}
+          child { node {$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+        }
+        child {
+            node {$f_{zz}(\ba)$}
+            child { node {$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+        }
+      };
+  \end{tikzpicture}
+  \caption{Trivariate case, first trial\label{fig:tree-simpl}}
+\end{figure}
 
 \begin{figure}[htbp]
   \centering
@@ -80,12 +137,12 @@ So our goal is to implement \hask{STower n a} data-type conveying information of
       child {
         node (fza) {$f_z(\ba)$}
         child {
-            node {$f_{z^2}(ba)$}
+            node {$f_{z^2}(\ba)$}
             child { node {$\vdots$} }
         }
       };
   \end{tikzpicture}
-  \caption{Ternary case\label{fig:tree}}
+  \caption{Trivariate case, succinct version\label{fig:tree}}
 \end{figure}
 
 \begin{listing}[tbp]
