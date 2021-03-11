@@ -101,8 +101,16 @@ The intuition in the trivariate case is depected in \Cref{fig:tree-simpl}.
   \end{tikzpicture}
   \caption{Trivariate case, first trial\label{fig:tree-simpl}}
 \end{figure}
+This can be viewed as a nested trie (or prefix-tree) for memoising functions with $n$-many natural number arguments.
+Actually, this representation is isomorphic to the one we can obtain when \hask{Sparse} tower from \texttt{ad} package~\cite{Kmett:2010aa} to the fixed-length vectors.
+However, as we assume $f$ to be (piecewise) smooth, there are space for optimisation.
+That is, in the above representation, $f_{xy}$ and $f_{yx}$ must almost always coincide except on non-smooth points.
+In other words, we can assume partial differential operators to be almost always commutative on inputs.
+In many applications, the value on the non-smooth points is negligible and hence we must use more \emph{succinct} representation making use of the commutativity.
 
-\begin{figure}[htbp]
+The idea is simple: if once one goes down $i$\textsuperscript{th} path, we can only choose $j$\textsuperscript{th} branches for $j \geq i$.
+This trick is illustrated in \Cref{fig:tree} for trivariate case.
+\begin{figure}[tbp]
   \centering
   \begin{tikzpicture}[
     level/.style={level distance=1cm},
@@ -116,41 +124,146 @@ The intuition in the trivariate case is depected in \Cref{fig:tree-simpl}.
         node (fxa) {$f_x(\ba)$}
           child { 
             node (fxxa) {$f_{x^2}(\ba)$}
-            child {node{$\vdots$}}
-            child {node{$\vdots$}}
-            child {node{$\vdots$}}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
           }
           child {
             node (fxya) {$f_{xy}(\ba)$}
-            child {node{$\vdots$}} child {node{$\vdots$}}
+            child[missing]
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
           }
           child { 
             node (fxza) {$f_{xz}(\ba)$}
-            child { node{$\vdots$} }
+            child[missing]
+            child[missing]
+            child { node{} edge from parent[thick,dotted] }
           }
       }
       child {
         node (fya) {$f_y(\ba)$}
-        child { node {$f_{y^2}(\ba)$} child {node{$\vdots$}} child{ node{$\vdots$}} }
-        child { node {$f_{yz}(\ba)$} child {node {$\vdots$}} }
+        child[missing]
+        child { node {$f_{y^2}(\ba)$} child[missing] 
+          child {node{} edge from parent[thick,dotted]}
+          child { node{} edge from parent[thick,dotted]}
+        }
+        child { node {$f_{yz}(\ba)$} child[missing] child[missing]
+          child {node{} edge from parent[thick,dotted]} }
       }
       child {
         node (fza) {$f_z(\ba)$}
         child {
             node {$f_{z^2}(\ba)$}
-            child { node {$\vdots$} }
+            child { node{} edge from parent[thick,dotted] }
         }
       };
   \end{tikzpicture}
   \caption{Trivariate case, succinct version\label{fig:tree}}
 \end{figure}
+This can be seen as a special kind of an infinite trie (or prefix-tree) of alphabets $\partial_{x_i}$ with available letter eventually decreasing.
 
-\begin{listing}[tbp]
+We further tweak this representation to make every branching binary (\Cref{fig:tree-tweaked}).
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    level/.style={level distance=1cm},
+    level 1/.style={sibling distance=8cm},
+    level 2/.style={sibling distance=4.5cm},
+    level 3/.style={sibling distance=2cm},
+    level 4/.style={sibling distance=1.25cm},
+    level 5/.style={sibling distance=0.75cm}
+    ]
+    \newcommand{\ba}{\boldsymbol{a}}
+    \node (fa) {$f(\ba)$}
+      child{ 
+        node (fxa) {$f_x(\ba)$}
+          child { 
+            node (fxxa) {$f_{x^2}(\ba)$}
+            child {node{} edge from parent[thick,dotted]}
+            child {
+              node{$f_{x^2}(\ba)$}
+              child {
+                node {$f_{x^2y}(\ba)$}
+                child {node{} edge from parent[thick,dotted]}
+                child {node{} edge from parent[thick,dotted]}
+              }
+              child { node { $f_{x^2}(\ba)$ }
+                child { 
+                  node { $f_{x^2z}(\ba)$ } 
+                  child {node{} edge from parent[thick,dotted]}
+                }
+              }
+            }
+          }
+          child {
+            node {$f_x(\ba)$}
+            child {
+              node (fxya) {$f_{xy}(\ba)$}
+              child {node{} edge from parent[thick,dotted]}
+              child {
+                node {$f_{xyz}(\ba)$}
+                child { node{} edge from parent[thick,dotted]}
+              }
+            }
+            child { 
+              node (fxza) {$f_{x}(\ba)$}
+              child{
+                node {$f_{xz}(\ba)$}
+                child {node{} edge from parent[thick,dotted]}
+              }
+            }
+          }
+      }
+      child
+      {
+        node {$f(\ba)$}
+        child {
+          node (fya) {$f_y(\ba)$}
+          child { node {$f_{y^2}(\ba)$} 
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
+            }
+          child { node {$f_{y}(\ba)$} 
+            child {
+              node {$f_{yz}(\ba)$}
+              child{node{} edge from parent[thick,dotted]}
+            }
+          }
+        }
+        child {
+          node (fza) {$f(\ba)$}
+          child {
+              node {$f_{z}(\ba)$}
+              child { node {$f_{z^2}(\ba)$}
+                child{node{} edge from parent[thick,dotted]}
+              }
+          }
+        }
+      }
+      ;
+  \end{tikzpicture}
+  \caption{Trivariate case, tweaked succinct version\label{fig:tree-tweaked}}
+\end{figure}
+This has two advantages:
+
+\begin{enumerate}
+\item We can directly express the tree structure purely as an ADT; we need to use fixed-length vectors here otherwise.
+\item Derivatives can be computed simply by induction on the number of variables.
+\end{enumerate}
+
+To see these advantages, we now turn to the Haskell implementation (\Cref{lst:data-def}).
+\begin{listing}[htbp]
 \begin{code}
 data STower n a where
   ZS :: !a -> STower 0 a
   SS :: !a -> STower (n + 1) a -> STower n a -> STower (n + 1) a
+\end{code}
+\caption{Core definitions\label{lst:data-def}}
+\end{listing}
 
+\begin{listing}[htbp]
+\begin{code}
 liftSTower
   :: forall c n a. (KnownNat n, c a, forall x k. c x => c (STower k x) )
   => (forall x. c x => x -> x)
@@ -160,11 +273,20 @@ liftSTower
   -> STower n a
   -> STower n a
 liftSTower f df (ZS a) = ZS (f a)
-liftSTower f df x@(SS a da dus)
-  = SS (f a) (da * df x) 
-       (liftSTower @c f df dus)
+liftSTower f df x@(SS a da dus) = SS (f a) (da * df x) (liftSTower @c f df dus)
+
+instance Num a => Num (STower n a) where
+  ZS a + ZS b = SZ (a + b)
+  SS f df dus + SS g dg dvs = SS (f + g) (dxf + dxg) (dus + dvs)
+
+  ZS a * ZS b = ZS (a * b)
+  SS f df dus * SS g dg dvs = (f * g) (f * dg + df * g) (dus * dvs)
+
+instance Floating a => Floating (STower n a) where
+  sin (ZS a) = ZS (sin a)
+  sin (SS f df dus) = SS (sin f) (df * cos f) (sin dus)
 \end{code}
-\caption{Core definitions\label{lst:data-def}}
+\caption{Definitions of operations of \texttt{STower}\label{lst:ops-def}}
 \end{listing}
 
 \end{document}

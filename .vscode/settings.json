@@ -165,6 +165,12 @@
     },
     {
       "name": "itemize"
+    },
+    {
+      "name": "figure"
+    },
+    {
+      "name": "enumerate"
     }
   ],
   "catex.section.dictionary": [
