@@ -738,12 +738,12 @@ This can be seen as a special kind of infinite trie (or prefix-tree) of alphabet
 This can be implemented by a (co-)inductive type as follows:
 
 \begin{code}
-data STower n a
-  = ZS :: !a -> STower 0 a
-  | SS :: !a
-       -> STower (n + 1) a
-       -> STower n a
-       -> STower (n + 1) a
+data STower n a where
+  ZS :: !a -> STower 0 a
+  SS :: !a
+     -> STower (n + 1) a
+     -> STower n a
+     -> STower (n + 1) a
 \end{code}
 
 A tree can have an \emph{infinite height}.
