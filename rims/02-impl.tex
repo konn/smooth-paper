@@ -9,6 +9,7 @@ It has several virtues useful for our purpose:
 \item It supports higher-order functions natively.
 \item It is a lazy language, enabling us to treat \emph{infinite} structures.
 \item The type-class mechanism in Haskell allows us to use function overloading in handy.
+\item Its type system allows us to implement complex inductive types safely.
 \end{enumerate}
 For a general discussion on the advantages of using Haskell in computer algebra, we refer readers to Ishii~\cite{ISHII:2018ek}.
 
@@ -64,38 +65,63 @@ The intuition in the trivariate case is depected in \Cref{fig:tree-simpl}.
         node (fxa) {$f_x(\ba)$}
           child { 
             node (fxxa) {$f_{xx}(\ba)$}
-            child {node{$\vdots$}}
-            child {node{$\vdots$}}
-            child {node{$\vdots$}}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
           }
           child {
             node (fxya) {$f_{xy}(\ba)$}
-            child {node{$\vdots$}} child {node{$\vdots$}} child {node{$\vdots$}}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]} 
+            child {node{} edge from parent[thick,dotted]}
           }
           child { 
             node (fxza) {$f_{xz}(\ba)$}
-            child { node{$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
           }
       }
       child {
         node (fya) {$f_y(\ba)$}
-        child { node {$f_{yx}(\ba)$} child {node{$\vdots$}} child{node{$\vdots$}} child{ node{$\vdots$}} }
-        child { node {$f_{yy}(\ba)$} child { node{$\vdots$} } child {node{$\vdots$}} child{ node{$\vdots$}} }
-        child { node {$f_{yz}(\ba)$} child { node{$\vdots$} } child { node{$\vdots$} } child {node {$\vdots$}} }
+        child { 
+          node {$f_{yx}(\ba)$} 
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+        }
+        child { 
+          node {$f_{yy}(\ba)$}
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+        }
+        child { 
+          node {$f_{yz}(\ba)$} 
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+        }
       }
       child {
         node (fza) {$f_z(\ba)$}
         child {
             node {$f_{zx}(\ba)$}
-            child { node {$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
         }
         child {
           node {$f_{zy}(\ba)$}
-          child { node {$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
+          child {node{} edge from parent[thick,dotted]}
         }
         child {
             node {$f_{zz}(\ba)$}
-            child { node {$\vdots$} } child { node{$\vdots$} } child { node{$\vdots$} }
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
+            child {node{} edge from parent[thick,dotted]}
         }
       };
   \end{tikzpicture}
@@ -164,7 +190,7 @@ This trick is illustrated in \Cref{fig:tree} for trivariate case.
 This can be seen as a special kind of an infinite trie (or prefix-tree) of alphabets $\partial_{x_i}$ with available letter eventually decreasing.
 
 We further tweak this representation to make every branching binary (\Cref{fig:tree-tweaked}).
-\begin{figure}[htbp]
+\begin{figure}[tbp]
   \centering
   \begin{tikzpicture}[
     level/.style={level distance=1cm},
@@ -200,10 +226,17 @@ We further tweak this representation to make every branching binary (\Cref{fig:t
             node {$f_x(\ba)$}
             child {
               node (fxya) {$f_{xy}(\ba)$}
-              child {node{} edge from parent[thick,dotted]}
               child {
-                node {$f_{xyz}(\ba)$}
-                child { node{} edge from parent[thick,dotted]}
+                node{$f_{xy^2}$}
+                child { node{} edge from parent[thick,dotted] }
+                child { node{} edge from parent[thick,dotted] }
+              }
+              child {
+                node {$f_{xy}(\ba)$}
+                child { 
+                  node {$f_{xyz}$}
+                  child {node{} edge from parent[thick,dotted]}
+                }
               }
             }
             child { 
@@ -248,12 +281,12 @@ We further tweak this representation to make every branching binary (\Cref{fig:t
 This has two advantages:
 
 \begin{enumerate}
-\item We can directly express the tree structure purely as an ADT; we need to use fixed-length vectors here otherwise.
-\item Derivatives can be computed simply by induction on the number of variables.
+\item We can directly express the tree structure purely as an ADT; we need to use fixed-length vectors here otherwise.\label{item:adt-friendly}
+\item Derivatives can be computed simply by induction on the number of variables.\label{item:recurse}
 \end{enumerate}
 
 To see these advantages, we now turn to the Haskell implementation (\Cref{lst:data-def}).
-\begin{listing}[htbp]
+\begin{listing}[tbp]
 \begin{code}
 data STower n a where
   ZS :: !a -> STower 0 a
