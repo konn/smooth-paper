@@ -22,7 +22,6 @@ class Fractional a => Floating a where
   pi :: a
   exp :: a -> a
   log :: a -> a
-  log\base :: a -> a -> a
   sin :: a -> a
   asin :: a -> a
   ...
@@ -189,7 +188,7 @@ This trick is illustrated in \Cref{fig:tree} for trivariate case.
 \end{figure}
 This can be seen as a special kind of an infinite trie (or prefix-tree) of alphabets $\partial_{x_i}$ with available letter eventually decreasing.
 
-We further tweak this representation to make every branching binary (\Cref{fig:tree-tweaked}).
+We further tweak this representation to make data-type definition and algorithm simple (\Cref{fig:tree-tweaked}).
 \begin{figure}[tbp]
   \centering
   \begin{tikzpicture}[
@@ -281,21 +280,62 @@ We further tweak this representation to make every branching binary (\Cref{fig:t
 This has two advantages:
 
 \begin{enumerate}
-\item We can directly express the tree structure purely as an ADT; we need to use fixed-length vectors here otherwise.\label{item:adt-friendly}
+\item We can directly express the tree structure purely as an algebraic data-type (ADT); we need to use fixed-length vectors here otherwise.\label{item:adt-friendly}
 \item Derivatives can be computed simply by induction on the number of variables.\label{item:recurse}
 \end{enumerate}
 
-To see these advantages, we now turn to the Haskell implementation (\Cref{lst:data-def}).
-\begin{listing}[tbp]
+To see these advantages, we now turn to the Haskell implementation (\Cref{lst:ops-def}).
+\begin{listing}[tb]
 \begin{code}
 data STower n a where
   ZS :: !a -> STower 0 a
   SS :: !a -> STower (n + 1) a -> STower n a -> STower (n + 1) a
-\end{code}
-\caption{Core definitions\label{lst:data-def}}
-\end{listing}
 
-\begin{listing}[htbp]
+instance Num a => Num (STower n a) where
+  ZS a + ZS b = SZ (a + b)
+  SS f df dus + SS g dg dvs = SS (f + g) (df + dg) (dus + dvs)
+
+  ZS a * ZS b = ZS (a * b)
+  SS f df dus * SS g dg dvs = (f * g) (f * dg + df * g) (dus * dvs)
+  ...
+
+instance Fractional a => Fractional (STower n a) where
+  ZS a / ZS b = ZS (a / b)
+  SS f df dus / SS g dg dvs = SS (f / g) (df / g - f * dg / g^2) (dus / dvs)
+
+instance Floating a => Floating (STower n a) where
+  log (ZS a) = ZS (log a)
+  log (SS f df dus) = SS (log f) (df / f) (log dus)
+  sin (ZS a) = ZS (sin a)
+  sin (SS f df dus) = SS (sin f) (df * cos f) (sin dus)
+  cos (ZS a) = ZS (cos a)
+  cos (SS f df dus) = SS (cos f) (- df * sin f) (cos dus)
+  exp (ZS a) = ZS (exp a)
+  exp (SS f df dus) = SS (exp f) (df * exp f) (exp dus)
+  ...
+\end{code}
+\caption{Definitions of operations of \texttt{STower}\label{lst:ops-def}}
+\end{listing}
+\hask{STower n a} is the type corresponding to the $n$-variate formal power series ring.
+Instance declarations implements functions and their derivatives on \hask{STower n a}.
+It might seems circular at the first glance, but these definitions works several reasons.
+For example, the definitions of $\sin$ and $\cos$ works because:
+\begin{enumerate}
+\item The calls of $\sin$ and $\cos$ in the first arguments (\hask{sin f} and \hask{cos f}) are those on the value \hask{f} in the coefficient field \hask{a}, not \hask{STower n a}, whose implementation is already given.
+\label{itm:call-coeff}
+\item The second calls of $\sin$ and $\cos$ (\hask{df * cos f} and \hask{-df * sin x}) is those on the \hask{STower n a} itself and results in an infinite loop.
+However, we are constructing an infinite trees that carries \emph{all} the partial derivative coefficients, and those coefficients are stored as the first argument of \hask{SS}, which has definite values by the discussion in \Cref{itm:call-coeff}.
+\label{itm:call-deriv}
+\item The direct calls in final arguments (\hask{sin dus} and \hask{cos dus}) seems looping, but they are indeed on power series with strictly less variable,that is, on \hask{STower (n - 1) a}, instead of \hask{STower n a}.
+As these arity strictly decreases, this stops after finite steps.
+\label{itm:rec-decr}
+\end{enumerate}
+Note that \Cref{itm:call-deriv} works also because both \hask{sin} and \hask{cos} are members of the \hask{Floating} class.
+In other words, member functions of the \hask{Floating} class is closed under derivatives.
+More generally, if the class \hask{c a} provides a family of numerical functions on \hask{c} which is closed under derivatives (together with functions from their superclasses), we can likewise derive the instance \hask{c (STower n a)} as above.
+This idea is embodied in \hask{liftSTower} function in \Cref{lst:lift}, and the usage is illustrated by the alternative definitions of instances that follows.
+
+\begin{listing}[tbp]
 \begin{code}
 liftSTower
   :: forall c n a. (KnownNat n, c a, forall x k. c x => c (STower k x) )
@@ -306,20 +346,19 @@ liftSTower
   -> STower n a
   -> STower n a
 liftSTower f df (ZS a) = ZS (f a)
-liftSTower f df x@(SS a da dus) = SS (f a) (da * df x) (liftSTower @c f df dus)
-
-instance Num a => Num (STower n a) where
-  ZS a + ZS b = SZ (a + b)
-  SS f df dus + SS g dg dvs = SS (f + g) (dxf + dxg) (dus + dvs)
-
-  ZS a * ZS b = ZS (a * b)
-  SS f df dus * SS g dg dvs = (f * g) (f * dg + df * g) (dus * dvs)
+liftSTower f df x@(SS a da dus) = SS (f a) (da * df x) (f df dus)
 
 instance Floating a => Floating (STower n a) where
-  sin (ZS a) = ZS (sin a)
-  sin (SS f df dus) = SS (sin f) (df * cos f) (sin dus)
+  log = liftSTower @Floating log recip
+  sin = liftSTower @Floating sin cos
+  cos = liftSTower @Floating cos (negate . sin)
+  exp = liftSTower @Floating exp exp
 \end{code}
-\caption{Definitions of operations of \texttt{STower}\label{lst:ops-def}}
+\caption{Helper function for implementing derivatives\label{lst:lift}}
 \end{listing}
 
+One might note that \Cref{itm:rec-decr} and the last argument in the \hask{SS}-clause in \hask{liftSmooth} is really simple recursion.
+We adopted the tweaked representation as depicted in \Cref{fig:tree-tweaked}, instead of \Cref{fig:tree}, for this simplicity.
+If we make branching $n$-ary as in \Cref{fig:tree}, the implementation gets more complicated as the number of variable decreases.
+One might worry that the same coefficient gets duplicated among multiple branches, but if we choose a language with a sharing (like Haskell), these value are shared across the siblings\footnote{We could achieved this also in more low-level langauges, such as C/C++, by representing each node as a pointer instead of a direct value.}.
 \end{document}
