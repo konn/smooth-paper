@@ -152,7 +152,7 @@ The former is the generic implementation of multivariate tower AD, and the forme
   \caption{Heap benchmarks. \texttt{Sparse} and \texttt{diffs} are existing implementation in \texttt{ad} package.\label{fig:tower-heap-bench}}
 \end{figure}
 
-\Cref{fig:tower-time-bench,fig:tower-time-bench} show the run-time speed and heap allocation of the existing implementations (\hask{Sparse} and \hask{diffs} only for univariate case), and the proposed method.
+\Cref{fig:tower-time-bench,fig:tower-heap-bench} show the run-time speed and heap allocation of the existing implementations (\hask{Sparse} and \hask{diffs} only for univariate case), and the proposed method.
 In univaricate case, the existing implementation for univariate tower AD provided, i.e.\ \hask{diffs} from \texttt{ad} package, peforms the best both in terms of run-time speed and memory allocation.
 Notably, our implementation outperforms \hask{Sparse} both in time and space.
 In particular, although \hask{Sparse} performs linearly both in time and space when applied to the identity, our method performs eventually constantly.
@@ -166,9 +166,7 @@ In summary, our method performs really well both in terms of time and space in t
 \subsection{Weil Algebra Computation}
 In this subsection, we compare the performances of Tower AD applied to Weil algebra computation as described in \cite{Ishii:2021vw}.
 
-% $W = \R[x,y]/(x^3 - y^2, y^3)$
-
-\begin{figure}[htbp]
+\begin{figure}[btp]
   \begin{center}
     \begin{tikzpicture}
       \begin{axis}[%
@@ -176,10 +174,10 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           legend columns=-1,
           legend entries={{\texttt{Sparse}},our method},
           legend to name=leg:time-weil,
-          xlabel={Input},ylabel={Time (sec)},%
+          ylabel={Time (sec)},%
           title=Identity,%
           symbolic x coords={sparse,x + d,dense},
-          enlarge x limits=0.15,
+          enlarge x limits=0.25,
           xtick=data,
           ymin=0,
           ybar,
@@ -189,14 +187,15 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
         \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
           {bench-results/liftWeil-speed/identity.csv};
       \end{axis}
-    \end{tikzpicture}
+    \end{tikzpicture}%
+    \quad
     \begin{tikzpicture}
       \begin{axis}[%
           footnotesize,
-          xlabel={Input},ylabel={Time (sec)},%
+          ylabel={Time (sec)},%
           title={$e^x$},%
           symbolic x coords={sparse,x + d,dense},
-          enlarge x limits=0.15,
+          enlarge x limits=0.25,
           xtick=data,
           ymin=0,
           ybar,
@@ -207,14 +206,14 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           {bench-results/liftWeil-speed/exp x.csv};
       \end{axis}
     \end{tikzpicture}
-    %
+    \quad%
     \begin{tikzpicture}
       \begin{axis}[%
           footnotesize,
-          xlabel={Input},ylabel={Time (sec)},%
+          ylabel={Time (sec)},%
           title={$\sin x e^{y^2 + z}$},%
           symbolic x coords={sparse,x + d,dense},
-          enlarge x limits=0.15,
+          enlarge x limits=0.25,
           xtick=data,
           ymin=0,
           ybar,
@@ -235,7 +234,7 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
   \end{center}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[btp]
   \begin{center}
     \begin{tikzpicture}
       \begin{axis}[%
@@ -243,7 +242,7 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           legend columns=-1,
           legend entries={{\texttt{Sparse}},our method},
           legend to name=leg:time-weil,
-          xlabel={Input},ylabel={Alloc (bytes)},%
+          ylabel={Alloc (bytes)},%
           title=Identity,%
           symbolic x coords={sparse,x + d,dense},
           enlarge x limits=0.25,
@@ -257,10 +256,11 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           {bench-results/liftWeil-heap/identity.csv};
       \end{axis}
     \end{tikzpicture}
+    \quad
     \begin{tikzpicture}
       \begin{axis}[%
           footnotesize,
-          xlabel={Input},ylabel={Alloc (bytes)},%
+          ylabel={Alloc (bytes)},%
           title={$e^x$},%
           symbolic x coords={sparse,x + d,dense},
           enlarge x limits=0.25,
@@ -274,11 +274,11 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           {bench-results/liftWeil-heap/exp x.csv};
       \end{axis}
     \end{tikzpicture}
-    %
+    \quad%
     \begin{tikzpicture}
       \begin{axis}[%
           footnotesize,
-          xlabel={Input},ylabel={Alloc (bytes)},%
+          ylabel={Alloc (bytes)},%
           title={$\sin x e^{y^2 + z}$},%
           symbolic x coords={sparse,x + d,dense},
           enlarge x limits=0.25,
@@ -301,4 +301,9 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
   \caption{Heap benchmarks for Weil algebra $W = \R[x,y]/(x^3 - y^2, y^3)$. \label{fig:weil-heap-bench}}
   \end{center}
 \end{figure}
+
+\Cref{fig:weil-time-bench,fig:weil-heap-bench} present the time and space performance of Weil algebra computation based on the existing implementation (\texttt{Sparse}) and the proposed method.
+In particular, we evaluated three functions (the identity, $e^x$, and $\sin x \cdot e^{y^2 + z}$) on a Weil algebra $W = \R[x,y]/(x^3 - y^2, y^3)$.
+We feed three types of inputs: a sparse input ($1$), $1 + d$, and dense input $1 + d_1 + d_2 + d_1^2 + d_1 d_2 + d_2^2$.
+In any case, our proposed method largely outperforms the existing implementation.
 \end{document}
