@@ -1,0 +1,25 @@
+Name,Mean
+sparse/identity/liftSmoothSerisAD,2.3599468446300378e-4
+sparse/identity/liftSmoothSuccinctTower,9.497246471590539e-6
+sparse/exp x/liftSmoothSerisAD,2.3895536642148534e-4
+sparse/exp x/liftSmoothSuccinctTower,9.8824423393038e-6
+sparse/sin x * exp (x^2 + x)/liftSmoothSerisAD,2.4000010024794653e-4
+sparse/sin x * exp (x^2 + x)/liftSmoothSuccinctTower,1.118779619941415e-5
+sparse/sin x * exp (y^2 + z)/liftSmoothSerisAD,2.5600726439509164e-4
+sparse/sin x * exp (y^2 + z)/liftSmoothSuccinctTower,2.757625306226337e-5
+x + d/identity/liftSmoothSerisAD,2.597594052114403e-4
+x + d/identity/liftSmoothSuccinctTower,1.8671778635207367e-5
+x + d/exp x/liftSmoothSerisAD,2.6432255019038825e-4
+x + d/exp x/liftSmoothSuccinctTower,2.430032178030748e-5
+x + d/sin x * exp (x^2 + x)/liftSmoothSerisAD,2.83728712025362e-4
+x + d/sin x * exp (x^2 + x)/liftSmoothSuccinctTower,3.149738219789326e-5
+x + d/sin x * exp (y^2 + z)/liftSmoothSerisAD,3.2347711783162984e-4
+x + d/sin x * exp (y^2 + z)/liftSmoothSuccinctTower,5.592957944312642e-5
+dense/identity/liftSmoothSerisAD,4.928373846762975e-4
+dense/identity/liftSmoothSuccinctTower,7.310413829197552e-5
+dense/exp x/liftSmoothSerisAD,6.023732878611342e-4
+dense/exp x/liftSmoothSuccinctTower,1.576534943143528e-4
+dense/sin x * exp (x^2 + x)/liftSmoothSerisAD,9.992124777610243e-4
+dense/sin x * exp (x^2 + x)/liftSmoothSuccinctTower,3.394616357270327e-4
+dense/sin x * exp (y^2 + z)/liftSmoothSerisAD,1.3778857065499266e-3
+dense/sin x * exp (y^2 + z)/liftSmoothSuccinctTower,4.036007428581708e-4

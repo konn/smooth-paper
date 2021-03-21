@@ -165,4 +165,140 @@ In summary, our method performs really well both in terms of time and space in t
 
 \subsection{Weil Algebra Computation}
 In this subsection, we compare the performances of Tower AD applied to Weil algebra computation as described in \cite{Ishii:2021vw}.
+
+% $W = \R[x,y]/(x^3 - y^2, y^3)$
+
+\begin{figure}[htbp]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[%
+          footnotesize,
+          legend columns=-1,
+          legend entries={{\texttt{Sparse}},our method},
+          legend to name=leg:time-weil,
+          xlabel={Input},ylabel={Time (sec)},%
+          title=Identity,%
+          symbolic x coords={sparse,x + d,dense},
+          enlarge x limits=0.15,
+          xtick=data,
+          ymin=0,
+          ybar,
+        ]
+        \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
+          {bench-results/liftWeil-speed/identity.csv};
+        \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
+          {bench-results/liftWeil-speed/identity.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \begin{axis}[%
+          footnotesize,
+          xlabel={Input},ylabel={Time (sec)},%
+          title={$e^x$},%
+          symbolic x coords={sparse,x + d,dense},
+          enlarge x limits=0.15,
+          xtick=data,
+          ymin=0,
+          ybar,
+        ]
+        \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
+          {bench-results/liftWeil-speed/exp x.csv};
+        \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
+          {bench-results/liftWeil-speed/exp x.csv};
+      \end{axis}
+    \end{tikzpicture}
+    %
+    \begin{tikzpicture}
+      \begin{axis}[%
+          footnotesize,
+          xlabel={Input},ylabel={Time (sec)},%
+          title={$\sin x e^{y^2 + z}$},%
+          symbolic x coords={sparse,x + d,dense},
+          enlarge x limits=0.15,
+          xtick=data,
+          ymin=0,
+          ybar,
+        ]
+        \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
+          {bench-results/liftWeil-speed/sin x exp (y2 + z).csv};
+        \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
+          {bench-results/liftWeil-speed/sin x exp (y2 + z).csv};
+      \end{axis}
+    \end{tikzpicture}
+  
+  \ref{leg:time-weil}
+
+  \texttt{Sparse} is the existing implementation in \texttt{ad} package.
+  As an input, the ``sparse'' gives $1$ , ``x + d'' as it is, and ``dense'' $x + (\text{sum of all nonzero basis})$.
+  
+  \caption{Speed benchmarks for Weil algebra $W = \R[x,y]/(x^3 - y^2, y^3)$. \label{fig:weil-time-bench}}
+  \end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[%
+          footnotesize,
+          legend columns=-1,
+          legend entries={{\texttt{Sparse}},our method},
+          legend to name=leg:time-weil,
+          xlabel={Input},ylabel={Alloc (bytes)},%
+          title=Identity,%
+          symbolic x coords={sparse,x + d,dense},
+          enlarge x limits=0.25,
+          xtick=data,
+          ymin=0,
+          ybar,
+        ]
+        \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
+          {bench-results/liftWeil-heap/identity.csv};
+        \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
+          {bench-results/liftWeil-heap/identity.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \begin{axis}[%
+          footnotesize,
+          xlabel={Input},ylabel={Alloc (bytes)},%
+          title={$e^x$},%
+          symbolic x coords={sparse,x + d,dense},
+          enlarge x limits=0.25,
+          xtick=data,
+          ymin=0,
+          ybar,
+        ]
+        \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
+          {bench-results/liftWeil-heap/exp x.csv};
+        \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
+          {bench-results/liftWeil-heap/exp x.csv};
+      \end{axis}
+    \end{tikzpicture}
+    %
+    \begin{tikzpicture}
+      \begin{axis}[%
+          footnotesize,
+          xlabel={Input},ylabel={Alloc (bytes)},%
+          title={$\sin x e^{y^2 + z}$},%
+          symbolic x coords={sparse,x + d,dense},
+          enlarge x limits=0.25,
+          xtick=data,
+          ymin=0,
+          ybar,
+        ]
+        \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
+          {bench-results/liftWeil-heap/sin x exp (y2 + z).csv};
+        \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
+          {bench-results/liftWeil-heap/sin x exp (y2 + z).csv};
+      \end{axis}
+    \end{tikzpicture}
+  
+  \ref{leg:time-weil}
+
+  \texttt{Sparse} is the existing implementation in \texttt{ad} package.
+  As an input, the ``sparse'' gives $1$ , ``x + d'' as it is, and ``dense'' $x + (\text{sum of all nonzero basis})$.
+  
+  \caption{Heap benchmarks for Weil algebra $W = \R[x,y]/(x^3 - y^2, y^3)$. \label{fig:weil-heap-bench}}
+  \end{center}
+\end{figure}
 \end{document}

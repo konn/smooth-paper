@@ -1,0 +1,82 @@
+liftSmooth Heap Profile
+
+
+  R[xy]/(x^3 - y^2 y^3)
+  
+    sparse
+    
+      identity
+      
+        Case                      Allocated  GCs
+        liftSmoothSerisAD           773496    0
+        liftSmoothSuccinctTower     185808    0
+      
+      exp x
+      
+        Case                      Allocated  GCs
+        liftSmoothSerisAD           775144    0
+        liftSmoothSuccinctTower     187760    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                       Allocated  GCs
+        liftSmoothSerisAD            776968    0
+        liftSmoothSuccinctTower      190272    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                          Allocated     GCs
+        liftSmoothSerisAD               799688       0
+        liftSmoothSuccinctTower         223872       0
+    
+    x + d
+    
+      identity
+      
+        Case                      Allocated  GCs
+        liftSmoothSerisAD           808184    0
+        liftSmoothSuccinctTower     200128    0
+      
+      exp x
+      
+        Case                      Allocated  GCs
+        liftSmoothSerisAD           817712    0
+        liftSmoothSuccinctTower     211584    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                       Allocated  GCs
+        liftSmoothSerisAD            842936    0
+        liftSmoothSuccinctTower      221376    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                          Allocated     GCs
+        liftSmoothSerisAD               918072       0
+        liftSmoothSuccinctTower         264176       0
+    
+    dense
+    
+      identity
+      
+        Case                      Allocated  GCs
+        liftSmoothSerisAD         1348480    1
+        liftSmoothSuccinctTower     303496    0
+      
+      exp x
+      
+        Case                      Allocated  GCs
+        liftSmoothSerisAD         1531496    1
+        liftSmoothSuccinctTower     494312    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                       Allocated  GCs
+        liftSmoothSerisAD          2319232    2
+        liftSmoothSuccinctTower      884536    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                          Allocated     GCs
+        liftSmoothSerisAD             3403120       3
+        liftSmoothSuccinctTower       1005048       0
