@@ -1,0 +1,283 @@
+multDiffUpTo Heap Profile
+
+  identity
+  
+    0
+    
+      Case    Allocated  GCs
+      AD          3,320    0
+      diffs          24    0
+      STower      2,832    0
+    
+    1
+    
+      Case    Allocated  GCs
+      AD          7,792    0
+      diffs          24    0
+      STower      4,360    0
+    
+    2
+    
+      Case    Allocated  GCs
+      AD         12,064    0
+      diffs          24    0
+      STower      5,552    0
+    
+    3
+    
+      Case    Allocated  GCs
+      AD         15,480    0
+      diffs          24    0
+      STower      4,696    0
+    
+    4
+    
+      Case    Allocated  GCs
+      AD         20,608    0
+      diffs          24    0
+      STower      5,552    0
+    
+    5
+    
+      Case    Allocated  GCs
+      AD         24,880    0
+      diffs          24    0
+      STower      5,552    0
+    
+    6
+    
+      Case    Allocated  GCs
+      AD         29,152    0
+      diffs          24    0
+      STower      5,552    0
+    
+    7
+    
+      Case    Allocated  GCs
+      AD         33,424    0
+      diffs          24    0
+      STower      4,696    0
+    
+    8
+    
+      Case    Allocated  GCs
+      AD         37,696    0
+      diffs          24    0
+      STower      5,552    0
+    
+    9
+    
+      Case    Allocated  GCs
+      AD         41,968    0
+      diffs          24    0
+      STower      5,552    0
+    
+    10
+    
+      Case    Allocated  GCs
+      AD         46,240    0
+      diffs          24    0
+      STower      5,552    0
+  
+  exp x
+  
+    0
+    
+      Case    Allocated  GCs
+      AD          3,424    0
+      diffs         112    0
+      STower      2,328    0
+    
+    1
+    
+      Case    Allocated  GCs
+      AD          8,160    0
+      diffs         752    0
+      STower      5,824    0
+    
+    2
+    
+      Case    Allocated  GCs
+      AD         15,312    0
+      diffs       1,336    0
+      STower      9,640    0
+    
+    3
+    
+      Case    Allocated  GCs
+      AD         23,872    0
+      diffs       1,896    0
+      STower     13,136    0
+    
+    4
+    
+      Case    Allocated  GCs
+      AD         33,968    0
+      diffs       2,456    0
+      STower     16,856    0
+    
+    5
+    
+      Case    Allocated  GCs
+      AD         45,656    0
+      diffs       3,016    0
+      STower     20,800    0
+    
+    6
+    
+      Case    Allocated  GCs
+      AD         57,896    0
+      diffs       3,576    0
+      STower     24,016    0
+    
+    7
+    
+      Case    Allocated  GCs
+      AD         74,032    0
+      diffs       4,136    0
+      STower     29,168    0
+    
+    8
+    
+      Case    Allocated  GCs
+      AD         90,832    0
+      diffs       4,696    0
+      STower     33,688    0
+    
+    9
+    
+      Case    Allocated  GCs
+      AD        109,448    0
+      diffs       4,400    0
+      STower     38,432    0
+    
+    10
+    
+      Case    Allocated  GCs
+      AD        129,936    0
+      diffs       5,816    0
+      STower     43,304    0
+  
+  sin x * exp y^2
+  
+    [0,1]
+    
+      Case    Allocated  GCs
+      AD         29,784    0
+      STower     20,088    0
+    
+    [2,0]
+    
+      Case    Allocated  GCs
+      AD         50,816    0
+      STower     30,776    0
+    
+    [2,1]
+    
+      Case    Allocated  GCs
+      AD         76,080    0
+      STower     42,280    0
+    
+    [2,2]
+    
+      Case    Allocated  GCs
+      AD        105,120    0
+      STower     52,896    0
+    
+    [3,2]
+    
+      Case    Allocated  GCs
+      AD        148,104    0
+      STower     68,088    0
+    
+    [4,2]
+    
+      Case    Allocated  GCs
+      AD        205,384    0
+      STower     83,272    0
+    
+    [3,4]
+    
+      Case    Allocated  GCs
+      AD        228,192    0
+      STower     98,680    0
+    
+    [5,3]
+    
+      Case    Allocated  GCs
+      AD        329,592    0
+      STower    120,944    0
+    
+    [3,6]
+    
+      Case    Allocated  GCs
+      AD        338,240    0
+      STower    137,128    0
+    
+    [6,4]
+    
+      Case    Allocated  GCs
+      AD        492,592    0
+      STower    163,896    0
+  
+  sin x * exp (y^2 + z)
+  
+    [0,0,1]
+    
+      Case    Allocated  GCs
+      AD         45,008    0
+      STower     33,112    0
+    
+    [1,0,1]
+    
+      Case    Allocated  GCs
+      AD         71,808    0
+      STower     49,432    0
+    
+    [0,1,2]
+    
+      Case    Allocated  GCs
+      AD         99,992    0
+      STower     58,144    0
+    
+    [1,2,1]
+    
+      Case    Allocated  GCs
+      AD        162,704    0
+      STower    101,456    0
+    
+    [0,3,2]
+    
+      Case    Allocated  GCs
+      AD        200,320    0
+      STower    103,984    0
+    
+    [2,2,2]
+    
+      Case    Allocated  GCs
+      AD        292,728    0
+      STower    171,192    0
+    
+    [3,2,2]
+    
+      Case    Allocated  GCs
+      AD        381,456    0
+      STower    218,808    0
+    
+    [3,4,1]
+    
+      Case    Allocated  GCs
+      AD        487,832    0
+      STower    276,576    0
+    
+    [5,3,1]
+    
+      Case    Allocated  GCs
+      AD        614,336    0
+      STower    323,040    0
+    
+    [2,3,5]
+    
+      Case    Allocated  GCs
+      AD        886,112    0
+      STower    372,728    0

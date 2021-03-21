@@ -1,0 +1,461 @@
+liftSmooth Heap Profile
+
+  DOrder 2
+  
+    sparse
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            30,864    0
+        liftSmoothSerisAD           27,280    0
+        liftSmoothSuccinctTower     13,216    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            34,280    0
+        liftSmoothSerisAD           28,928    0
+        liftSmoothSuccinctTower     14,752    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            43,712    0
+        liftSmoothSerisAD           30,752    0
+        liftSmoothSuccinctTower     16,432    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           208,464    0
+        liftSmoothSerisAD           45,632    0
+        liftSmoothSuccinctTower     35,232    0
+    
+    x + d
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            34,192    0
+        liftSmoothSerisAD           38,688    0
+        liftSmoothSuccinctTower     22,344    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            37,608    0
+        liftSmoothSerisAD           40,496    0
+        liftSmoothSuccinctTower     25,528    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            47,040    0
+        liftSmoothSerisAD           48,296    0
+        liftSmoothSuccinctTower     30,040    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           215,376    0
+        liftSmoothSerisAD           78,776    0
+        liftSmoothSuccinctTower     56,520    0
+    
+    dense
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            34,192    0
+        liftSmoothSerisAD           38,688    0
+        liftSmoothSuccinctTower     22,344    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            37,608    0
+        liftSmoothSerisAD           40,496    0
+        liftSmoothSuccinctTower     25,528    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            47,040    0
+        liftSmoothSerisAD           48,296    0
+        liftSmoothSuccinctTower     30,040    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           215,376    0
+        liftSmoothSerisAD           78,776    0
+        liftSmoothSuccinctTower     56,520    0
+  
+  DOrder 3
+  
+    sparse
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            65,704    0
+        liftSmoothSerisAD           42,488    0
+        liftSmoothSuccinctTower     15,352    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            75,728    0
+        liftSmoothSerisAD           44,136    0
+        liftSmoothSuccinctTower     16,888    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           112,368    0
+        liftSmoothSerisAD           45,960    0
+        liftSmoothSuccinctTower     18,568    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         1,076,832    1
+        liftSmoothSerisAD           61,784    0
+        liftSmoothSuccinctTower     38,312    0
+    
+    x + d
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            72,088    0
+        liftSmoothSerisAD           61,856    0
+        liftSmoothSuccinctTower     26,192    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            84,440    0
+        liftSmoothSerisAD           68,768    0
+        liftSmoothSuccinctTower     36,472    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           121,080    0
+        liftSmoothSerisAD           88,160    0
+        liftSmoothSuccinctTower     45,432    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         1,099,512    1
+        liftSmoothSerisAD          131,840    0
+        liftSmoothSuccinctTower     73,000    0
+    
+    dense
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            74,992    0
+        liftSmoothSerisAD           87,072    0
+        liftSmoothSuccinctTower     34,640    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries            85,016    0
+        liftSmoothSerisAD           91,672    0
+        liftSmoothSuccinctTower     40,024    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           121,656    0
+        liftSmoothSerisAD          111,192    0
+        liftSmoothSuccinctTower     49,816    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         1,104,488    1
+        liftSmoothSerisAD          200,648    0
+        liftSmoothSuccinctTower     84,200    0
+  
+  DOrder 4
+  
+    sparse
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           155,496    0
+        liftSmoothSerisAD           61,704    0
+        liftSmoothSuccinctTower     17,576    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           189,952    0
+        liftSmoothSerisAD           63,352    0
+        liftSmoothSuccinctTower     19,112    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           329,280    0
+        liftSmoothSerisAD           65,176    0
+        liftSmoothSuccinctTower     20,792    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         6,368,496    6
+        liftSmoothSerisAD           81,944    0
+        liftSmoothSuccinctTower     41,480    0
+    
+    x + d
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           165,728    0
+        liftSmoothSerisAD           81,768    0
+        liftSmoothSuccinctTower     29,128    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           205,824    0
+        liftSmoothSerisAD           96,032    0
+        liftSmoothSuccinctTower     47,696    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           345,152    0
+        liftSmoothSerisAD          133,040    0
+        liftSmoothSuccinctTower     62,376    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         6,450,384    6
+        liftSmoothSerisAD          177,744    0
+        liftSmoothSuccinctTower     91,208    0
+    
+    dense
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           179,160    0
+        liftSmoothSerisAD          174,352    0
+        liftSmoothSuccinctTower     47,920    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           213,616    0
+        liftSmoothSerisAD          183,008    0
+        liftSmoothSuccinctTower     56,688    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries           352,944    0
+        liftSmoothSerisAD          221,424    0
+        liftSmoothSuccinctTower     75,224    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         6,556,976    6
+        liftSmoothSerisAD          439,376    0
+        liftSmoothSuccinctTower    118,680    0
+  
+  DOrder 3 |*| DOrder 4
+  
+    sparse
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         2,233,816    2
+        liftSmoothSerisAD          481,296    0
+        liftSmoothSuccinctTower    180,608    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         2,979,696    2
+        liftSmoothSerisAD          482,944    0
+        liftSmoothSuccinctTower    182,560    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         6,132,272    5
+        liftSmoothSerisAD          484,768    0
+        liftSmoothSuccinctTower    185,072    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                       Allocated  GCs
+        liftSmoothSeries         355,005,344  343
+        liftSmoothSerisAD            510,368    0
+        liftSmoothSuccinctTower      221,552    0
+    
+    x + d
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         2,324,848    2
+        liftSmoothSerisAD          531,128    0
+        liftSmoothSuccinctTower    210,088    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         3,105,800    3
+        liftSmoothSerisAD          576,768    0
+        liftSmoothSuccinctTower    258,632    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         6,258,376    6
+        liftSmoothSerisAD          621,552    0
+        liftSmoothSuccinctTower    274,144    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                       Allocated  GCs
+        liftSmoothSeries         357,680,920  345
+        liftSmoothSerisAD            699,808    0
+        liftSmoothSuccinctTower      320,064    0
+    
+    dense
+    
+      identity
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         3,403,520    3
+        liftSmoothSerisAD        1,743,232    1
+        liftSmoothSuccinctTower    430,920    0
+      
+      exp x
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         4,149,400    4
+        liftSmoothSerisAD        1,800,848    1
+        liftSmoothSuccinctTower    477,328    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                     Allocated  GCs
+        liftSmoothSeries         7,301,976    7
+        liftSmoothSerisAD        2,099,584    2
+        liftSmoothSuccinctTower    599,312    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                       Allocated  GCs
+        liftSmoothSeries         393,863,768  380
+        liftSmoothSerisAD          4,344,192    4
+        liftSmoothSuccinctTower      752,272    0
+  
+  R[x,y]/(x^3 - y^2, y^3)
+  
+    sparse
+    
+      identity
+      
+        Case                      Allocated  GCs
+        liftSmoothSeries         34,300,104   33
+        liftSmoothSerisAD           773,496    0
+        liftSmoothSuccinctTower     185,808    0
+      
+      exp x
+      
+        Case                      Allocated  GCs
+        liftSmoothSeries         51,835,024   50
+        liftSmoothSerisAD           775,144    0
+        liftSmoothSuccinctTower     187,760    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                       Allocated  GCs
+        liftSmoothSeries         126,848,752  123
+        liftSmoothSerisAD            776,968    0
+        liftSmoothSuccinctTower      190,272    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                          Allocated     GCs
+        liftSmoothSeries         22,885,868,784  22,149
+        liftSmoothSerisAD               799,688       0
+        liftSmoothSuccinctTower         223,872       0
+    
+    x + d
+    
+      identity
+      
+        Case                      Allocated  GCs
+        liftSmoothSeries         35,316,776   34
+        liftSmoothSerisAD           808,184    0
+        liftSmoothSuccinctTower     200,128    0
+      
+      exp x
+      
+        Case                      Allocated  GCs
+        liftSmoothSeries         52,854,696   51
+        liftSmoothSerisAD           817,712    0
+        liftSmoothSuccinctTower     211,584    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                       Allocated  GCs
+        liftSmoothSeries         127,868,424  123
+        liftSmoothSerisAD            842,936    0
+        liftSmoothSuccinctTower      221,376    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                          Allocated     GCs
+        liftSmoothSeries         23,002,360,568  22,262
+        liftSmoothSerisAD               918,072       0
+        liftSmoothSuccinctTower         264,176       0
+    
+    dense
+    
+      identity
+      
+        Case                      Allocated  GCs
+        liftSmoothSeries         44,728,456   43
+        liftSmoothSerisAD         1,348,480    1
+        liftSmoothSuccinctTower     303,496    0
+      
+      exp x
+      
+        Case                      Allocated  GCs
+        liftSmoothSeries         62,297,448   60
+        liftSmoothSerisAD         1,531,496    1
+        liftSmoothSuccinctTower     494,312    0
+      
+      sin x * exp (x^2 + x)
+      
+        Case                       Allocated  GCs
+        liftSmoothSeries         137,311,176  132
+        liftSmoothSerisAD          2,319,232    2
+        liftSmoothSuccinctTower      884,536    0
+      
+      sin x * exp (y^2 + z)
+      
+        Case                          Allocated     GCs
+        liftSmoothSeries         24,084,041,240  23,313
+        liftSmoothSerisAD             3,403,120       3
+        liftSmoothSuccinctTower       1,005,048       0

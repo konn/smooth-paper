@@ -1,0 +1,522 @@
+  *-cpu:0
+       description: CPU
+       product: Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz
+       vendor: Intel Corp.
+       physical id: 5
+       bus info: cpu@0
+       version: Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz
+       serial: None
+       slot: None
+       size: 2400MHz
+       capacity: 4GHz
+       width: 64 bits
+       clock: 100MHz
+       capabilities: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp x86-64 constant_tsc rep_good nopl xtopology cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm invpcid_single pti fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt md_clear
+  *-cpu:1
+       description: CPU
+       product: Xeon (None)
+       vendor: None
+       physical id: 6
+       bus info: cpu@1
+       version: Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz
+       serial: None
+       slot: None
+       size: 2400MHz
+       capacity: 4GHz
+       clock: 100MHz
+  *-cpu:2 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 7
+       version: None
+       serial: None
+       slot: None
+  *-cpu:3 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 8
+       version: None
+       serial: None
+       slot: None
+  *-cpu:4 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 9
+       version: None
+       serial: None
+       slot: None
+  *-cpu:5 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: a
+       version: None
+       serial: None
+       slot: None
+  *-cpu:6 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: b
+       version: None
+       serial: None
+       slot: None
+  *-cpu:7 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: c
+       version: None
+       serial: None
+       slot: None
+  *-cpu:8 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: d
+       version: None
+       serial: None
+       slot: None
+  *-cpu:9 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: e
+       version: None
+       serial: None
+       slot: None
+  *-cpu:10 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: f
+       version: None
+       serial: None
+       slot: None
+  *-cpu:11 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 10
+       version: None
+       serial: None
+       slot: None
+  *-cpu:12 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 11
+       version: None
+       serial: None
+       slot: None
+  *-cpu:13 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 12
+       version: None
+       serial: None
+       slot: None
+  *-cpu:14 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 13
+       version: None
+       serial: None
+       slot: None
+  *-cpu:15 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 14
+       version: None
+       serial: None
+       slot: None
+  *-cpu:16 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 15
+       version: None
+       serial: None
+       slot: None
+  *-cpu:17 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 16
+       version: None
+       serial: None
+       slot: None
+  *-cpu:18 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 17
+       version: None
+       serial: None
+       slot: None
+  *-cpu:19 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 18
+       version: None
+       serial: None
+       slot: None
+  *-cpu:20 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 19
+       version: None
+       serial: None
+       slot: None
+  *-cpu:21 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 1a
+       version: None
+       serial: None
+       slot: None
+  *-cpu:22 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 1b
+       version: None
+       serial: None
+       slot: None
+  *-cpu:23 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 1c
+       version: None
+       serial: None
+       slot: None
+  *-cpu:24 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 1d
+       version: None
+       serial: None
+       slot: None
+  *-cpu:25 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 1e
+       version: None
+       serial: None
+       slot: None
+  *-cpu:26 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 1f
+       version: None
+       serial: None
+       slot: None
+  *-cpu:27 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 20
+       version: None
+       serial: None
+       slot: None
+  *-cpu:28 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 21
+       version: None
+       serial: None
+       slot: None
+  *-cpu:29 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 22
+       version: None
+       serial: None
+       slot: None
+  *-cpu:30 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 23
+       version: None
+       serial: None
+       slot: None
+  *-cpu:31 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 24
+       version: None
+       serial: None
+       slot: None
+  *-cpu:32 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 25
+       version: None
+       serial: None
+       slot: None
+  *-cpu:33 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 26
+       version: None
+       serial: None
+       slot: None
+  *-cpu:34 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 27
+       version: None
+       serial: None
+       slot: None
+  *-cpu:35 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 28
+       version: None
+       serial: None
+       slot: None
+  *-cpu:36 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 29
+       version: None
+       serial: None
+       slot: None
+  *-cpu:37 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 2a
+       version: None
+       serial: None
+       slot: None
+  *-cpu:38 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 2b
+       version: None
+       serial: None
+       slot: None
+  *-cpu:39 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 2c
+       version: None
+       serial: None
+       slot: None
+  *-cpu:40 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 2d
+       version: None
+       serial: None
+       slot: None
+  *-cpu:41 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 2e
+       version: None
+       serial: None
+       slot: None
+  *-cpu:42 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 2f
+       version: None
+       serial: None
+       slot: None
+  *-cpu:43 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 30
+       version: None
+       serial: None
+       slot: None
+  *-cpu:44 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 31
+       version: None
+       serial: None
+       slot: None
+  *-cpu:45 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 32
+       version: None
+       serial: None
+       slot: None
+  *-cpu:46 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 33
+       version: None
+       serial: None
+       slot: None
+  *-cpu:47 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 34
+       version: None
+       serial: None
+       slot: None
+  *-cpu:48 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 35
+       version: None
+       serial: None
+       slot: None
+  *-cpu:49 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 36
+       version: None
+       serial: None
+       slot: None
+  *-cpu:50 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 37
+       version: None
+       serial: None
+       slot: None
+  *-cpu:51 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 38
+       version: None
+       serial: None
+       slot: None
+  *-cpu:52 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 39
+       version: None
+       serial: None
+       slot: None
+  *-cpu:53 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 3a
+       version: None
+       serial: None
+       slot: None
+  *-cpu:54 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 3b
+       version: None
+       serial: None
+       slot: None
+  *-cpu:55 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 3c
+       version: None
+       serial: None
+       slot: None
+  *-cpu:56 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 3d
+       version: None
+       serial: None
+       slot: None
+  *-cpu:57 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 3e
+       version: None
+       serial: None
+       slot: None
+  *-cpu:58 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 3f
+       version: None
+       serial: None
+       slot: None
+  *-cpu:59 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 40
+       version: None
+       serial: None
+       slot: None
+  *-cpu:60 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 41
+       version: None
+       serial: None
+       slot: None
+  *-cpu:61 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 42
+       version: None
+       serial: None
+       slot: None
+  *-cpu:62 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 43
+       version: None
+       serial: None
+       slot: None
+  *-cpu:63 DISABLED
+       description: CPU [empty]
+       product: (None)
+       vendor: None
+       physical id: 44
+       version: None
+       serial: None
+       slot: None
