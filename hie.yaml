@@ -1,0 +1,6 @@
+cradle:
+  stack:
+    stackYaml: rims/bench-processor/stack.yaml
+    components:
+    - path: "rims/bench-processor/src/Main.hs"
+      component: "bench-processor:exe:bench-processor"

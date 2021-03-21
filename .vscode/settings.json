@@ -167,7 +167,13 @@
       "name": "itemize"
     },
     {
-      "name": "figure"
+      "name": "figure",
+      "args":
+        [
+          { "kind": "optional",
+            "placeholder": "htbp"
+          }
+        ]
     },
     {
       "name": "enumerate"

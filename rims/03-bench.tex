@@ -3,5 +3,166 @@
 \begin{document}
 \section{Benchmarks}
 \label{sec:bench}
+We report several benchmarks on the proposed method with the existing implementation in the \texttt{ad}~\cite{Kmett:2010aa} package.
 
+The code used in the benchmarks is implemented as a Haskell library and hosted on GitHub\footnote{\url{https://github.com/konn/smooth/tree/d3386a15c97f23d4071b09f97b7bc87f2c4b1da4}}.
+All the benchmark code was compiled with GHC 8.10.4 with the flag \texttt{-threaded -O2}.
+We ran the benchmark suites on a virtual Linux environment available on GitHub Actions (Standard\_DS2\_v2 Azure instance) with two Intel Xeon Platinum 8171M virtual CPUs (2.60GHz) and 7 GiB of RAM.
+The Gauge framework~\cite{Hanquez:2019wk} was used to report the run-time speed.
+
+\subsection{Tower Automatic Differentiation}
+In this subsection, we compare the run-time speed and memory consumption of the existing multivariate tower AD and the proposed method.
+In univariate case, we compare our proposed method with two existing implementations: \hask{Sparse} and \hask{diffs} both from \texttt{ad} package.
+The former is the generic implementation of multivariate tower AD, and the former is speciailised implementation for the univariate case.
+
+\begin{figure}[htbp]
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[%
+        legend columns=-1,
+        legend entries={{\texttt{Sparse}},\textt{diffs},our method},
+        legend to name=leg:time-tower,
+        xlabel={Order},ylabel={Time (sec)},%
+        title=Identity,%
+      ]
+      \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+        {bench-results/multdiffupto-speed/identity.csv};
+      \addplot[mark=o] table[col sep=comma,x=size,y=AD-diffs] 
+        {bench-results/multdiffupto-speed/identity.csv};
+      \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+        {bench-results/multdiffupto-speed/identity.csv};
+    \end{axis}
+  \end{tikzpicture}
+  %
+  \begin{tikzpicture}
+  \begin{axis}[%
+      xlabel={Order},ylabel={Time (sec)},%
+      title=$e^x$,%
+    ]
+    \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+      {bench-results/multdiffupto-speed/exp x.csv};
+    \addplot[mark=o] table[col sep=comma,x=size,y=AD-diffs] 
+      {bench-results/multdiffupto-speed/exp x.csv};
+    \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+      {bench-results/multdiffupto-speed/exp x.csv};
+  \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[%
+      xlabel style={align=center},
+      xlabel={Total degrees:\\$(0, 1), (2, 0), (2, 1), (2, 2), (3, 2)$\\
+        $(4, 2), (3, 4), (5, 3), (3, 6), (6, 4)$},ylabel={Time (sec)},%
+      title=$\sin x e^{y^2}$,%
+    ]
+    \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+      {bench-results/multdiffupto-speed/sin x exp y2.csv};
+    \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+      {bench-results/multdiffupto-speed/sin x exp y2.csv};
+  \end{axis}
+\end{tikzpicture}
+%
+\begin{tikzpicture}
+  \begin{axis}[%
+      xlabel style={align=center},
+      xlabel={Total degrees:\\
+      {$\scriptsize (0, 0, 1), (1, 0, 1), (0, 1, 2), (1, 2, 1), (0, 3, 2), (2, 2, 2)$}\\
+      {$\scriptsize (3, 2, 2), (3, 4, 1), (5, 3, 1), (2, 3, 5), (5, 4, 2), (3, 4, 5)$}},%
+      ylabel={Time (sec)},%
+      title=$\sin x e^{y^2 + z}$,%
+    ]
+    \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+      {bench-results/multdiffupto-speed/sin x exp (y2 + z).csv};
+    \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+      {bench-results/multdiffupto-speed/sin x exp (y2 + z).csv};
+  \end{axis}
+\end{tikzpicture}
+
+\ref{leg:time-tower}
+\end{center}
+
+\caption{Speed benchmarks. \texttt{Sparse} and \texttt{diffs} are existing implementation in \texttt{ad} package.\label{fig:tower-time-bench}}
+\end{figure}
+
+\begin{figure}[htbp]
+  \begin{center}
+      \begin{tikzpicture}
+      \begin{axis}[%
+          legend columns=-1,
+          legend entries={{\texttt{Sparse}},\textt{diffs},our method},
+          legend to name=leg:heap-tower,%
+          xlabel={Order},ylabel={Allocation (bytes)},%
+          title=identity,%
+        ]
+        \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+          {bench-results/multdiffupto-heap/identity.csv};
+        \addplot[mark=o] table[col sep=comma,x=size,y=AD-diffs] 
+          {bench-results/multdiffupto-heap/identity.csv};
+        \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+          {bench-results/multdiffupto-heap/identity.csv};
+      \end{axis}
+    \end{tikzpicture}
+    %
+    \begin{tikzpicture}
+    \begin{axis}[%
+        xlabel={Order},ylabel={Allocation (bytes)},%
+        title=$e^x$,%
+      ]
+      \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+        {bench-results/multdiffupto-heap/exp x.csv};
+      \addplot[mark=o] table[col sep=comma,x=size,y=AD-diffs] 
+        {bench-results/multdiffupto-heap/exp x.csv};
+      \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+        {bench-results/multdiffupto-heap/exp x.csv};
+    \end{axis}
+  \end{tikzpicture}
+  
+  \begin{tikzpicture}
+    \begin{axis}[%
+        xlabel style={align=center},
+        xlabel={Total degrees:\\$(0, 1), (2, 0), (2, 1), (2, 2), (3, 2)$\\
+          $(4, 2), (3, 4), (5, 3), (3, 6), (6, 4)$},ylabel={Allocation (bytes)},%
+        title=$\sin x e^{y^2}$,%
+      ]
+      \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+        {bench-results/multdiffupto-heap/sin x exp y2.csv};
+      \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+        {bench-results/multdiffupto-heap/sin x exp y2.csv};
+    \end{axis}
+  \end{tikzpicture}
+  %
+  \begin{tikzpicture}
+    \begin{axis}[%
+        xlabel style={align=center},
+        xlabel={Total degrees:\\
+        {$\scriptsize (0, 0, 1), (1, 0, 1), (0, 1, 2), (1, 2, 1), (0, 3, 2), (2, 2, 2)$}\\
+        {$\scriptsize (3, 2, 2), (3, 4, 1), (5, 3, 1), (2, 3, 5), (5, 4, 2), (3, 4, 5)$}},%
+        ylabel={Allocation (bytes)},%
+        title=$\sin x e^{y^2 + z}$,%
+      ]
+      \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
+        {bench-results/multdiffupto-heap/sin x exp (y2 + z).csv};
+      \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
+        {bench-results/multdiffupto-heap/sin x exp (y2 + z).csv};
+    \end{axis}
+  \end{tikzpicture}
+
+  \ref{leg:heap-tower}
+\end{center}
+  \caption{Heap benchmarks. \texttt{Sparse} and \texttt{diffs} are existing implementation in \texttt{ad} package.\label{fig:tower-heap-bench}}
+\end{figure}
+
+\Cref{fig:tower-time-bench,fig:tower-time-bench} show the run-time speed and heap allocation of the existing implementations (\hask{Sparse} and \hask{diffs} only for univariate case), and the proposed method.
+In univaricate case, the existing implementation for univariate tower AD provided, i.e.\ \hask{diffs} from \texttt{ad} package, peforms the best both in terms of run-time speed and memory allocation.
+Notably, our implementation outperforms \hask{Sparse} both in time and space.
+In particular, although \hask{Sparse} performs linearly both in time and space when applied to the identity, our method performs eventually constantly.
+This is because our actual implementation employs some heuristics to detect a function whose higher derivatives are eventually zero.
+
+Compared to \hask{Sparse}, our proposed method performs always better both in univariate and multivariate cases.
+In particular, \hask{Sparse} presents a steep quadratic growth both in time and space, our proposed method peroforms almost linearly.
+
+In summary, our method performs really well both in terms of time and space in the multivariate case, although we need more optimisation in univariate cases.
+
+\subsection{Weil Algebra Computation}
+In this subsection, we compare the performances of Tower AD applied to Weil algebra computation as described in \cite{Ishii:2021vw}.
 \end{document}
