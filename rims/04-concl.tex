@@ -6,6 +6,7 @@
 We presented a succinct and efficient implementation of a multivariate lazy forward-mode tower automatic differentiation.
 This can be viewed as a mixture of existing methods but optimised exploiting the commutativity of partial differential operators.
 The basic idea is to store all the partial derivatives in some kind of a prefix-tree, in which the number of branching will eventually decrease as the right branch is chosen.
+We applied laziness and the advanced type-system in Haskell.
 
 Our implementation performs particularly well in multivariate cases and gives pleasing improvements both in time and space when applied to Weil algebra computation as described in \cite{Ishii:2021vw}.
 For univariate case, however, there is much room for improvements.
