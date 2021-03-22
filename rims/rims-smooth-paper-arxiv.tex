@@ -1,5 +1,7 @@
 \documentclass[a4paper]{article}
-\usepackage[pdftex]{hyperref}
+\usepackage{iftex}
+\ifLuaTeX\else\pdfoutput=1\fi
+\usepackage{nohyperref}
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \input{preamble}
 \usepackage{geometry}
