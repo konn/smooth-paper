@@ -1,8 +1,13 @@
 \usepackage{braket}
 \usepackage{cleveref}
 \usepackage[prologue,gray]{xcolor}
+\usepackage{iftex}
+\ifLuaTeX
 \usepackage{fontspec}
 \setmonofont[StylisticSet=3]{inconsolata}
+\else
+\usepackage{inconsolata}
+\fi
 \usepackage{tikz}
 \usetikzlibrary{matrix,decorations,arrows,calc,trees}
 \usepackage{tcolorbox}

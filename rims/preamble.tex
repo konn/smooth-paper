@@ -1,0 +1,19 @@
+\usepackage{amsmath,amssymb}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{subfiles}
+\input{syntax}
+\usepackage{pgfplots}
+\usepackage[backend=biber,bibstyle=numeric]{biblatex}
+\addbibresource{../references.bib}
+\Crefformat{enumi}{(#2#1#3)}
+\pgfplotsset{small,ylabel style={yshift=-12pt},%
+  legend style={%
+    outer sep=7pt,inner sep=5pt,%
+    /tikz/every even column/.append style={column sep=10pt},%
+  },
+}
+
+\title{A Succinct Multivariate Lazy Multivariate Tower AD for Weil Algebra Computation}
+\newcommand{\Rseries}{\R\llbracket\boldsymbol{X}\rrbracket}
+\date{}

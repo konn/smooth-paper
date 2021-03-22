@@ -40,11 +40,11 @@ The former is the generic implementation of multivariate tower AD, and the forme
       title=$e^x$,%
     ]
     \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
-      {bench-results/multdiffupto-speed/exp x.csv};
+      {bench-results/multdiffupto-speed/exp-x.csv};
     \addplot[mark=o] table[col sep=comma,x=size,y=AD-diffs] 
-      {bench-results/multdiffupto-speed/exp x.csv};
+      {bench-results/multdiffupto-speed/exp-x.csv};
     \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
-      {bench-results/multdiffupto-speed/exp x.csv};
+      {bench-results/multdiffupto-speed/exp-x.csv};
   \end{axis}
 \end{tikzpicture}
 
@@ -56,9 +56,9 @@ The former is the generic implementation of multivariate tower AD, and the forme
       title=$\sin x e^{y^2}$,%
     ]
     \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
-      {bench-results/multdiffupto-speed/sin x exp y2.csv};
+      {bench-results/multdiffupto-speed/sin-x-exp-y2.csv};
     \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
-      {bench-results/multdiffupto-speed/sin x exp y2.csv};
+      {bench-results/multdiffupto-speed/sin-x-exp-y2.csv};
   \end{axis}
 \end{tikzpicture}
 %
@@ -72,9 +72,9 @@ The former is the generic implementation of multivariate tower AD, and the forme
       title=$\sin x e^{y^2 + z}$,%
     ]
     \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
-      {bench-results/multdiffupto-speed/sin x exp (y2 + z).csv};
+      {bench-results/multdiffupto-speed/sin-x-exp-y2-z.csv};
     \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
-      {bench-results/multdiffupto-speed/sin x exp (y2 + z).csv};
+      {bench-results/multdiffupto-speed/sin-x-exp-y2-z.csv};
   \end{axis}
 \end{tikzpicture}
 
@@ -109,11 +109,11 @@ The former is the generic implementation of multivariate tower AD, and the forme
         title=$e^x$,%
       ]
       \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
-        {bench-results/multdiffupto-heap/exp x.csv};
+        {bench-results/multdiffupto-heap/exp-x.csv};
       \addplot[mark=o] table[col sep=comma,x=size,y=AD-diffs] 
-        {bench-results/multdiffupto-heap/exp x.csv};
+        {bench-results/multdiffupto-heap/exp-x.csv};
       \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
-        {bench-results/multdiffupto-heap/exp x.csv};
+        {bench-results/multdiffupto-heap/exp-x.csv};
     \end{axis}
   \end{tikzpicture}
   
@@ -125,9 +125,9 @@ The former is the generic implementation of multivariate tower AD, and the forme
         title=$\sin x e^{y^2}$,%
       ]
       \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
-        {bench-results/multdiffupto-heap/sin x exp y2.csv};
+        {bench-results/multdiffupto-heap/sin-x-exp-y2.csv};
       \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
-        {bench-results/multdiffupto-heap/sin x exp y2.csv};
+        {bench-results/multdiffupto-heap/sin-x-exp-y2.csv};
     \end{axis}
   \end{tikzpicture}
   %
@@ -141,9 +141,9 @@ The former is the generic implementation of multivariate tower AD, and the forme
         title=$\sin x e^{y^2 + z}$,%
       ]
       \addplot[mark=*] table[col sep=comma,x=size,y=AD] 
-        {bench-results/multdiffupto-heap/sin x exp (y2 + z).csv};
+        {bench-results/multdiffupto-heap/sin-x-exp-y2-z.csv};
       \addplot[mark=x] table[col sep=comma,x=size,y=STower] 
-        {bench-results/multdiffupto-heap/sin x exp (y2 + z).csv};
+        {bench-results/multdiffupto-heap/sin-x-exp-y2-z.csv};
     \end{axis}
   \end{tikzpicture}
 
@@ -201,9 +201,9 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           ybar,
         ]
         \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
-          {bench-results/liftWeil-speed/exp x.csv};
+          {bench-results/liftWeil-speed/exp-x.csv};
         \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
-          {bench-results/liftWeil-speed/exp x.csv};
+          {bench-results/liftWeil-speed/exp-x.csv};
       \end{axis}
     \end{tikzpicture}
     \quad%
@@ -219,9 +219,9 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           ybar,
         ]
         \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
-          {bench-results/liftWeil-speed/sin x exp (y2 + z).csv};
+          {bench-results/liftWeil-speed/sin-x-exp-y2-z.csv};
         \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
-          {bench-results/liftWeil-speed/sin x exp (y2 + z).csv};
+          {bench-results/liftWeil-speed/sin-x-exp-y2-z.csv};
       \end{axis}
     \end{tikzpicture}
   
@@ -269,9 +269,9 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           ybar,
         ]
         \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
-          {bench-results/liftWeil-heap/exp x.csv};
+          {bench-results/liftWeil-heap/exp-x.csv};
         \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
-          {bench-results/liftWeil-heap/exp x.csv};
+          {bench-results/liftWeil-heap/exp-x.csv};
       \end{axis}
     \end{tikzpicture}
     \quad%
@@ -287,9 +287,9 @@ In this subsection, we compare the performances of Tower AD applied to Weil alge
           ybar,
         ]
         \addplot[black,fill=white] table[col sep=comma,x=size,y=AD] 
-          {bench-results/liftWeil-heap/sin x exp (y2 + z).csv};
+          {bench-results/liftWeil-heap/sin-x-exp-y2-z.csv};
         \addplot[black,fill=gray] table[col sep=comma,x=size,y=STower] 
-          {bench-results/liftWeil-heap/sin x exp (y2 + z).csv};
+          {bench-results/liftWeil-heap/sin-x-exp-y2-z.csv};
       \end{axis}
     \end{tikzpicture}
   
