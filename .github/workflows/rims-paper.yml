@@ -187,6 +187,7 @@ jobs:
           mkdir -p ${{env.JOBNAME}}-testing
           tar xzf ${{env.JOBNAME}}.tar.gz --directory=${{env.JOBNAME}}-testing
           cd ${{env.JOBNAME}}-testing
+          ls
           pdflatex ${{env.JOBNAME}}.tex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error
 
       - name: Upload a arXiv tarball
