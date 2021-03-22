@@ -15,7 +15,7 @@ For a general discussion on the advantages of using Haskell in computer algebra,
 
 We follow the standard pattern in implementing ADs in Haskell: we use the function overloading to implement operations on types corresponding ADs.
 This strategy is taken, for example, in Karczmarczuk~\cite{Karczmarczuk:2001ww}, Elliott~\cite{Elliott2009-beautiful-differentiation} and implemented in \texttt{ad} package~\cite{Kmett:2010aa}.
-In Haskell, the \hask{Floating} type-class gives an abstraction over floating-point numbers that admit elementary functions as excerpted in \Cref{lst:cls-floating}.
+In Haskell, the \hask{Floating} typeclass (\Cref{lst:cls-floating}) is an abstraction over floating-point numbers that admit elementary function.
 \begin{listing}[tbp]
 \begin{code}
 class Fractional a => Floating a where
