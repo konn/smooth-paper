@@ -191,10 +191,18 @@ jobs:
           grep minted syntax.tex
           pdflatex ${{env.JOBNAME}}.tex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error
 
-      - name: Upload a arXiv tarball
+      - name: Upload an arXiv tarball
         uses: actions/upload-artifact@v2.2.1
         with:
           name: rims-arxiv
           path: ${{env.JOBNAME}}.tar.gz
+          if-no-files-found: error # optional, default is warn
+          retention-days: 90
+
+      - name: Upload an arXiv preview
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: rims-arxiv-preview
+          path: ${{env.JOBNAME}}-testing/${{env.JOBNAME}}.pdf
           if-no-files-found: error # optional, default is warn
           retention-days: 90
