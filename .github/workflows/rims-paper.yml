@@ -184,6 +184,7 @@ jobs:
 
       - name: Checks that generated tarball generates appropriate output without -shell-escape
         run: |
+          mkdir -p ${{env.JOBNAME}}-testing
           tar xzf ${{env.JOBNAME}}.tar.gz --directory=${{env.JOBNAME}}-testing
           cd ${{env.JOBNAME}}-testing
           pdflatex ${{env.JOBNAME}}.tex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error
