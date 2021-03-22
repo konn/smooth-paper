@@ -151,7 +151,7 @@ jobs:
       - name: Modifies latex files so that it generates appropriate cache
         run: |
           cd ${GITHUB_WORKSPACE}/${WORKDIR}
-          sed -i 's/\usepackage{minted}/\\usepackage[finalizecache]{minted}/' syntax.tex
+          sed -i 's/\\usepackage{minted}/\\usepackage[finalizecache]{minted}/' syntax.tex
 
       - name: Typeset it (with pdflatex)
         run: |
@@ -173,7 +173,7 @@ jobs:
       - name: Modifies latex files so that it uses appropriate minted cache
         run: |
           cd ${GITHUB_WORKSPACE}/${WORKDIR}
-          sed -i 's/\usepackage[finalizecache]{minted}/\\usepackage[frozencache]{minted}/' syntax.tex
+          sed -i 's/\\usepackage[finalizecache]{minted}/\\usepackage[frozencache]{minted}/' syntax.tex
 
       - name: Creates tarball
         run: |
