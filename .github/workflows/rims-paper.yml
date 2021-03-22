@@ -147,15 +147,18 @@ jobs:
       - name: Install pygments
         run: |
           apt-get update && apt-get install -y python3-pygments
+
+      - name: Modifies latex files so that it generates appropriate cache
+        run: |
+          cd ${GITHUB_WORKSPACE}/${WORKDIR}
+          sed -i 's/\usepackage{minted}/\usepackage[finalizecache]{minted}/' syntax.tex
+
       - name: Typeset it (with pdflatex)
         run: |
           cd ${GITHUB_WORKSPACE}/${WORKDIR}
           ls
           latexmk -pdf ${JOBNAME}.tex
-      - name: Modifies latex files so that it generates appropriate cache
-        run: |
-          cd ${GITHUB_WORKSPACE}/${WORKDIR}
-          sed -i 's/\usepackage{minted}/\usepackage[finalizecache]{minted}/' syntax.tex
+
       - name: Store latex generated files
         run: |
           cd ${GITHUB_WORKSPACE}/${WORKDIR}

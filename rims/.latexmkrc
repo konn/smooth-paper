@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # $latex = 'xelatex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error -synctex=1';
 # $pdflatex = 'xelatex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error -synctex=1';
-$pdflatex = "lualatex %O -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error -synctex=1 %S";
+$pdflatex = "pdflatex %O -file-line-error -interaction=nonstopmode -halt-on-error -synctex=1 %S";
 $lualatex = "lualatex %O -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error -synctex=1 %S";
 $latex = "lualatex %O -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error -synctex=1 %S";
 $bibtex           = 'pbibtex';
