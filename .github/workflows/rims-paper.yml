@@ -152,6 +152,7 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}/${WORKDIR}
           sed -i 's/\\usepackage{minted}/\\usepackage[finalizecache]{minted}/' syntax.tex
+          sed -i 's/lualatex/pdflatex/g' .latexmkrc
 
       - name: Typeset it (with pdflatex)
         run: |
@@ -180,6 +181,12 @@ jobs:
           rm -rf ${{env.WORKDIR}}/rims-smooth-paper.*
           rm -rf ${{env.WORKDIR}}/*.pdf
           tar czf ${{env.JOBNAME}}.tar.gz --directory=${{env.WORKDIR}} .
+
+      - name: Checks that generated tarball generates appropriate output without -shell-escape
+        run: |
+          tar xzf ${{env.JOBNAME}}.tar.gz --directory=${{env.JOBNAME}}-testing
+          cd ${{env.JOBNAME}}-testing
+          pdflatex ${{env.JOBNAME}}.tex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error
 
       - name: Upload a arXiv tarball
         uses: actions/upload-artifact@v2.2.1
