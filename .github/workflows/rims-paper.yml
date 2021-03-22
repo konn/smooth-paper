@@ -150,8 +150,10 @@ jobs:
 
       - name: Modifies latex files so that it generates appropriate cache
         run: |
+          cp references.bib ${GITHUB_WORKSPACE}/${WORKDIR}
           cd ${GITHUB_WORKSPACE}/${WORKDIR}
           sed -i 's/\\usepackage{minted}/\\usepackage[finalizecache]{minted}/' syntax.tex
+          sed -i 's+\\addbibresource{\.\./+\\addbibresource{+' preamble.tex
           sed -i 's/lualatex/pdflatex/g' .latexmkrc
 
       - name: Typeset it (with pdflatex)
