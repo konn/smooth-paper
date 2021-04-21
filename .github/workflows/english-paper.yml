@@ -24,7 +24,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on:  ubuntu-18.04
-    container: docker://konn/texlive2020-slim:20201227.4
+    container: docker://konn/texlive2020-slim:20210421.1
 
     steps:
       - uses: actions/checkout@v2
