@@ -430,7 +430,6 @@ As indicated by \Cref{thm:univ-partial-duals} and \Cref{lem:higher-infinitesimal
 to compute higher-order derivatives of univariate functions, we can use tensor products of Dual numbers or higher-order infinitesimals.
 
 Let us first compute higher-order derivatives of $\sin(x)$ up to $3$.
-
 First, let's use a tensor product of dual numbers:
 \begin{code}
 d1, d2, d3
@@ -438,48 +437,35 @@ d1, d2, d3
   => Weil (D1 |*| D1 |*| D1) a
 [d1, d2, d3] = map di [0..]
 \end{code}
-
 Here, \hask{Weil w a} represents the type of Weil algebra with its setting given in \hask{w}, \hask{D1} the dual number ideal $I = (X^2)$, and \hask{|*|} the tensor product operator.
 Each $d_i$ corresponds to $i$\textsuperscript{th} infinitesimal.
 
 Next, we calculate higher-order differential coefficients at $x = \frac{\pi}{6}$ up to the third order:
 
-\begin{code}
->>> ( sin (pi/6),  cos (pi/6), 
-     -sin (pi/6), -cos (pi/6))
-( 0.49999999999999994,
-  0.8660254037844387,
- -0.49999999999999994,
- -0.8660254037844387)
+\begin{repl}
+>>> (sin (pi/6),  cos (pi/6), -sin (pi/6), -cos (pi/6))
+( 0.49999999999999994, 0.8660254037844387, -0.49999999999999994,
+  -0.8660254037844387)
 
 >>> sin (pi/6 + d0 + d1 + d2)
--0.8660254037844387 d(0) d(1) d(2) 
-  - 0.49999999999999994 d(0) d(1) 
-  - 0.49999999999999994 d(0) d(2)
-  - 0.49999999999999994 d(1) d(2) 
-  + 0.8660254037844387 d(0) 
-  + 0.8660254037844387 d(1) 
-  + 0.8660254037844387 d(2) 
-  + 0.49999999999999994
-\end{code}
+-0.8660254037844387 d(0) d(1) d(2) - 0.49999999999999994 d(0) d(1) 
+  - 0.49999999999999994 d(0) d(2)  - 0.49999999999999994 d(1) d(2) 
+  + 0.8660254037844387 d(0) + 0.8660254037844387 d(1) 
+  + 0.8660254037844387 d(2) + 0.49999999999999994
+\end{repl}
 
 It is easy to see that terms of degree $i$ has the coefficients $\sin^{(i)}(\pi/6)$.
 Since our implementation is polymorphic, if we apply the same function to the type for symbolic computation, say \hask{Symbolic}, we can reconstruct symbolic differentiation and check that the result is indeed correct symbolically:
 
-\begin{code}
-x :: Weil w Symbolic
-x = injectCoeff (var "x")
+\begin{repl}
+>>> x :: Weil w Symbolic
+>>> x = injectCoeff (var "x")
 
 >>> normalise <$> sin (x + d0+d1+d2)
-((-1.0) * cos x) d(0) d(1) d(2) 
-  + (- (sin x)) d(0) d(1) 
-  + (- (sin x)) d(0) d(2) 
-  + (- (sin x)) d(1) d(2) 
-  + (cos x) d(0) + (cos x) d(1) 
-  + (cos x) d(2) 
-  + (sin x)
-
-\end{code}
+((-1.0) * cos x) d(0) d(1) d(2) + (- (sin x)) d(0) d(1) 
+  + (- (sin x)) d(0) d(2) + (- (sin x)) d(1) d(2) 
+  + (cos x) d(0) + (cos x) d(1) + (cos x) d(2) + (sin x)
+\end{repl}
 
 As stated before, the tensor-of-duals approach blows the number of terms exponentially.
 Let's see how higher infinitesimal works.
@@ -492,50 +478,40 @@ eps = di 0
 Here, \hask{DOrder n} corresponds to an ideal $\R[X]/(X^n)$.
 Note that, according to \Cref{lem:higher-infinitesimal}, to calculate an $n$-th derivative  we have to use $\R[X]/(X^{n+1})$.
 
-\begin{code}
->>> (  sin (pi/6),    cos (pi/6), 
-      -sin (pi/6)/2, -cos (pi/6)/6)
-  (0.49999999999999994,
-   0.8660254037844387,
-   -0.24999999999999997,
-   -0.14433756729740646)
+\begin{repl}
+>>> (sin (pi/6), cos (pi/6), -sin (pi/6)/2, -cos (pi/6)/6)
+( 0.49999999999999994, 0.8660254037844387, 
+ -0.24999999999999997, -0.14433756729740646)
   
->>> sin (pi/6 + eps)
--0.14433756729740646 d(0)^3 
-  - 0.24999999999999997 d(0)^2 
-  + 0.8660254037844387 d(0)
-  + 0.49999999999999994
+>>> sin (pi/6 + eps) 
+-0.14433756729740646 d(0)^3 - 0.24999999999999997 d(0)^2
+  + 0.8660254037844387 d(0) + 0.49999999999999994
 
 >>> normalise <$> sin (x + eps)
-((-1.0) * cos x / 6.0) d(0)^3 
-  + ((- (sin x)) / 2.0) d(0)^2
+((-1.0) * cos x / 6.0) d(0)^3 + ((- (sin x)) / 2.0) d(0)^2
   + (cos x) d(0) + (sin x)
-\end{code}
+\end{repl}
 
 Note that by \Cref{lem:higher-infinitesimal}, each coefficient is not directly a differential coefficient, but divided by $k!$.
 
 Let's see how tensor products of higher Weil algebras can be used to multivariate higher-order partial derivatives.
 Suppose we want to calculate partial derivatives of $f(x, y) = e^{2x} \sin y$ up to $(2, 1)$-th order.
-\begin{code}
+\begin{repl}
 eps1, eps2 :: Weil (DOrder 3 |*| DOrder 2) a
 (eps1, eps2) = (di 0, di 1)
 
 >>> f (2 + eps1) (pi/6 + eps2)
-94.5667698566742 d(0)^2 d(1)
-  + 54.59815003314423 d(0)^2
-  + 94.5667698566742 d(0) d(1)
-  + 54.59815003314423 d(0)
-  + 47.2833849283371 d(1)
-  + 27.299075016572115
+94.5667698566742 d(0)^2 d(1) + 54.59815003314423 d(0)^2
+  + 94.5667698566742 d(0) d(1) + 54.59815003314423 d(0)
+  + 47.2833849283371 d(1) + 27.299075016572115
 
 >>> normalise <$> f (x + eps1) (y + eps2)
 (4.0 * exp (2.0 * x) / 2.0 * cos y) d(0)^2 d(1)
   + (4.0 * exp (2.0 * x) / 2.0 * sin y) d(0)^2
   + (2.0 * exp (2.0 * x) * cos y) d(0) d(1)
   + (2.0 * exp (2.0 * x) * sin y) d(0)
-  + (exp (2.0 * x) * cos y) d(1)
-  + (exp (2.0 * x) * sin y)
-\end{code}
+  + (exp (2.0 * x) * cos y) d(1) + (exp (2.0 * x) * sin y)
+\end{repl}
 One can see that the coefficient of $d(0)^i d(1)^j$ corresponds exactly to the value $D^{(i,j)}f(x,y)/i!j!$.
 In this way, we can freely compose multiple Weil algebra to calculate various partial derivatives modularly.
 
@@ -545,7 +521,7 @@ Here, we demonstrate that we can determine whether the given ideal defines Weil 
 
 First, we see that \textsc{WeilTest} rejects invalid ideals:
 
-\begin{code}
+\begin{repl}
 -- R[X,Y]/(X^3 - Y), not zero-dimensional
 >>> isWeil (toIdeal [x ^3 - y :: Q[x,y]])
 Nothing
@@ -553,11 +529,11 @@ Nothing
 -- R[X]/(X^2 - 1), which is zero-dimensional but not Weil
 >>> isWeil (toIdeal [x - 1 :: Q[x]])
 Nothing
-\end{code}
+\end{repl}
 
 Next, we try to calculate in arbitrary chosen Weil algebra, $W = \R[x,y]/(x^2 - y^3, y^4)$, whose corresponding meaning in AD is unclear but is a Weil algebra as a matter of fact.
 
-\begin{code}
+\begin{repl}
 i :: Ideal (Rational[x,y])
 i = toIdeal [x ^ 2 - y ^ 3, y ^ 4]
 
@@ -572,26 +548,20 @@ Just WeilSettings
   , table = [((0,0),1),((1,3),d(0)^2)
       ,...,((3,4),d(0)^3)]
   }
-\end{code}
+\end{repl}
 
 Let's see what will happen evaluating $\sin(a + d_0 + d_1)$, where $d_0 = [x]_I, d_1 = [y]_I$?
 
-\begin{code}
+\begin{repl}
 >>> withWeil i (sin (pi/4 + di 0 + di 1))
--2.7755575615628914e-17 d(0)^3 
-  - ...
-  + 0.7071067811865476 d(0)
-  + 0.7071067811865476 d(1)
-  + 0.7071067811865475
+-2.7755575615628914e-17 d(0)^3 - ... + 0.7071067811865476 d(0) 
+  + 0.7071067811865476 d(1) + 0.7071067811865475
 
 >>> withWeil i (normalise <$> sin (x + di 0 + di 1))
-((-1.0) * (- (sin x)) / 6.0 
-    + (-1.0) * cos x / 6.0
-  ) d(0)^3
+((-1.0) * (- (sin x)) / 6.0 + (-1.0) * cos x / 6.0) d(0)^3
   + ...
-  + (cos x) d(0)
-  + (cos x) d(1) + (sin x)
-\end{code}
+  + (cos x) d(0) + (cos x) d(1) + (sin x)
+\end{repl}
 
 Carefully analysing each output, one can see that the output coincides with what is given by \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal}.
 
@@ -709,9 +679,7 @@ This can be implemented by a (co-)inductive type as follows:
 \begin{code}
 data STower n a where
   ZS :: !a -> STower 0 a
-  SS :: !a
-     -> STower (n + 1) a
-     -> STower n a
+  SS :: !a -> STower (n + 1) a -> STower n a
      -> STower (n + 1) a
 \end{code}
 
@@ -730,11 +698,9 @@ liftSTower :: forall c n a.
     -- ^ its first-order derivative
   STower n a ->
   STower n a
-liftSTower f df (ZS a)
- = ZS (f a)
-liftSTower f df x@(SS a da dus)
-  = SS (f a) (da * df x) 
-       (liftSTower @c f df dus)
+liftSTower f df (ZS a) = ZS (f a)
+liftSTower f df x@(SS a da dus) 
+  = SS (f a) (da * df x) (liftSTower @c f df dus)
 \end{code}
 
 Here, we use type-level constraint \hask{c} to represent to a subclass of smooth functions, e.g.\ $\hask{c} = \hask{Floating}$ for elementary functions.
@@ -744,11 +710,9 @@ This constraint is used recursively when one implements an actual implementation
 For example, \hask{Floating} instance (for elementary floating point operations) can be written as follows:
 
 \begin{code}
-instance Floating a
-      => Floating (STower n a) where
+instance Floating a => Floating (STower n a) where
   sin = liftSTower @Floating sin cos
-  cos = liftSTower @Floating cos 
-          (negate . sin)
+  cos = liftSTower @Floating cos (negate . sin)
   exp = liftSTower @Floating exp exp
   ...
 \end{code}
@@ -758,11 +722,8 @@ In this way, we can implement Tower AD for a class of smooth function closed und
 More general $n$-ary case of lifting operator is obtained in just the same way:
 
 \begin{code}
-  liftNAry :: forall c n a m.
-  ( c a
-  , forall x k. (KnownNat k, c x)
-        => c (STower k x)
-  ) =>
+liftNAry :: forall c n a m. 
+    ( c a, forall x k. (KnownNat k, c x) => c (STower k x) ) =>
   -- | f, an m-ary smooth function
   (forall x. c x => Vec m x -> x) ->
   -- | partial derivatives of f,
@@ -773,21 +734,17 @@ More general $n$-ary case of lifting operator is obtained in just the same way:
 liftNAry f _ Nil = constSS $ f Nil
 liftNAry f dfs xss =
   case sing @l of
-    Zero ->
-      ZS (f $ constTerm <$> xss)
+    Zero -> ZS (f $ constTerm <$> xss)
     Succ (k :: SNat k) ->
       SS (f $ constTerm <$> xss)
          ( sum
-         $ SV.zipWithSame
-           ( \fi gi ->
-               topDiffed gi
-             * runSmooth fi xss)
-           dfs xss)
-         (liftNAry @c f dfs
-         $ diffOther <$> xss)
+         $ SV.zipWithSame 
+            (\fi gi -> topDiffed gi * runSmooth fi xss)
+           dfs xss
+         )
+         (liftNAry @c f dfs $ diffOther <$> xss)
 
-diffOther :: STower (n + 1) a
-          -> STower n a
+diffOther :: STower (n + 1) a -> STower n a
 diffOther (SS _ _ dus) = dus
 \end{code}
 

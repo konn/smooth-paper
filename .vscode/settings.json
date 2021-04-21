@@ -507,6 +507,14 @@
           "placeholder": "modulus"
         }
       ]
+    },
+    {
+      "name": "lstset",
+      "args": [
+        {
+          "kind": "fixed"
+        }
+      ]
     }
   ]
 }
