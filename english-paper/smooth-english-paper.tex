@@ -55,7 +55,7 @@ Its central building blocks are \emph{Weil algebras}, which can be viewed as the
 Indeed, SIA is a subarea of \emph{Synthetic Differential Geometry} (SDG) initiated by Lawvere~\cite{lawvere1979categorical}, which studies smooth manifolds topos-theoretically, and higher multivariate infinitesimals play crucial roles in building theory of, e.g.\ vector fields, differential forms and tangent spaces.
 The key observation of Lawvere is that manifolds can be classified solely by their smooth function ring $C^\infty(M)$, and both such function rings and Weil algebras are special cases of \emph{$C^\infty$-rings}.
 
-It has been pointed out that AD and SIA have some connection; e.g.\ even Wikipedia article~\cite{Wikipedia:2021aa} mentions the connection between first-order Forward-mode AD with the ring $\R[X]/(X^2)$ of dual numbers.
+It has been pointed out that AD and SIA have some connection; e.g.\ even Wikipedia article~\cite{Wikipedia:2021aa} mentions the connection between first-order Forward-mode AD with the ring $\R[X]/X^2$ of dual numbers.
 However, a precise theoretical description of this correspondence is not well-communicated, and further generalisation of AD in terms of SIA hasn't been discussed in depth.
 
 The present paper aims at filling this gap, giving a unified description of AD in terms of $C^\infty$-rings and Weil algebras.
@@ -196,7 +196,7 @@ In this representation, we have only $(n + 1)$-terms, and hence it results in su
 
 If we duplicate such higher-order infinitesimals as much as needed, one can likewise compute \emph{multivariate} higher-order derivatives all at once, up to some multidegree $\beta$:
 \begin{lemma}
-  Let $I = \left(X_i^{\beta_i + 1}\ \middle|\ i \leq m \right)$, $W = \R[X_1, \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $\beta = {(\beta_i)}_{i \leq m} \in \N^m$.
+  Let $I = \Braket{X_i^{\beta_i + 1}\ |\ i \leq m}$, $W = \R[X_1, \dots, X_m]/I$, and $\varepsilon_i = {[X_i]}_I$ for $\beta = {(\beta_i)}_{i \leq m} \in \N^m$.
   For $f: \R^m \smoothto \R$ and $\boldsymbol{a} = {(a_i)}_{i \leq m} \in \R^m$, we have:
   \[
     W(f)(a_1 + \varepsilon_1, \dots, a_m + \varepsilon_m) =
@@ -539,14 +539,11 @@ i = toIdeal [x ^ 2 - y ^ 3, y ^ 4]
 
 >>> isWeil red
 Just WeilSettings 
-  {weilBasis =
-    [[0,0],[0,1],...,[3,0]]
+  {weilBasis =[[0,0],[0,1], ..., [3,0]]
   , nonZeroVarMaxPowers = [3,3]
   , weilMonomDic = 
-    [([0,2],[0,0,0,1,0,0,0,0]),
-      ...,([1,3],[0,0,0,0,0,0,0,1])]
-  , table = [((0,0),1),((1,3),d(0)^2)
-      ,...,((3,4),d(0)^3)]
+      [([0,2],[0,0,0,1,0,0,0,0]), ..., ([1,3],[0,0,0,0,0,0,0,1])]
+  , table = [((0,0),1),((1,3),d(0)^2), ..., ((3,4),d(0)^3)]
   }
 \end{repl}
 
@@ -559,8 +556,7 @@ Let's see what will happen evaluating $\sin(a + d_0 + d_1)$, where $d_0 = [x]_I,
 
 >>> withWeil i (normalise <$> sin (x + di 0 + di 1))
 ((-1.0) * (- (sin x)) / 6.0 + (-1.0) * cos x / 6.0) d(0)^3
-  + ...
-  + (cos x) d(0) + (cos x) d(1) + (sin x)
+  + ... + (cos x) d(0) + (cos x) d(1) + (sin x)
 \end{repl}
 
 Carefully analysing each output, one can see that the output coincides with what is given by \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal}.
