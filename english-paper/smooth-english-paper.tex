@@ -37,13 +37,13 @@
   The algorithms in the present paper can also be used for a pedagogical purpose in learning and studying smooth infinitesimal analysis as well.
 \end{abstract}
 
-\keywords{automatic differentiation, %
-  smooth infinitesimal analysis, %
-  Weil algebras,%
-  smooth algebras, $C^\infty$-rings, %
-  symbolic-numeric algorithms,
-  symbolic differentiation, %
-  Gr\"{o}bner basis, zero-dimensional ideals}
+\keywords{automatic differentiation \and %
+  smooth infinitesimal analysis \and %
+  Weil algebras\and %
+  smooth algebras\and  $C^\infty$-rings\and  %
+  symbolic-numeric algorithms\and 
+  symbolic differentiation\and  %
+  Gr\"{o}bner basis\and zero-dimensional ideals}
 
 \section{Introduction}\label{sec:intro}
 \sloppy
@@ -158,7 +158,7 @@ Letting $f: \R \smoothto \R$ be a univariate smooth function, then we can derive
   &\quad&(\text{by \Cref{thm:series-is-smooth}})\\
   &&=\:&f(a) + b f'(a) X + \cdots\\
   &&\xrightarrow{X \mapsto d}\:&f(a) + bf'(a) d,\\
-  &\therefore&& \R[d](f)(a + bd) = f(a) + b f'(a).
+  &\therefore&& \R[d](f)(a + bd) = f(a) + b f'(a) d.
   && (\text{by \Cref{lem:quot-ring-ideal}}) \tag{\ensuremath{\ast}}
   \label{eqn:dual-smooth}
 \end{alignat*}
@@ -181,7 +181,7 @@ This intuition can be expressed by duplicating the number of the basis of dual n
 The above can be proven by an easy induction.
 
 However, as one can easily see, terms in $\Rseries/\braket{X_i^2}_i$ can grow exponentially and include duplicated coefficients.
-How could we reduce such duplication and save space consumption? ---This is where general Weil algebras beyond (multivariate) dual numbers can play roles.
+How could we reduce such duplication and save space consumption? ---This is where general Weil algebras beyond (multivariate) dual numbers can play a role.
 We can get derivatives in more succinct representation with \emph{higher infinitesimal} beyond dual numbers:
 
 \begin{lemma}\label{lem:higher-infinitesimal}
@@ -208,10 +208,10 @@ If we duplicate such higher-order infinitesimals as much as needed, one can like
 Note that the formal power series ring $\Rseries$ can be viewed as the inverse limit of $\R[\X]/(\X^\beta)$'s.
 In other words, if we take a limit $\beta_i \to \infty$, we can compute any higher derivative up to any finite orders; this is exactly what \emph{Tower-mode} AD aims at, modulo factor $\frac{1}{\beta!}$.
 
-In this way, we can view AD as a technique to compute higher derivatives simultaneously by partially implementing certain $C^\infty$-ring\footnote{Such implementation is inherently a partial approximation: there are $2^{\aleph_0}$-many smooth functions, but there are only countably many computable (floating) functions.}.
+In this way, we can view AD as a technique to compute higher derivatives simultaneously by partially implementing a certain $C^\infty$-ring\footnote{Such implementation is inherently a partial approximation: there are $2^{\aleph_0}$-many smooth functions, but there are only countably many computable (floating) functions.}.
 Forward-mode AD (of first-order) computes the $C^\infty$-structure of the dual number ring $\R[d]$; Tower-mode AD computes that of the formal power series ring $\Rseries$ (modulo reciprocal factorial).
 
-So far, we have used Weil algebra of form $\Rseries/I$.
+So far, we have used a Weil algebra of form $\Rseries/I$.
 So, do we need to define new ideals by hand whenever one wants to treat multiple variables?
 The answer is no:
 
@@ -225,7 +225,7 @@ The answer is no:
   where $\otimes_\R$ is a tensor product of $C^\infty$-rings.
 \end{lemma}
 Thanks to this lemma, we don't have to define $I$ by hand every time, but can take tensor products to compose predefined Weil algebras to compute multivariate and higher-order derivatives.
-Examples of such calculations will be present in \Cref{sec:examples}.
+Examples of such calculations will be presented in \Cref{sec:examples}.
 
 \section{Algorithms}\label{sec:alg}
 In this section, we will present the main results of this paper: concrete algorithms to compute the $C^\infty$-structure of arbitrary Weil algebra and their tensor products.
@@ -234,11 +234,11 @@ For examples of applications of the algorithm presented here, the reader can ski
 \subsection{Computing $C^\infty$-structure of Weil algebra}
 \label{sec:general-weil-algs}
 Let's start with algorithms to compute the $C^\infty$-structure of a general Weil algebra.
-Roughly speaking, the algorithm can be divided into threefold:
+Roughly speaking, the algorithm is threefold:
 
 \begin{enumerate}
   \item A procedure deciding Weil-ness of an ideal and returning data required to compute the $C^\infty$-structure (\textsc{WeilTest}, \Cref{alg:weil-test}),
-  \item A procedure to compute the lifting  $W(f): W^m \to W$ to Weil albgebra $W$ from $\Rseries(f)$ (\textsc{LiftWeil}, \Cref{alg:smooth-weil}), and
+  \item A procedure to compute the lifting  $W(f): W^m \to W$ to a Weil algebra $W$ from $\Rseries(f)$ (\textsc{LiftWeil}, \Cref{alg:smooth-weil}), and
   \item A procedure to lift smooth map $f: \R^m \to \R$ to the $n$-variate formal power series ring $\Rseries$ (\textsc{LiftSeries}, \Cref{lift-series}).\label{step:lift-series}
 \end{enumerate}
 
@@ -261,7 +261,7 @@ The latter two data, $\vec{k}$ and $\NonVan_W$, are essential in computing the $
 In theory, \ref{item:nonvan} is unnecessary if one stores a Gr\"{o}bner basis of $I$;
 but since normal form calculation modulo $G$ can take much time in some case, we don't store $G$ itself and use the precalculated data $\NonVan$.
 It might be desirable to calculate $\NonVan_W$ as lazily as possible.
-Since it involves Gr\"{o}bner basis computation it is more desirable to delay it as later as possible and do in an on-demand manner.
+Since it involves Gr\"{o}bner basis computation it is more desirable to delay it as much as possible and do in an on-demand manner.
 
 With this definition, one can decide Weilness and compute their settings:
 
@@ -301,9 +301,9 @@ Return (@$\vec{\boldsymbol{b}}, M, \vec{k}, \NonVan_W$@)
   But, again, this is just a variation of radical calculation algorithm for zero-dimensional ideals.
   Indeed, since each $\R[X_i]$ is a PID, we have $X_i^k \in I \cap R[X_i]$ iff $p_i \divs X_i^k$, hence $p_i$ is a monomial iff $X_i$ is nilpotent in $W$.
 \end{proof}
-Now that we have the basis and multiplication table in handy, we can calculate the ordinary algebraic operations just by the standard means.
+Now that we have the basis and multiplication table at hand, we can calculate the ordinary algebraic operations just by the standard means.
 
-With upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\Rseries$:
+With upper bounds $\vec k$ of powers and representations $\NonVan_W$ of non-vanishing monomials, we can now compute the $C^\infty$-structure of an arbitrary Weil algebra, when given a lifting of smooth mapping $f$ to $\Rseries$:
 
 \begin{algorithm}[\textsc{LiftWeil}]\label{alg:smooth-weil}
   \hfill\vspace{-.25em}
@@ -327,10 +327,10 @@ Return @$\boldsymbol{v}$@
 
 The termination and validity of \Cref{alg:smooth-weil} are clear.
 
-Now that we can compute the $\R$-algebraic and $C^\infty$-structure of a Weil algebra solely from its Weil setting, one can hard-code pre-calculated Weil settings for known typical Weil algebras, such as the dual number ring or higher infinitesimal rings of form $\R[X]/(X^{n+1})$, to reduce computational overheads.
+Now that we can compute the $\R$-algebraic and $C^\infty$-structure of a Weil algebra solely from its Weil setting, one can hard-code pre-calculated Weil settings for known typical Weil algebras, such as the dual number ring or higher infinitesimal rings of the form $\R[X]/(X^{n+1})$, to reduce computational overheads.
 
 \subsubsection{Computing the $C^\infty$-structure of $\Rseries$}\label{sec:power-series-lifting}
-So it remains to compute $C^\infty$-structure of $\Rseries$.
+So it remains to compute the $C^\infty$-structure of $\Rseries$.
 Thanks to \Cref{thm:series-is-smooth}, we know the precise definition of $C^\infty$-lifting to $\Rseries$:
 \[
   \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}).
@@ -343,7 +343,7 @@ Both Tower-mode AD and formal power series can be represented as a formal power 
 The difference is the interpretation of coefficients in a given series.
 On one hand, a coefficient of $\X^\alpha$ in Tower AD is interpreted as the $\alpha$\textsuperscript{th} partial differential coefficient $D^\alpha f(\boldsymbol{a})$, where $\boldsymbol{a} = (g_1(0), \dots, g_m(0))$.
 On the other hand, in $\Rseries$ it is interpreted as $\frac{D^\alpha f(\boldsymbol{a})}{\alpha!}$.
-To avoid the confusion, we adapt the following convension: Tower-mode AD is represented as a function from monomials $\X^\alpha$ to coefficient $\R$ in what follows, whilst $\Rseries$ as-is.
+To avoid the confusion, we adopt the following convension: Tower-mode AD is represented as a function from monomials $\X^\alpha$ to coefficient $\R$ in what follows, whilst $\Rseries$ as-is.
 Note that this is purely for notational and descriptional distinctions, and does not indicate any essential difference.
 
 With this distinction, we use the following notation and transformation:
@@ -390,7 +390,7 @@ Here, we give a simple procedure to compute Weil settings of the tensor product.
 \begin{description}
   \item[Input] Weil settings of two Weil algebras $W_1, W_2$,
   with $\set{\boldsymbol{b}_1^i, \dots, \boldsymbol{b}_{\ell_i}^i}$ a basis,
-  $(k^i_1, \dots, k^i_{n_i})$ a upper bounds and $M_i$ a multiprication table for each $W_i$.
+  $(k^i_1, \dots, k^i_{n_i})$ an upper bounds and $M_i$ a multiplication table for each $W_i$.
   \item[Output] Weil settings of $W_1 \otimes_\R W_2$.
   \item[Procedure] {\upshape \textsc{WeilTensor}}
 \end{description}
@@ -440,9 +440,9 @@ d1, d2, d3
 \end{code}
 
 Here, \hask{Weil w a} represents the type of Weil algebra with its setting given in \hask{w}, \hask{D1} the dual number ideal $I = (X^2)$, and \hask{|*|} the tensor product operator.
-Each $d_i$ corresnponds to $i$\textsuperscript{th} infinitesimal.
+Each $d_i$ corresponds to $i$\textsuperscript{th} infinitesimal.
 
-OK, then let's calculate higher-order differntial coefficients at $x = \frac{\pi}{6}$ up to the third order:
+Next, we calculate higher-order differential coefficients at $x = \frac{\pi}{6}$ up to the third order:
 
 \begin{code}
 >>> ( sin (pi/6),  cos (pi/6), 
@@ -463,7 +463,7 @@ OK, then let's calculate higher-order differntial coefficients at $x = \frac{\pi
   + 0.49999999999999994
 \end{code}
 
-It is easy to see that terms of degree $i$ has coefficients $\sin^{(i)}(\pi/6)$.
+It is easy to see that terms of degree $i$ has the coefficients $\sin^{(i)}(\pi/6)$.
 Since our implementation is polymorphic, if we apply the same function to the type for symbolic computation, say \hask{Symbolic}, we can reconstruct symbolic differentiation and check that the result is indeed correct symbolically:
 
 \begin{code}
@@ -490,7 +490,7 @@ eps = di 0
 \end{code}
 
 Here, \hask{DOrder n} corresponds to an ideal $\R[X]/(X^n)$.
-Note that, according to \Cref{lem:higher-infinitesimal}, to calculate $n$-th derivative  we have to use $\R[X]/(X^{n+1})$.
+Note that, according to \Cref{lem:higher-infinitesimal}, to calculate an $n$-th derivative  we have to use $\R[X]/(X^{n+1})$.
 
 \begin{code}
 >>> (  sin (pi/6),    cos (pi/6), 
@@ -514,8 +514,8 @@ Note that, according to \Cref{lem:higher-infinitesimal}, to calculate $n$-th der
 
 Note that by \Cref{lem:higher-infinitesimal}, each coefficient is not directly a differential coefficient, but divided by $k!$.
 
-Let's see how we can use tensor products of higher Weil algebras can be used to multivariate higher-order partial derivatives.
-Suppose we want to calculate partial derivatives of $f(x, y) = e^{2x} \sin y$ up to $(2, 1)$-th.
+Let's see how tensor products of higher Weil algebras can be used to multivariate higher-order partial derivatives.
+Suppose we want to calculate partial derivatives of $f(x, y) = e^{2x} \sin y$ up to $(2, 1)$-th order.
 \begin{code}
 eps1, eps2 :: Weil (DOrder 3 |*| DOrder 2) a
 (eps1, eps2) = (di 0, di 1)
@@ -540,7 +540,7 @@ One can see that the coefficient of $d(0)^i d(1)^j$ corresponds exactly to the v
 In this way, we can freely compose multiple Weil algebra to calculate various partial derivatives modularly.
 
 \subsection{Computation in General Weil Algebra}
-All examples so far is concerning the predefined, specific form of Weil algebra.
+All examples so far were about the predefined, specific form of a Weil algebra.
 Here, we demonstrate that we can determine whether the given ideal defines Weil algebras with \Cref{alg:weil-test}, and do some actual calculation in arbitrary Weil algebra.
 
 First, we see that \textsc{WeilTest} rejects invalid ideals:
@@ -574,7 +574,7 @@ Just WeilSettings
   }
 \end{code}
 
-Let's see what will happen evaluating $sin(a + d_0 + d_1)$, where $d_0 = [x]_I, d_1 = [y]_I$?
+Let's see what will happen evaluating $\sin(a + d_0 + d_1)$, where $d_0 = [x]_I, d_1 = [y]_I$?
 
 \begin{code}
 >>> withWeil i (sin (pi/4 + di 0 + di 1))
@@ -636,11 +636,11 @@ We argue that our method pursues other direction of formulations; we treat highe
 
 \subsection{Future Works}
 In SDG, $C^\infty$-ring and higher infinitesimals are used as fundamental building blocks to formulate manifolds, vector fields, differential forms, and so on.
-Hence, if one can extend our method to treat general $C^\infty$-ring $C^\infty(M)$ of real-valued smooth functions on $M$, it can open up a new door to formulate differential geometry on computer.
+Hence, if one can extend our method to treat a general $C^\infty$-ring $C^\infty(M)$ of real-valued smooth functions on $M$, it can open up a new door to formulate differential geometry on a computer.
 One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented} as a $C^\infty$-ring, it is NOT finitely \emph{generated} as an $\R$-algebra, but $2^{\aleph_0}$-generated, by its very nature.
 Hence, it seems impossible to compute $C^\infty(M)$ in purely symbolic and direct way; we need some workarounds or distinct formulations to overcome such obstacles.
 
-As for connections with AD, there are also many rooms for further exploration.
+As for connections with AD, there is also plenty of room for further exploration.
 There are so many ``modes'' other than Forward- and Tower-modes in AD: for examples, Reverse, Mixed, etc.\ amongst others.
 From the point of view of Weil algebras, they are just implementation details.
 But such details matter much when one takes the efficiency seriously.
