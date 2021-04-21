@@ -1,5 +1,4 @@
-\documentclass[%
-  sigconf,authorversion,screen]{acmart}
+\documentclass[authorversion,screen]{llncs}
 \usepackage{amsmath}
 \input{preamble}
 
@@ -7,18 +6,11 @@
 
 \title[Automatic Differentiation With Higher Infinitesimals]{Automatic Differentiation With Higher Infinitesimals, or Computational Smooth Infinitesimal Analysis in Weil Algebra}
 
-\author{Hiromi Ishii}
+\author{Hiromi Ishii\inst{1}}
 \email{h-ishii@math.tsukuba.ac.jp}
-\affiliation{%
-  \institution{DeepFlow, Inc.}
-  \streetaddress{3-16-40}
-  \city{Fujimi-shi Tsuruse nishi}
-  \state{Saitama prefecture}
-  \country{Japan}
-  \postcode{354-0026}
-}
+\institute{DeepFlow, Inc.}
 
-\renewcommand{\shortauthors}{Hiromi ISHII}
+\authorrunning{Hiromi ISHII}
 
 \begin{abstract}
   \frenchspacing
@@ -31,36 +23,6 @@
   The algorithms in the present paper can also be used for a pedagogical purpose in learning and studying smooth infinitesimal analysis as well.
 \end{abstract}
 
-\begin{CCSXML}
-<ccs2012>
-    <concept>
-        <concept_id>10010147.10010148.10010149.10010154</concept_id>
-        <concept_desc>Computing methodologies~Hybrid symbolic-numeric methods</concept_desc>
-        <concept_significance>500</concept_significance>
-        </concept>
-    <concept>
-        <concept_id>10010147.10010148.10010149.10010150</concept_id>
-        <concept_desc>Computing methodologies~Algebraic algorithms</concept_desc>
-        <concept_significance>500</concept_significance>
-        </concept>
-    <concept>
-        <concept_id>10010147.10010148.10010149.10010152</concept_id>
-        <concept_desc>Computing methodologies~Symbolic calculus algorithms</concept_desc>
-        <concept_significance>500</concept_significance>
-        </concept>
-    <concept>
-        <concept_id>10002950.10003714.10003732.10003734</concept_id>
-        <concept_desc>Mathematics of computing~Differential calculus</concept_desc>
-        <concept_significance>500</concept_significance>
-        </concept>
-  </ccs2012>
-\end{CCSXML}
-
-\ccsdesc[500]{Computing methodologies~Hybrid symbolic-numeric methods}
-\ccsdesc[500]{Computing methodologies~Algebraic algorithms}
-\ccsdesc[500]{Computing methodologies~Symbolic calculus algorithms}
-\ccsdesc[500]{Mathematics of computing~Differential calculus}
-  
 \keywords{automatic differentiation, %
   smooth infinitesimal analysis, %
   Weil algebras,%
@@ -85,7 +47,7 @@ It has been pointed out that AD and SIA have some connection; e.g.\ even Wikiped
 However, a precise theoretical description of this correspondence is not well-communicated, and further generalisation of AD in terms of SIA hasn't been discussed in depth.
 
 The present paper aims at filling this gap, giving a unified description of AD in terms of $C^\infty$-rings and Weil algebras.
-Furthermore, our main contribution is algorithms to compute $C^\infty$-ring structure of general Weil algebra.
+Furthermore, our main contribution is algorithms to compute the $C^\infty$-ring structure of a general Weil algebra.
 This enables automatic differentiation done in \emph{arbitrary} Weil algebras other than dual numbers, and, together with tensor products, lets us compute higher-order multivariate partial derivatives in a modular and composable manner, packed as Weil algebra.
 Such algorithms can also be used to learn and study the theory of SIA and SDG.
 
@@ -93,7 +55,7 @@ This paper is organised as follows.
 In \Cref{sec:prel}, we review the basic concepts and facts on $C^\infty$-rings and Weil algebras.
 Subsequently, we discuss the connection between Forward-mode automatic differentiation and Weil algebras in \Cref{sec:ad-and-weils}.
 There, we see how the notion of Weil algebra and $C^\infty$-ring can be applied to treat higher-order partial ADs in a unified and general setting.
-Then, in \Cref{sec:alg}, we give algorithms to compute $C^\infty$-ring structure of arbitrary Weil algebra. These algorithms enable us to do \emph{automatic differentiation with higher infinitesimals}, or \emph{computational smooth infinitesimal analysis}.
+Then, in \Cref{sec:alg}, we give algorithms to compute the $C^\infty$-ring structure of an arbitrary Weil algebra. These algorithms enable us to do \emph{automatic differentiation with higher infinitesimals}, or \emph{computational smooth infinitesimal analysis}.
 We give some small examples in \Cref{sec:examples}, using our proof-of-concept implementation~\cite{Ishii:2020aa} in Haskell.
 Finally, we discuss related and possible future works and conclude in \Cref{sec:concl}.
 
@@ -108,12 +70,12 @@ For theoretical detail, we refer readers to Moerdijk--Reyes~\cite[Chapters I and
   For a map $f: \R^m \to \R$, we call $A(f): A^m \to A$ the \emph{$C^\infty$-lifting} of $f$ to $A$.
 \end{definition}
 
-Intuitively, $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary operations $A(f): A^m \to A$ respecting composition, projection and product for all smooth map $f: \R^m \to \R$.
+Intuitively, a $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary operations $A(f): A^m \to A$ respecting composition, projection and product for all smooth maps $f: \R^m \to \R$.
 
 One typical example of a $C^\infty$-ring is a formal power series ring:
 
 \begin{theorem}[Lawvere]\label{thm:series-is-smooth}
-  The ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finite variables has the $C^\infty$-ring structure via Taylor expansion at $\boldsymbol{0}$.
+  The ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finitely many variables has the $C^\infty$-ring structure via Taylor expansion at $\boldsymbol{0}$.
   In particular, lifting of a smooth map $f: \R^m \to \R$ is given by:
   \[
     \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
@@ -121,21 +83,21 @@ One typical example of a $C^\infty$-ring is a formal power series ring:
   where $\alpha! = \alpha_1 ! \dots \alpha_n !$ is the multi-index factorial and $D^\alpha$ is the partial differential operator to degree $\alpha$.
 \end{theorem}
 
-$C^\infty$-rings of our central interest in this paper is \emph{Weil algebras}, and has a deep connection with $\Rseries$:
+The $C^\infty$-rings of central interest in this paper are \emph{Weil algebras}, and has a deep connection with $\Rseries$:
 
 \begin{definition}[Weil algebra]
   A \emph{Weil algebra} $W$ is an algebra of form $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
 \end{definition}
-It follows that Weil algebra $W$ is finite-dimensional as a $R$-linear space and hence $I$ is a \emph{zero-dimensional} ideal.
-Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
-In what follows, we identify an element $\boldsymbol{u} \in W$ of $k$-dimensional Weil algebra $W$ with a $k$-dimensional vector $\boldsymbol{u} = (u_1, \dots, u_k) \in \R^k$ of reals.
+It follows that a Weil algebra $W$ is finite-dimensional as a $\R$-linear space and hence $I$ is a \emph{zero-dimensional} ideal.
+A Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
+In what follows, we identify an element $\boldsymbol{u} \in W$ of a $k$-dimensional Weil algebra $W$ with a $k$-dimensional vector $\boldsymbol{u} = (u_1, \dots, u_k) \in \R^k$ of reals.
 
 Although it is unclear from the definition, Weil algebras have the canonical $C^\infty$-structure.
 First note that, if $I$ is zero-dimensional, we have $\R[\X]/I \simeq \R\llbracket \X \rrbracket /I$.
-Hence, in particular, Weil algebra $W$ can also be regarded as a quotient ring of the formal power series by zero-dimensional ideal.
+Hence, in particular, any Weil algebra $W$ can also be regarded as a quotient ring of the formal power series by zero-dimensional ideal.
 Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that any Weil algebra $W$ has the canonical $C^\infty$-ring structure:
 
-\begin{lemma}\label{lem:quot-ring-ideal}
+\begin{lemma}[Lawvere]\label{lem:quot-ring-ideal}
   For any $C^\infty$-ring $A$ and a ring-theoretical ideal $I \subseteq A$, the quotient ring $A/I$ again has the canonical $C^\infty$-ring structure.
   In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\Rseries$.
 \end{lemma}
@@ -149,7 +111,7 @@ It can be implemented by ad-hoc polymorphism (or equivalently, function overload
 For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beautiful-differentiation} and Kmett's \texttt{ad} package~\cite{Kmett:2010aa}.
 
 Briefly speaking, in Forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
-Then, when evaluating composite functions, one uses Chain Rule for implementation:
+Then, when evaluating composite functions, one uses the Chain Rule for implementation:
 \[
   \frac{\mathrm{d}}{\mathrm{d}x}(g \circ f)(x) = f'(x) g'(f(x)).
 \]
@@ -162,21 +124,21 @@ The following definitions of functions on dual numbers illustrate the idea:
   \cos(a_1 + b_1 d) &= \cos(a_1) - b_1 \sin(a_1) d
 \end{align*}
 
-The first two equations for addition and multiplication suggest us to regard operations on Forward-mode AD as extending the algebraic structure of $\R[d] = \R[X]/(X^2)$.
+The first two equations for addition and multiplication suggest us to regard operations on Forward-mode AD as extending the algebraic structure of $\R[d] = \R[X]/X^2$.
 Indeed, first-order Forward-mode AD can be identified with the arithmetic on \emph{dual numbers}:
 \begin{definition}
-  The \emph{dual number ring} is a Weil algebra $\R[X]/(X^2)$.
-  We often write $d = {[X]}_I \in \R[d]$ and $\R[d] \coloneq \R[X]/(X^2)$.
+  The \emph{dual number ring} is a Weil algebra $\R[X]/{X^2}$.
+  We often write $d = {[X]}_I \in \R[d]$ and $\R[d] \coloneq \R[X]/{X^2}$.
 
   We use an analogous notation for multivariate versions:
   
   \[
-    \R[d_1, \dots, d_k] \coloneq \R[\X]/(X_1^2, \dots, X_k^2).
+    \R[d_1, \dots, d_k] \coloneq \R[\X]/\braket{X_1^2, \dots, X_k^2}.
   \]
 \end{definition}
 
 Since the dual number ring $\R[d]$ is a Weil algebra, one can apply \Cref{thm:series-is-smooth} and \Cref{lem:quot-ring-ideal} to compute its $C^\infty$-structure.
-Letting $f: \R \smoothto \R$ a univariate smooth function, then we can derive $C^\infty$-lifting $\R[d](f): \R[d] \to \R[d]$ as follows:
+Letting $f: \R \smoothto \R$ be a univariate smooth function, then we can derive the $C^\infty$-lifting $\R[d](f): \R[d] \to \R[d]$ as follows:
 
 \begin{alignat*}{3}
   &&&\R\llbracket{}X\rrbracket(f)(a + bX) \\
@@ -206,12 +168,12 @@ This intuition can be expressed by duplicating the number of the basis of dual n
 
 The above can be proven by an easy induction.
 
-However, as one can easily see, terms in $\Rseries/(X_i^2)$ can grow exponentially and include duplicated coefficients.
+However, as one can easily see, terms in $\Rseries/\braket{X_i^2}_i$ can grow exponentially and include duplicated coefficients.
 How could we reduce such duplication and save space consumption? ---This is where general Weil algebras beyond (multivariate) dual numbers can play roles.
 We can get derivatives in more succinct representation with \emph{higher infinitesimal} beyond dual numbers:
 
 \begin{lemma}\label{lem:higher-infinitesimal}
-  Let $I = (X^{n + 1}), W = \R[X]/I$ and $\varepsilon = {[X]}_I$ for $n \in \N$.
+  Let $I = \braket{X^{n + 1}}, W = \R[X]/I$ and $\varepsilon = {[X]}_I$ for $n \in \N$.
   Given $f: \R \smoothto \R$ and $a \in \R$, we have:
   \[
     W(f)(a + \varepsilon)
@@ -263,7 +225,7 @@ Let's start with algorithms to compute the $C^\infty$-structure of a general Wei
 Roughly speaking, the algorithm can be divided into threefold:
 
 \begin{enumerate}
-  \item A procedure deciding Weil-ness of an ideal and returning data required to compute $C^\infty$-structure (\textsc{WeilTest}, \Cref{alg:weil-test}),
+  \item A procedure deciding Weil-ness of an ideal and returning data required to compute the $C^\infty$-structure (\textsc{WeilTest}, \Cref{alg:weil-test}),
   \item A procedure to compute the lifting  $W(f): W^m \to W$ to Weil albgebra $W$ from $\Rseries(f)$ (\textsc{LiftWeil}, \Cref{alg:smooth-weil}), and
   \item A procedure to lift smooth map $f: \R^m \to \R$ to the $n$-variate formal power series ring $\Rseries$ (\textsc{LiftSeries}, \Cref{lift-series}).\label{step:lift-series}
 \end{enumerate}
@@ -674,12 +636,11 @@ It might be desirable to extend our formulation to handle such differences in im
 For such direction, Elliot~\cite{Elliott:2018aa} proposes the categorical formulation.
 Exploring how that approach fits with our algebraic framework could be interesting future work, and perhaps also shed a light on the way to realise the aforementioned computational SDG.
 
-\begin{acks}
+\section*{Acknowledgments}
 The author is grateful to Prof.\ Akira Terui, for encouraging to write this paper and many helpful feedbacks.
 
 This work was supported by the Research Institute for Mathematical Sciences,
 an International Joint Usage/Research Center located in Kyoto University.
-\end{acks}
 
 \appendix
 \section{Succinct Multivariate Lazy Tower AD}\label{sec:appendix}
@@ -822,8 +783,7 @@ diffOther :: STower (n + 1) a
 diffOther (SS _ _ dus) = dus
 \end{code}
 
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{../references}
+\printbibliography
 
 \end{document}
 \endinput

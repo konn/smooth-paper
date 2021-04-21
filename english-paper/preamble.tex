@@ -2,27 +2,19 @@
 \usepackage{cleveref}
 \usepackage{braket}
 \usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\usepackage{stmaryrd}
 \usetikzlibrary{matrix,decorations,arrows,calc,trees}
+\addbibresource{../references.bib}
 \usepackage{tcolorbox}
 \tcbuselibrary{listings,xparse}
 \usepackage[draft]{fixme}
 \usepackage{enumitem}
 
 \makeatletter
-\newtheoremstyle{acmplainbreak}%
-  {.5\baselineskip\@plus.2\baselineskip%
-    \@minus.2\baselineskip}% space above
-  {.5\baselineskip\@plus.2\baselineskip%
-    \@minus.2\baselineskip}% space below
-  {\@acmplainbodyfont}% body font
-  {\@acmplainindent}% indent amount
-  {\@acmplainheadfont}% head font
-  {.}% punctuation after head
-  {.5em}% spacing after head
-  {\thmname{#1}\thmnumber{ #2}\thmnote{ {\@acmplainnotefont(#3)}}}
-\makeatother
 
-\theoremstyle{acmplainbreak}
 \newtheorem{algorithm}{Algorithm}
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
@@ -31,8 +23,8 @@
     \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
 
 % \setcopyright{acmcopyright}
-\copyrightyear{2021}
-\acmYear{2021}
+% \copyrightyear{2021}
+% \acmYear{2021}
 % \acmDOI{10.1145/1122445.1122456}
 
 % \acmConference[Woodstock '18]{Woodstock '18: ACM Symposium on Neural
