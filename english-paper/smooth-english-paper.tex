@@ -432,9 +432,7 @@ to compute higher-order derivatives of univariate functions, we can use tensor p
 Let us first compute higher-order derivatives of $\sin(x)$ up to $3$.
 First, let's use a tensor product of dual numbers:
 \begin{code}
-d1, d2, d3
-  :: Floating a
-  => Weil (D1 |*| D1 |*| D1) a
+d1, d2, d3 :: Floating a => Weil (D1 |*| D1 |*| D1) a
 [d1, d2, d3] = map di [0..]
 \end{code}
 Here, \hask{Weil w a} represents the type of Weil algebra with its setting given in \hask{w}, \hask{D1} the dual number ideal $I = (X^2)$, and \hask{|*|} the tensor product operator.
