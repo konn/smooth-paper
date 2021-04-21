@@ -1,17 +1,31 @@
-\documentclass[authorversion,screen]{llncs}
+\documentclass[runningheads]{llncs}
 \usepackage{amsmath}
 \input{preamble}
 
 \begin{document}
-
-\title[Automatic Differentiation With Higher Infinitesimals]{Automatic Differentiation With Higher Infinitesimals, or Computational Smooth Infinitesimal Analysis in Weil Algebra}
-
+% \title{}
+% \author{Hiromi Ishii}
+% \authorrunning{H. Ishii}
+% \institute{DeepFlow, Inc.}
+% \email{h-ishii@math.tsukuba.ac.jp}
+% \maketitle
+%
+\title{Automatic Differentiation With Higher Infinitesimals, or Computational Smooth Infinitesimal Analysis in Weil Algebra\thanks{This work was supported by the Research Institute for Mathematical Sciences, an International Joint Usage/Research Center located in Kyoto University.
+}}
+%
+\titlerunning{Automatic Differentiation With Higher Infinitesimals}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
 \author{Hiromi Ishii\inst{1}}
-\email{h-ishii@math.tsukuba.ac.jp}
-\institute{DeepFlow, Inc.}
-
-\authorrunning{Hiromi ISHII}
-
+%
+\authorrunning{H. Ishii}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{DeepFlow, Inc., 3-16-40 Fujimi-shi Tsuruse nishi 354-0026, Japan}
+%
+\maketitle              % typeset the header of the contribution
 \begin{abstract}
   \frenchspacing
   We propose an algorithm to compute the $C^\infty$-ring structure of arbitrary Weil algebra.
@@ -30,8 +44,6 @@
   symbolic-numeric algorithms,
   symbolic differentiation, %
   Gr\"{o}bner basis, zero-dimensional ideals}
-
-\maketitle
 
 \section{Introduction}\label{sec:intro}
 \sloppy
@@ -638,10 +650,6 @@ Exploring how that approach fits with our algebraic framework could be interesti
 
 \section*{Acknowledgments}
 The author is grateful to Prof.\ Akira Terui, for encouraging to write this paper and many helpful feedbacks.
-
-This work was supported by the Research Institute for Mathematical Sciences,
-an International Joint Usage/Research Center located in Kyoto University.
-
 \appendix
 \section{Succinct Multivariate Lazy Tower AD}\label{sec:appendix}
 For completeness, we include the referential implementation of the Tower-mode AD in Haskell, which can be used in \Cref{alg:smooth-weil}.
