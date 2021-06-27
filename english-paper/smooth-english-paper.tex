@@ -75,17 +75,17 @@ Finally, we discuss related and possible future works and conclude in \Cref{sec:
 In this section, we briefly review classical definitions and facts on Weil algebras and $C^\infty$-rings without proofs, which will be used in \Cref{sec:alg}.
 For theoretical detail, we refer readers to Moerdijk--Reyes~\cite[Chapters I and II]{Moerdijk:1991aa} or Joyce~\cite{joyce2016algebraic}.
 
-% We use the following notational convention:
-% \begin{definition}[Notation]
-%   Throughout the paper, we use the following notation:
-%   \begin{itemize}
-%     \item
-%     $g \circ f$ denotes the composite function from $A$ to $C$ of functions $f: A \to B$ and $g: B \to C$, that is, the function defined by $(g \circ f)(x) = g(f(x))$ for all $a \in A$.
-%     \item For functions $f_i: Z \to X_i\,(1 \leq i \leq n)$,
-%     $\braket{f_1, \dots, f_n}$ denotes the product of functions $f_i$ given by the universality of the product objects.
-%     That is, $\braket{f_1, \dots, f_n}$ is the function of type $Z \to X_1 \times \dots \times X_n$ defined by $\braket{f_1, \dots, f_n}(z) = (f_1(z), \dots, f_n(z)) \in X_1 \times \dots \times X_n$ for all $z \in Z$
-%   \end{itemize}
-% \end{definition}
+We use the following notational convention:
+\begin{definition}[Notation]
+  Throughout the paper, we use the following notation:
+  \begin{itemize}
+    \item
+    $g \circ f$ denotes the composite function from $A$ to $C$ of functions $f: A \to B$ and $g: B \to C$, that is, the function defined by $(g \circ f)(x) = g(f(x))$ for all $a \in A$.
+    \item For functions $f_i: Z \to X_i\,(1 \leq i \leq n)$,
+    $\braket{f_1, \dots, f_n}$ denotes the product of functions $f_i$ given by the universality of the product objects.
+    That is, $\braket{f_1, \dots, f_n}$ is the function of type $Z \to X_1 \times \dots \times X_n$ defined by $\braket{f_1, \dots, f_n}(z) = (f_1(z), \dots, f_n(z)) \in X_1 \times \dots \times X_n$ for all $z \in Z$
+  \end{itemize}
+\end{definition}
 
 \begin{definition}[Lawvere~\cite{lawvere1979categorical}]
   A \emph{$C^\infty$}-ring $A$ is a product-preserving functor from the category $\CartSp$ of finite-dimensional Euclidean spaces and smooth maps to the category $\Sets$ of sets.
@@ -107,7 +107,7 @@ One typical example of a $C^\infty$-ring is a formal power series ring:
   where $\alpha! = \alpha_1 ! \dots \alpha_n !$ is the multi-index factorial and $D^\alpha$ is the partial differential operator to degree $\alpha$.
 \end{theorem}
 
-The $C^\infty$-rings of central interest in this paper are \emph{Weil algebras}, and has a deep connection with $\Rseries$:
+The $C^\infty$-rings of central interest in this paper are \emph{Weil algebras}, and have a deep connection with $\Rseries$:
 
 \begin{definition}[Weil algebra]
   A \emph{Weil algebra} $W$ is an associative $\R$-algebra which can be written as $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
@@ -152,6 +152,9 @@ The following definitions of functions on dual numbers illustrate the idea:
   \cos(a_1 + b_1 d) &= \cos(a_1) - b_1 \sin(a_1) d
 \end{align*}
 
+The last equation for $\cos$ express the nontrivial part of Forward-mode AD.
+As mentioned above, we regard $a_1 + b_1 d$ as a pair $(a_1, b_1) = (f(x), f'x)$ of value and differential cofficient of some smooth function $f$ at some point $x$.
+So if $a_2 + b_2 d = \cos(a_1 + b_1 d)$, we must have $a_2 = \cos(f(x)) = \cos a_1$ and $b_2 = \frac{\mathrm d}{\mathrm{d} x} \cos(f(x)) = -b_1 \sin(a_1)$ by Chain Rule.
 The first two equations for addition and multiplication suggest us to regard operations on Forward-mode AD as extending the algebraic structure of $\R[d] = \R[X]/X^2$.
 Indeed, first-order Forward-mode AD can be identified with the arithmetic on \emph{dual numbers}:
 \begin{definition}
