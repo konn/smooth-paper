@@ -180,7 +180,7 @@ jobs:
 
       - name: Creates tarball
         run: |
-          latexmk -c
+          latexmk -C ${{env.WORKDIR}}/${{env.JOBNAME}}.tex
           rm -rf ${{env.WORKDIR}}/*.pdf
           tar czf ${{env.JOBNAME}}-arxiv.tar.gz --directory=${{env.WORKDIR}} .
 
