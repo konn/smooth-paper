@@ -180,7 +180,7 @@ jobs:
 
       - name: Creates tarball
         run: |
-          rm -rf ${{env.WORKDIR}}/rims-smooth-paper.*
+          rm -rf ${{env.WORKDIR}}/smooth-english-paper.*
           rm -rf ${{env.WORKDIR}}/*.pdf
           tar czf ${{env.JOBNAME}}.tar.gz --directory=${{env.WORKDIR}} .
 
