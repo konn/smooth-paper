@@ -190,7 +190,6 @@ jobs:
           tar xzf ${{env.JOBNAME}}.tar.gz --directory=${{env.JOBNAME}}-testing
           cd ${{env.JOBNAME}}-testing
           ls
-          grep minted syntax.tex
           pdflatex ${{env.JOBNAME}}.tex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error
 
       - name: Upload an arXiv tarball
