@@ -75,6 +75,18 @@ Finally, we discuss related and possible future works and conclude in \Cref{sec:
 In this section, we briefly review classical definitions and facts on Weil algebras and $C^\infty$-rings without proofs, which will be used in \Cref{sec:alg}.
 For theoretical detail, we refer readers to Moerdijk--Reyes~\cite[Chapters I and II]{Moerdijk:1991aa} or Joyce~\cite{joyce2016algebraic}.
 
+% We use the following notational convention:
+% \begin{definition}[Notation]
+%   Throughout the paper, we use the following notation:
+%   \begin{itemize}
+%     \item
+%     $g \circ f$ denotes the composite function from $A$ to $C$ of functions $f: A \to B$ and $g: B \to C$, that is, the function defined by $(g \circ f)(x) = g(f(x))$ for all $a \in A$.
+%     \item For functions $f_i: Z \to X_i\,(1 \leq i \leq n)$,
+%     $\braket{f_1, \dots, f_n}$ denotes the product of functions $f_i$ given by the universality of the product objects.
+%     That is, $\braket{f_1, \dots, f_n}$ is the function of type $Z \to X_1 \times \dots \times X_n$ defined by $\braket{f_1, \dots, f_n}(z) = (f_1(z), \dots, f_n(z)) \in X_1 \times \dots \times X_n$ for all $z \in Z$
+%   \end{itemize}
+% \end{definition}
+
 \begin{definition}[Lawvere~\cite{lawvere1979categorical}]
   A \emph{$C^\infty$}-ring $A$ is a product-preserving functor from the category $\CartSp$ of finite-dimensional Euclidean spaces and smooth maps to the category $\Sets$ of sets.
 
@@ -86,11 +98,11 @@ Intuitively, a $C^\infty$-ring $A$ is an $\R$-algebra $A$ augmented with $m$-ary
 
 One typical example of a $C^\infty$-ring is a formal power series ring:
 
-\begin{theorem}[Lawvere]\label{thm:series-is-smooth}
+\begin{theorem}[{Implicitly in Lawvere~\cite{lawvere1979categorical}; See~\cite[1.3  Borel's Theorem]{Moerdijk:1991aa}}]\label{thm:series-is-smooth}
   The ring $\R\llbracket X_1, \dots, X_n\rrbracket$ of formal power series with finitely many variables has the $C^\infty$-ring structure via Taylor expansion at $\boldsymbol{0}$.
   In particular, lifting of a smooth map $f: \R^m \to \R$ is given by:
   \[
-    \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_n})(\boldsymbol{0}),
+    \Rseries(f)(g_1, \dots, g_m) = \sum_{\alpha \in \N^n} \frac{\X^\alpha}{\alpha!} D^\alpha(f \circ \braket{g_1, \dots, g_m})(\boldsymbol{0}),
   \]
   where $\alpha! = \alpha_1 ! \dots \alpha_n !$ is the multi-index factorial and $D^\alpha$ is the partial differential operator to degree $\alpha$.
 \end{theorem}
@@ -98,7 +110,7 @@ One typical example of a $C^\infty$-ring is a formal power series ring:
 The $C^\infty$-rings of central interest in this paper are \emph{Weil algebras}, and has a deep connection with $\Rseries$:
 
 \begin{definition}[Weil algebra]
-  A \emph{Weil algebra} $W$ is an algebra of form $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
+  A \emph{Weil algebra} $W$ is an associative $\R$-algebra which can be written as $W = \R[X_1, \dots, X_n]/I$ for some ideal $I \subseteq \R[\X]$ such that $\braket{X_1, \dots, X_n}^k \subseteq I$ for some $k \in \N$.
 \end{definition}
 It follows that a Weil algebra $W$ is finite-dimensional as a $\R$-linear space and hence $I$ is a \emph{zero-dimensional} ideal.
 A Weil algebra $W$ can be regarded as a real line $\R$ augmented with nilpotent infinitesimals $d_i = {[X_i]}_I$.
@@ -109,9 +121,13 @@ First note that, if $I$ is zero-dimensional, we have $\R[\X]/I \simeq \R\llbrack
 Hence, in particular, any Weil algebra $W$ can also be regarded as a quotient ring of the formal power series by zero-dimensional ideal.
 Thus, together with \Cref{thm:series-is-smooth}, the following lemma shows that any Weil algebra $W$ has the canonical $C^\infty$-ring structure:
 
-\begin{lemma}[Lawvere]\label{lem:quot-ring-ideal}
-  For any $C^\infty$-ring $A$ and a ring-theoretical ideal $I \subseteq A$, the quotient ring $A/I$ again has the canonical $C^\infty$-ring structure.
-  In particular, the $C^\infty$-structure of Weil algebra $W$ is given just by post-composition of a quotient mapping to that of $\Rseries$.
+\begin{lemma}[{Implicitly in Lawvere~\cite{lawvere1979categorical}; See~\cite[1.2 Proposition]{Moerdijk:1991aa}}]\label{lem:quot-ring-ideal}
+  For any $C^\infty$-ring $A$ and a ring-theoretical ideal $I \subseteq A$, the quotient ring $A/I$ again has the canonical $C^\infty$-ring structure induced by the canonical quotient mapping:
+  \[
+    (A/I)(f)([x_1]_I, \dots, [x_m]_I) \coloneqq \left[ A(I)(f)(x_1, \dots, x_m) \right]_I,
+  \]
+  where $x_i \in A$ and $f: \R^m \smoothto \R$.
+  In particular, the $C^\infty$-structure of Weil algebra $W$ is induced by the canonical quotient mapping to that of $\Rseries$.
 \end{lemma}
 
 \section{Connection between Automatic Differentiation and Weil Algebras}
@@ -122,7 +138,7 @@ In this section, based on the basic facts on $C^\infty$-rings and Weil algebras 
 It can be implemented by ad-hoc polymorphism (or equivalently, function overloading).
 For detailed implementation, we refer readers to Elliott~\cite{Elliott2009-beautiful-differentiation} and Kmett's \texttt{ad} package~\cite{Kmett:2010aa}.
 
-Briefly speaking, in Forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an opaque variable.
+Briefly speaking, in Forward-mode AD, one stores both the value and differential coefficient simultaneously, say in a form $f(x) + f'(x) d$ for $d$ an indeterminate variable.
 Then, when evaluating composite functions, one uses the Chain Rule for implementation:
 \[
   \frac{\mathrm{d}}{\mathrm{d}x}(g \circ f)(x) = f'(x) g'(f(x)).
@@ -326,6 +342,12 @@ Return @$\boldsymbol{v}$@
 \end{algorithm}
 
 The termination and validity of \Cref{alg:smooth-weil} are clear.
+One might feel it problematic that \Cref{alg:smooth-weil} requires \emph{functions} as its input.
+This can be \emph{any} smooth computable functions on the coefficient type.
+Practically, we expect a composite function of standard smooth floating-point functions as its argument,
+for example, it can be $x \mapsto \sin(x)$, $(x, y) \mapsto e^{\sin x}y^2$, and so on.
+In the modern programming language -- like Haskell, Rust, LISP, Ruby, etc.\ -- one don't need to worry about their representation, as we can already freely write \emph{higher-order functions} that take functions or closures as their arguments.
+Even in the low-level languages such as C/C++, one can use function pointers or whatever to pass an arbitrary function to another function.
 
 Now that we can compute the $\R$-algebraic and $C^\infty$-structure of a Weil algebra solely from its Weil setting, one can hard-code pre-calculated Weil settings for known typical Weil algebras, such as the dual number ring or higher infinitesimal rings of the form $\R[X]/(X^{n+1})$, to reduce computational overheads.
 
@@ -601,6 +623,9 @@ We argue that our method pursues other direction of formulations; we treat highe
 \subsection{Future Works}
 In SDG, $C^\infty$-ring and higher infinitesimals are used as fundamental building blocks to formulate manifolds, vector fields, differential forms, and so on.
 Hence, if one can extend our method to treat a general $C^\infty$-ring $C^\infty(M)$ of real-valued smooth functions on $M$, it can open up a new door to formulate differential geometry on a computer.
+With such a formulation, we can define differential-geometric objects in more synthetic manner using nilpotent infinitesimals -- for example, one can define the tangent space $T_x M$ at $x \in M$ on some manifold $M$ to be the collection of $f: D \to M$ with $f(0) = x$, where $D$ is the set of nilpotents of order two.
+Another virtue of such system is that we can treat infinitesimal spaces (derived from Weil algebras), manifolds, functions spaces, and vector spaces uniformly -- they are all living in the same category.
+See Moerdijk--Reyes~\cite{Moerdijk:1991aa} for more theoretical details.
 One major obstacle in this direction is that, even if $C^\infty(M)$ is finitely \emph{presented} as a $C^\infty$-ring, it is NOT finitely \emph{generated} as an $\R$-algebra, but $2^{\aleph_0}$-generated, by its very nature.
 Hence, it seems impossible to compute $C^\infty(M)$ in purely symbolic and direct way; we need some workarounds or distinct formulations to overcome such obstacles.
 
@@ -613,7 +638,7 @@ For such direction, Elliot~\cite{Elliott:2018aa} proposes the categorical formul
 Exploring how that approach fits with our algebraic framework could be interesting future work, and perhaps also shed a light on the way to realise the aforementioned computational SDG.
 
 \section*{Acknowledgments}
-The author is grateful to Prof.\ Akira Terui, for encouraging to write this paper and many helpful feedbacks.
+The author is grateful to Prof.\ Akira Terui, for encouraging to write this paper and many helpful feedbacks, and to anonymous reviewers for giving a constructive comments.
 \appendix
 \section{Succinct Multivariate Lazy Tower AD}\label{sec:appendix}
 For completeness, we include the referential implementation of the Tower-mode AD in Haskell, which can be used in \Cref{alg:smooth-weil}.
