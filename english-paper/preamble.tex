@@ -6,8 +6,12 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{minted}
+\ifLuaTeX
 \usepackage{fontspec}
 \setmonofont[StylisticSet=3]{inconsolata}
+\else
+\usepackage{inconsolata}
+\fi
 \usepackage[backend=biber,style=numeric]{biblatex}
 \usepackage{stmaryrd}
 \usetikzlibrary{matrix,decorations,arrows,calc,trees}
