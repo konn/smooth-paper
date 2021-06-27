@@ -113,7 +113,7 @@ jobs:
     runs-on:  ubuntu-18.04
     container: docker://konn/texlive2020-slim:20201227.4
     env:
-      JOBNAME: smooth-english-paper-arxiv
+      JOBNAME: smooth-english-paper
 
     steps:
       - uses: actions/checkout@v2
@@ -180,14 +180,14 @@ jobs:
 
       - name: Creates tarball
         run: |
-          rm -rf ${{env.WORKDIR}}/smooth-english-paper.*
+          latexmk -c
           rm -rf ${{env.WORKDIR}}/*.pdf
-          tar czf ${{env.JOBNAME}}.tar.gz --directory=${{env.WORKDIR}} .
+          tar czf ${{env.JOBNAME}}-arxiv.tar.gz --directory=${{env.WORKDIR}} .
 
       - name: Checks that generated tarball generates appropriate output without -shell-escape
         run: |
           mkdir -p ${{env.JOBNAME}}-testing
-          tar xzf ${{env.JOBNAME}}.tar.gz --directory=${{env.JOBNAME}}-testing
+          tar xzf ${{env.JOBNAME}}-arxiv.tar.gz --directory=${{env.JOBNAME}}-testing
           cd ${{env.JOBNAME}}-testing
           ls
           pdflatex ${{env.JOBNAME}}.tex -shell-escape -file-line-error -interaction=nonstopmode -halt-on-error
@@ -196,7 +196,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: casc-arxiv
-          path: ${{env.JOBNAME}}.tar.gz
+          path: ${{env.JOBNAME}}-arxiv.tar.gz
           if-no-files-found: error # optional, default is warn
           retention-days: 90
 
