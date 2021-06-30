@@ -356,7 +356,7 @@ For reference, we include a succinct and efficient variant mixing these two tech
 
 Both Tower-mode AD and formal power series can be represented as a formal power series.
 The difference is the interpretation of coefficients in a given series.
-On one hand, a coefficient of $\X^\alpha$ in Tower AD is interpreted as the $\alpha$-th partial differential coefficient $D^\alpha f(\boldsymbol{a})$, where $\boldsymbol{a} = (g_1(0), \dots, g_m(0))$.
+On one hand, a coefficient of $\X^\alpha$ in Tower AD is interpreted as the $\alpha$\textsuperscript{th} partial differential coefficient $D^\alpha f(\boldsymbol{a})$, where $\boldsymbol{a} = (g_1(0), \dots, g_m(0))$.
 On the other hand, in $\Rseries$ it is interpreted as $\frac{D^\alpha f(\boldsymbol{a})}{\alpha!}$.
 To avoid the confusion, we adopt the following convention: Tower-mode AD is represented as a function from monomials $\X^\alpha$ to coefficient $\R$ in what follows, whilst $\Rseries$ as-is.
 Note that this is purely for notational and descriptional distinctions, and does not indicate any essential difference.
@@ -451,7 +451,7 @@ d1, d2, d3 :: Floating a => Weil (D1 |*| D1 |*| D1) a
 [d1, d2, d3] = map di [0..]
 \end{code}
 Here, \hask{Weil w a} represents the type of Weil algebra with its setting given in \hask{w}, \hask{D1} the dual number ideal $I = (X^2)$, and \hask{|*|} the tensor product operator.
-Each $d_i$ corresponds to $i$-th infinitesimal.
+Each $d_i$ corresponds to $i$\textsuperscript{th} infinitesimal.
 
 Next, we calculate higher-order differential coefficients at $x = \frac{\pi}{6}$ up to the third order:
 
@@ -509,7 +509,7 @@ Note that by \Cref{lem:higher-infinitesimal}, each coefficient is not directly a
 = \sum_{k \leq 3} \frac{f^{(k)}(x)}{k !} \varepsilon^k$.
 
 Let us see how tensor products of higher Weil algebras can be used to multivariate higher-order partial derivatives.
-Suppose we want to calculate partial derivatives of $f(x, y) = e^{2x} \sin y$ up to $(2, 1)$-th order.
+Suppose we want to calculate partial derivatives of $f(x, y) = e^{2x} \sin y$ up to $(2, 1)$\textsuperscript{th} order.
 \begin{repl}
 eps1, eps2 :: Weil (DOrder 3 |*| DOrder 2) a
 (eps1, eps2) = (di 0, di 1)
